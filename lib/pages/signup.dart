@@ -30,6 +30,7 @@ class _SignUpPageState extends State<SignUpPage> {
             Container(
               padding: const EdgeInsets.only(left: 30, top: 45),
               child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Create an account',
@@ -46,12 +47,12 @@ class _SignUpPageState extends State<SignUpPage> {
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w400,
-                      fontSize: 11,
+                      fontSize: 12,
                       color: Color.fromRGBO(18, 18, 18, 1),
                     ),
                   ),
                 ],
-              )
+              ),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -74,6 +75,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       TextField(
                         controller: _nameController,
                         decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.grey, width: 1.5, style: BorderStyle.solid, strokeAlign: BorderSide.strokeAlignInside), // Customize border color and width
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+
                             hintText: "Enter name",
                             hintStyle: const TextStyle(
                               color: Color.fromRGBO(200, 200, 200, 1),
@@ -87,6 +93,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               borderSide: const BorderSide(color: Color.fromRGBO(200, 200, 200, 1)),
                             )
                         ),
+
         
                       ),
                     ],
@@ -110,6 +117,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       TextField(
                         controller: _emailController,
                         decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.grey, width: 1.5, style: BorderStyle.solid, strokeAlign: BorderSide.strokeAlignInside), // Customize border color and width
+                                borderRadius: BorderRadius.circular(10.0),
+                            ),
                             hintText: "Enter email",
                             hintStyle: const TextStyle(
                               color: Color.fromRGBO(200, 200, 200, 1),
@@ -145,6 +156,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       TextField(
                         controller: _passwordController,
                         decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.grey, width: 1.5, style: BorderStyle.solid, strokeAlign: BorderSide.strokeAlignInside), // Customize border color and width
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
                             hintText: "Enter password",
                             hintStyle: const TextStyle(
                               color: Color.fromRGBO(200, 200, 200, 1),
@@ -180,6 +195,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       TextField(
                         controller: _confirmPasswordController,
                         decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.grey, width: 1.5, style: BorderStyle.solid, strokeAlign: BorderSide.strokeAlignInside), // Customize border color and width
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
                             hintText: "Retype password",
                             hintStyle: const TextStyle(
                               color: Color.fromRGBO(200, 200, 200, 1),

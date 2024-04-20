@@ -72,6 +72,10 @@ class _LoginPageState extends State<LoginPage> {
                   TextField(
                     controller: _emailController,
                     decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.grey, width: 1.5, style: BorderStyle.solid, strokeAlign: BorderSide.strokeAlignInside), // Customize border color and width
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
                       hintText: "Enter email",
                       hintStyle: const TextStyle(
                         color: Color.fromRGBO(200, 200, 200, 1),
@@ -108,6 +112,10 @@ class _LoginPageState extends State<LoginPage> {
                   TextField(
                     controller: _password,
                     decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.grey, width: 1.5, style: BorderStyle.solid, strokeAlign: BorderSide.strokeAlignInside), // Customize border color and width
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
                         hintText: "Enter password",
                         hintStyle: const TextStyle(
                           color: Color.fromRGBO(200, 200, 200, 1),
