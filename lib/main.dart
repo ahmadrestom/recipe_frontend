@@ -20,10 +20,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: '/',
-      routes: {
+      initialRoute: '/signup',
+      /*routes: {
         '/': (context) => const LandingPage(),
-      },
+      },*/
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/login':
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
             break;
           case '/signup':
             return PageTransition(
-              child: const SignUpPage(),
+              child:  SignUpPage(),
               type: PageTransitionType.fade,
               duration: const Duration(milliseconds: 350),
               reverseDuration: const Duration(milliseconds: 200),

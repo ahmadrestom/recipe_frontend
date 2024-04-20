@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
-import 'login.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
@@ -74,7 +72,7 @@ class LandingPage extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 60.0),
-                        child: Container(
+                        child: SizedBox(
                           width: 243,
                           height: 54,
                           child: ElevatedButton(
