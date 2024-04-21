@@ -1,6 +1,7 @@
 import 'package:recipe_app/customerWidgets/CategoryItem.dart';
 import 'package:flutter/material.dart';
 import '../models/recipe.dart' as recipe;
+import '../models/recipe.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,6 +12,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  late List<Recipe> recipes;
 
   String selectedCategory = '';
 
@@ -132,6 +135,39 @@ class _HomePageState extends State<HomePage> {
 
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 40,horizontal: 25),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 200,
+                        width: MediaQuery.of(context).size.width,
+                        child: ListView.builder(
+                            itemCount: categories.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index){
+                              return Container(
+                                margin: const EdgeInsets.only(right: 7),
+                                child: CategoryItem(
+                                  categoryName: categories[index],
+                                  selectedCategory: selectedCategory,
+                                  onCategorySelected: (category){
+                                    setState(() {
+                                      selectedCategory = category;
+                                    });
+                                  },
+                                ),
+                              );
+                            }
+                        ),
+                      ),
+                    ),
+                  ],
+
+                ),
+              ),
+
             ],
           ),
         ),

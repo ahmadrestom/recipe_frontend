@@ -4,6 +4,7 @@ import 'package:recipe_app/pages/notifications.dart';
 import 'package:recipe_app/pages/profile.dart';
 import 'package:recipe_app/pages/savedRecipes.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
+import 'package:ionicons/ionicons.dart';
 
 class NavPage extends StatefulWidget {
   const NavPage({super.key});
@@ -43,30 +44,29 @@ class _NavPageState extends State<NavPage> {
           iconSize: 30,
           barAnimation: BarAnimation.fade,
           iconStyle: IconStyle.Default,
-          opacity: 0.3,
-          padding: EdgeInsets.fromLTRB(30, 30, 30, 5),
+          padding: const EdgeInsets.fromLTRB(30, 30, 30, 5),
         ),
         items: [
           BottomBarItem(
-            icon: const Icon(Icons.home_outlined,),
+            icon: const Icon(Ionicons.home_outline),
             selectedColor: const Color.fromRGBO(18, 149, 117, 1),
             unSelectedColor: const Color.fromRGBO(217, 217, 217, 1),
             title: const Text(""),
           ),
           BottomBarItem(
-            icon: const Icon(Icons.favorite_border),
+            icon: const Icon(Ionicons.bookmark_outline),
             title: const Text(''),
             selectedColor: const Color.fromRGBO(18, 149, 117, 1),
             unSelectedColor: const Color.fromRGBO(217, 217, 217, 1),
           ),
           BottomBarItem(
-            icon: const Icon(Icons.notifications_none_outlined),
+            icon: const Icon(Ionicons.notifications_outline),
             title: const Text(''),
             selectedColor: const Color.fromRGBO(18, 149, 117, 1),
             unSelectedColor: const Color.fromRGBO(217, 217, 217, 1),
           ),
           BottomBarItem(
-            icon: const Icon(Icons.person_2),
+            icon: const Icon(Ionicons.person_outline),
             title: const Text(''),
             selectedColor: const Color.fromRGBO(18, 149, 117, 1),
             unSelectedColor: const Color.fromRGBO(217, 217, 217, 1),
