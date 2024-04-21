@@ -29,6 +29,8 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   page_transition: ^2.1.0
+  stylish_bottom_bar: ^1.1.0
+  standard_searchbar: ^2.0.0
   flutter:
     sdk: flutter
 
@@ -60,11 +62,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/landing.png
-    - assets/icons/chef.png
-    - assets/icons/arrow-right.png
-    - assets/icons/google.png
-    - assets/icons/facebook.png
+    - assets/images/
+    - assets/icons/
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
@@ -80,6 +80,8 @@ flutter:
     - family: Poppins
       fonts:
         - asset: assets/fonts/Poppins-Regular.ttf
+
+
   #
   # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
+  # see https://flutter.dev/custom-fonts/#from-packagessdk_android: 21 # android min sdk min:16, default 21

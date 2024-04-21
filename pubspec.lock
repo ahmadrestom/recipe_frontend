@@ -144,6 +144,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.1"
+  standard_searchbar:
+    dependency: "direct main"
+    description:
+      name: standard_searchbar
+      sha256: "37a16251fe1727442c00c7dde053f5ca1ca5b0d93cbe9437ece289d780cf0f99"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.1"
   stream_channel:
     dependency: transitive
     description:
@@ -160,6 +168,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  stylish_bottom_bar:
+    dependency: "direct main"
+    description:
+      name: stylish_bottom_bar
+      sha256: ca72557a5bd8f44caae9017eb3a73002e9189d7a9d2fac598fa55be13724f32b
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   term_glyph:
     dependency: transitive
     description:
@@ -194,3 +210,4 @@ packages:
     version: "0.3.0"
 sdks:
   dart: ">=3.2.5 <4.0.0"
+  flutter: ">=3.10.0"
