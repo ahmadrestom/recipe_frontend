@@ -29,7 +29,10 @@ List<Recipe> recipes = [
     cookingTime: const Duration(minutes: 0),
     difficultyLevel: DifficultyLevel.easy,
     category: Category.vegan,
-    imageUrl: "assets/images/ClassicGreekSalad.png",
+    rating: Rating.four,
+    plateImageUrl: "assets/images/ClassicGreekSalad.png",
+    imageUrl: "assets/images/ChineseStyleEggFriedRiceWithSlicedPorkFillet.png",
+    chef: "Alex"
   ),
   Recipe(
     id: 2,
@@ -59,8 +62,11 @@ List<Recipe> recipes = [
     difficultyLevel: DifficultyLevel.easy,
     category: Category.vegan,
     nutritionalInformation: null,
-    imageUrl: "assets/images/CrunchyNutColeslaw.png",
+    plateImageUrl: "assets/images/CrunchyNutColeslaw.png",
+    imageUrl: "assets/images/SpiceRoastedChickenWithFlavoredRice.png",
     reviews:null,
+      rating: Rating.three,
+    chef: "Jake"
   ),
   Recipe(
     id: 3,
@@ -96,8 +102,11 @@ List<Recipe> recipes = [
     category: Category.seaFood,
     nutritionalInformation: null,
     //imageUrl: "assets/images/ShrimpChickenAndouilleSausageJambalaya.png",
-    imageUrl: "assets/images/ClassicGreekSalad.png",
+    plateImageUrl: "assets/images/ClassicGreekSalad.png",
+    imageUrl: "assets/images/LambChopsWithFruityCouscousAndMint.png",
     reviews: null,
+      rating: Rating.four,
+    chef: "Mike"
   ),
   Recipe(
     id: 4,
@@ -135,8 +144,11 @@ List<Recipe> recipes = [
     category: Category.grilledDishes,
     nutritionalInformation: null,
     //imageUrl: "assets/images/BarbecueChickenJollofRice.png",
-    imageUrl: "assets/images/ClassicGreekSalad.png",
-    reviews: null
+    plateImageUrl: "assets/images/ClassicGreekSalad.png",
+    imageUrl: "assets/images/TraditionalSpareRibsBaked.png",
+    reviews: null,
+      rating: Rating.five,
+    chef: "Justin"
   ),
   Recipe(
       id: 5,
@@ -167,9 +179,165 @@ List<Recipe> recipes = [
       category: Category.grilledDishes,
       nutritionalInformation: null,
       //imageUrl: "assets/images/PortuguesePiriPiriChicken.png",
-      imageUrl: "assets/images/ClassicGreekSalad.png",
-      reviews: null
+      plateImageUrl: "assets/images/ClassicGreekSalad.png",
+      imageUrl: "assets/images/TraditionalSpareRibsBaked.png",
+      reviews: null,
+      rating: Rating.four,
+      chef: "Sofia"
   ),
+  Recipe(
+    id: 6,
+    name: "Traditional Spare Ribs Baked",
+    description: "Delicious and tender spare ribs baked to perfection with a traditional blend of spices and herbs.",
+    timeUploaded: DateTime.now(),
+    ingredients: [
+      "Spare ribs",
+      "Brown sugar",
+      "Paprika",
+      "Garlic powder",
+      "Onion powder",
+      "Salt",
+      "Black pepper",
+      "Barbecue sauce"
+    ],
+    instructions: [
+      "Preheat oven to 300°F (150°C).",
+      "In a small bowl, mix brown sugar, paprika, garlic powder, onion powder, salt, and black pepper to make the dry rub.",
+      "Rub the dry rub mixture all over the spare ribs, covering them evenly.",
+      "Place the spare ribs on a baking sheet lined with aluminum foil.",
+      "Bake in the preheated oven for 2 to 2 1/2 hours, or until the ribs are tender and cooked through.",
+      "During the last 30 minutes of baking, brush the ribs with barbecue sauce.",
+      "Remove from the oven and let rest for a few minutes before serving.",
+      "Serve hot with extra barbecue sauce on the side."
+    ],
+    preparationTime: const Duration(minutes: 20),
+    cookingTime: const Duration(minutes: 150),
+    difficultyLevel: DifficultyLevel.medium,
+    category: Category.grilledDishes,
+    plateImageUrl: "",
+    imageUrl: "assets/images/TraditionalSpareRibsBaked.png",
+    reviews: null,
+      rating: Rating.two,
+    chef: "Mark"
+  ),
+  Recipe(
+    id: 7,
+    name: "Lamb Chops with Fruity Couscous and Mint",
+    description: "Tender lamb chops served with a light and refreshing fruity couscous salad, topped with fresh mint leaves.",
+    timeUploaded: DateTime.now(),
+    ingredients: [
+      "Lamb chops",
+      "Couscous",
+      "Dried apricots, chopped",
+      "Dried cranberries",
+      "Almonds, sliced",
+      "Fresh mint leaves, chopped",
+      "Lemon juice",
+      "Olive oil",
+      "Salt",
+      "Black pepper"
+    ],
+    instructions: [
+      "Cook couscous according to package instructions.",
+      "In a large bowl, combine cooked couscous, chopped dried apricots, dried cranberries, sliced almonds, chopped fresh mint leaves, lemon juice, olive oil, salt, and black pepper.",
+      "Mix well until all ingredients are evenly distributed.",
+      "Season lamb chops with salt and black pepper.",
+      "Grill or pan-sear lamb chops until cooked to desired doneness.",
+      "Serve lamb chops hot with a generous portion of fruity couscous salad on the side."
+    ],
+    preparationTime: const Duration(minutes: 20),
+    cookingTime: const Duration(minutes: 15),
+    difficultyLevel: DifficultyLevel.medium,
+    category: Category.grilledDishes,
+    plateImageUrl:"" ,
+    imageUrl: "assets/images/LambChopsWithFruityCouscousAndMint.png",
+    reviews: null,
+      rating: Rating.four,
+    chef: "Jason"
+  ),
+  Recipe(
+    id: 8,
+    name: "Spice Roasted Chicken with Flavored Rice",
+    description: "Juicy roasted chicken seasoned with aromatic spices, served with flavorful rice cooked with vegetables.",
+    timeUploaded: DateTime.now(),
+    ingredients: [
+      "Whole chicken",
+      "Cumin powder",
+      "Coriander powder",
+      "Turmeric powder",
+      "Cayenne pepper",
+      "Garlic cloves, minced",
+      "Ginger, grated",
+      "Onion, diced",
+      "Bell peppers, diced",
+      "Carrots, diced",
+      "Basmati rice",
+      "Chicken broth",
+      "Salt",
+      "Black pepper"
+    ],
+    instructions: [
+      "Preheat oven to 375°F (190°C).",
+      "In a small bowl, mix cumin powder, coriander powder, turmeric powder, cayenne pepper, minced garlic, grated ginger, salt, and black pepper to make the spice rub.",
+      "Rub the spice rub all over the chicken, including under the skin.",
+      "Place the chicken on a roasting pan and roast in the preheated oven for 1 to 1 1/2 hours, or until the chicken is cooked through and golden brown.",
+      "Meanwhile, cook basmati rice according to package instructions, substituting chicken broth for water.",
+      "In a separate pan, sauté diced onion, bell peppers, and carrots until softened.",
+      "Mix cooked rice with sautéed vegetables and season with salt and black pepper to taste.",
+      "Serve spice roasted chicken hot with flavored rice on the side."
+    ],
+    preparationTime: const Duration(minutes: 30),
+    cookingTime: const Duration(minutes: 90),
+    difficultyLevel: DifficultyLevel.medium,
+    category: Category.grilledDishes,
+    plateImageUrl: "",
+    imageUrl: "assets/images/SpiceRoastedChickenWithFlavoredRice.png",
+    reviews: null,
+      rating: Rating.four,
+    chef: "Melanie"
+  ),
+  Recipe(
+    id: 9,
+    name: "Chinese Style Egg Fried Rice with Sliced Pork",
+    description: "A classic Chinese dish of fragrant egg fried rice tossed with tender slices of pork, vegetables, and savory seasonings.",
+    timeUploaded: DateTime.now(),
+    ingredients: [
+      "Cooked rice, chilled",
+      "Pork loin, thinly sliced",
+      "Eggs, beaten",
+      "Carrots, diced",
+      "Peas",
+      "Green onions, chopped",
+      "Garlic cloves, minced",
+      "Soy sauce",
+      "Oyster sauce",
+      "Sesame oil",
+      "Salt",
+      "Black pepper"
+    ],
+    instructions: [
+      "In a wok or large skillet, heat oil over medium-high heat.",
+      "Add thinly sliced pork loin and cook until browned and cooked through.",
+      "Push the cooked pork to the side of the wok, then add beaten eggs to the empty space.",
+      "Scramble the eggs until cooked, then mix with the cooked pork.",
+      "Add diced carrots, peas, chopped green onions, and minced garlic to the wok.",
+      "Stir-fry until vegetables are tender-crisp.",
+      "Add chilled cooked rice to the wok and stir-fry until heated through.",
+      "Season with soy sauce, oyster sauce, sesame oil, salt, and black pepper to taste.",
+      "Continue to stir-fry until everything is well combined and heated through.",
+      "Serve hot as a delicious main dish or side."
+    ],
+    preparationTime: const Duration(minutes: 20),
+    cookingTime: const Duration(minutes: 15),
+    difficultyLevel: DifficultyLevel.easy,
+    category: Category.grilledDishes,
+    plateImageUrl: "",
+    imageUrl: "assets/images/ChineseStyleEggFriedRiceWithSlicedPorkFillet.png",
+    reviews: null,
+      rating: Rating.three,
+    chef: "Christina"
+  ),
+
 
 ];
 

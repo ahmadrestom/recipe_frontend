@@ -12,8 +12,11 @@ class Recipe {
   final Duration cookingTime;
   final DifficultyLevel difficultyLevel;
   final Category category;
+  final String chef;
+  final Rating rating;
   final NutritionalInformation? nutritionalInformation;
   final String imageUrl;
+  final String plateImageUrl;
   List<Review>? reviews;
 
   Recipe({
@@ -27,8 +30,11 @@ class Recipe {
       required this.cookingTime,
       required this.difficultyLevel,
       required this.category,
+      required this.chef,
+      required this.rating,
       this.nutritionalInformation,
       required this.imageUrl,
+      required this.plateImageUrl,
       this.reviews
       });
 
@@ -49,6 +55,9 @@ class Recipe {
       nutritionalInformation:
       NutritionalInformation.fromJson(json['nutritionalInformation'] as Map<String, dynamic>),
       imageUrl: json['imageUrl'] as String,
+      chef: json['chef'] as String,
+      rating: json['rating'],
+      plateImageUrl: json['plateImageUrl'] as String,
       reviews: (json['reviews'] as List<dynamic>)
           .map((e) => Review.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -69,6 +78,9 @@ class Recipe {
       'category': category.toString().split('.').last,
       'nutritionalInformation': nutritionalInformation?.toJson(),
       'imageUrl': imageUrl,
+      'chef': chef,
+      'rating': rating,
+      'plateImageUrl': plateImageUrl,
       'reviews': reviews?.map((e) => e.toJson()).toList(),
     };
   }
@@ -96,4 +108,8 @@ enum Category{
   lebanese,
   seaFood,
   grilledDishes
+}
+
+enum Rating {
+  one, two, three, four, five
 }
