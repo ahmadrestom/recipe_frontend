@@ -5,6 +5,7 @@ import 'package:recipe_app/pages/NavPage.dart';
 import 'package:recipe_app/pages/home.dart';
 import 'package:recipe_app/pages/landing.dart';
 import 'package:recipe_app/pages/login.dart';
+import 'package:recipe_app/pages/recentSearches.dart';
 import 'package:recipe_app/pages/signup.dart';
 
 void main() {
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: '/navPage',
+      initialRoute: '/recentSearches',
       routes: {
         '/': (context) => const LandingPage(),
       },
@@ -51,6 +52,14 @@ class MyApp extends StatelessWidget {
           case '/navPage':
             return PageTransition(
               child:  const NavPage(),
+              type: PageTransitionType.fade,
+              duration: const Duration(milliseconds: 350),
+              reverseDuration: const Duration(milliseconds: 200),
+              settings: settings,
+            );
+          case '/recentSearches':
+            return PageTransition(
+              child:  const RecentSearches(),
               type: PageTransitionType.fade,
               duration: const Duration(milliseconds: 350),
               reverseDuration: const Duration(milliseconds: 200),

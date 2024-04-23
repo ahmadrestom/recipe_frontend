@@ -12,9 +12,9 @@ class Recipe {
   final Duration cookingTime;
   final DifficultyLevel difficultyLevel;
   final Category category;
-  final NutritionalInformation nutritionalInformation;
+  final NutritionalInformation? nutritionalInformation;
   final String imageUrl;
-  List<Review> reviews;
+  List<Review>? reviews;
 
   Recipe({
       required this.id,
@@ -27,9 +27,9 @@ class Recipe {
       required this.cookingTime,
       required this.difficultyLevel,
       required this.category,
-      required this.nutritionalInformation,
+      this.nutritionalInformation,
       required this.imageUrl,
-      required this.reviews
+      this.reviews
       });
 
   factory Recipe.fromJson(Map<String, dynamic> json) {
@@ -67,9 +67,9 @@ class Recipe {
       'cookingTime': cookingTime.inMinutes,
       'difficultyLevel': difficultyLevel.toString().split('.').last,
       'category': category.toString().split('.').last,
-      'nutritionalInformation': nutritionalInformation.toJson(),
+      'nutritionalInformation': nutritionalInformation?.toJson(),
       'imageUrl': imageUrl,
-      'reviews': reviews.map((e) => e.toJson()).toList(),
+      'reviews': reviews?.map((e) => e.toJson()).toList(),
     };
   }
 
@@ -79,7 +79,7 @@ class Recipe {
 enum DifficultyLevel {
   easy,
   moderate,
-  difficult,
+  difficult, medium,
 }
 
 enum Category{

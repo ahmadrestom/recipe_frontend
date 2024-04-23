@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:recipe_app/customerWidgets/CategoryItem.dart';
 import 'package:flutter/material.dart';
+import 'package:recipe_app/pages/recentSearches.dart';
 import '../models/recipe.dart' as recipe;
 import '../models/recipe.dart';
+import '../pages/Data/recipes.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,11 +27,18 @@ class _HomePageState extends State<HomePage> {
       .toList();
 
   @override
+  void initState(){
+    super.initState();
+    recipes = getRecipes();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
       body: SafeArea(
         child: SingleChildScrollView(
+
           child: Column(
             children: [
               Padding(
@@ -74,16 +84,30 @@ class _HomePageState extends State<HomePage> {
               ),
               Container(
                 padding: const EdgeInsets.only(top: 30),
-
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     SizedBox(
                       width: 255,
                       height: 40,
-                      child: SearchBar(
-                        hintText: 'Search',
-                        leading: Image.asset('assets/icons/search.png'),
+                      child: CupertinoTextField(
+                        onTap: (){
+                          Navigator.push(context,
+                              MaterialPageRoute(builder:
+                                  (context)=>const RecentSearches()));
+                        },
+                        placeholder: "Search",
+                        readOnly: true,
+                        prefix: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset('assets/icons/search.png'),
+
+                        ),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+
                       ),
                     ),
                     GestureDetector(
@@ -96,7 +120,6 @@ class _HomePageState extends State<HomePage> {
                         //////////////////////////////
                       },
                     )
-
                   ],
                 ),
               ),
@@ -110,38 +133,6 @@ class _HomePageState extends State<HomePage> {
                     Expanded(
                       child: SizedBox(
                         height: 50,
-                        width: MediaQuery.of(context).size.width,
-                        child: ListView.builder(
-                          itemCount: categories.length,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index){
-                            return Container(
-                              margin: const EdgeInsets.only(right: 7),
-                              child: CategoryItem(
-                                categoryName: categories[index],
-                                selectedCategory: selectedCategory,
-                                onCategorySelected: (category){
-                                  setState(() {
-                                    selectedCategory = category;
-                                  });
-                                },
-                              ),
-                            );
-                        }
-                                             ),
-                      ),
-                    ),
-                  ],
-
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 40,horizontal: 25),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        height: 200,
                         width: MediaQuery.of(context).size.width,
                         child: ListView.builder(
                             itemCount: categories.length,
@@ -167,7 +158,25 @@ class _HomePageState extends State<HomePage> {
 
                 ),
               ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                height: 200,
+                child: ListView.builder(
+                    itemCount: recipes.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index){
+                      bool isFirst = index == 0;
+                      bool isLast = index == recipes.length - 1;
+                      EdgeInsets itemPadding = EdgeInsets.only(left: isFirst? 30:10, right: isLast? 30: 10);
+                      return Padding(
+                          padding: itemPadding,
+                          child: Stack(
 
+                          ),
+                      );
+                    }
+                ),
+              ),
             ],
           ),
         ),
