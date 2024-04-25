@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:recipe_app/customerWidgets/CategoryItem.dart';
 import 'package:flutter/material.dart';
+import 'package:recipe_app/pages/Data/newRecipes.dart';
 import 'package:recipe_app/pages/recentSearches.dart';
 import '../models/recipe.dart' as recipe;
 import '../models/recipe.dart';
 import '../pages/Data/recipes.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,6 +20,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   late List<Recipe> recipes;
+  late List<Recipe> newRecipes;
 
   String selectedCategory = '';
 
@@ -30,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   void initState(){
     super.initState();
     recipes = getRecipes();
+    newRecipes = getNewRecipes();
   }
 
   @override
@@ -38,8 +43,8 @@ class _HomePageState extends State<HomePage> {
       extendBody: true,
       body: SafeArea(
         child: SingleChildScrollView(
-
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 50, left: 30, right: 30),
@@ -126,53 +131,278 @@ class _HomePageState extends State<HomePage> {
 
               const SizedBox(height: 25,),
 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        height: 50,
-                        width: MediaQuery.of(context).size.width,
-                        child: ListView.builder(
-                            itemCount: categories.length,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index){
-                              return Container(
-                                margin: const EdgeInsets.only(right: 7),
-                                child: CategoryItem(
-                                  categoryName: categories[index],
-                                  selectedCategory: selectedCategory,
-                                  onCategorySelected: (category){
-                                    setState(() {
-                                      selectedCategory = category;
-                                    });
-                                  },
-                                ),
-                              );
-                            }
-                        ),
+              Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      child: ListView.builder(
+                          itemCount: categories.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index){
+                            bool isFirst = index == 0;
+                            bool isLast = index == recipes.length - 1;
+                            EdgeInsets itemMargin = EdgeInsets.only(
+                                left: isFirst ? 30 : 3, right: isLast ? 30 : 3);
+                            return Container(
+                              margin: itemMargin,
+                              child: CategoryItem(
+                                categoryName: categories[index],
+                                selectedCategory: selectedCategory,
+                                onCategorySelected: (category){
+                                  setState(() {
+                                    selectedCategory = category;
+                                  });
+                                },
+                              ),
+                            );
+                          }
                       ),
                     ),
-                  ],
+                  ),
+                ],
 
-                ),
               ),
               Container(
-                padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-                height: 200,
+                margin: const EdgeInsets.fromLTRB(0, 12, 0, 0),
+                height: 231,
                 child: ListView.builder(
                     itemCount: recipes.length,
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index){
+                    itemBuilder: (context, index) {
                       bool isFirst = index == 0;
                       bool isLast = index == recipes.length - 1;
-                      EdgeInsets itemPadding = EdgeInsets.only(left: isFirst? 30:10, right: isLast? 30: 10);
-                      return Padding(
-                          padding: itemPadding,
-                          child: Stack(
+                      EdgeInsets itemMargin = EdgeInsets.only(
+                          left: isFirst ? 30 : 10, right: isLast ? 30 : 10);
+                      return Container(
+                        margin: itemMargin,
+                        width: 150,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              top: 50,
+                              child: Container(
+                                width: 150,
+                                height: 176,
+                                decoration: BoxDecoration(
+                                  //color: const Color.fromRGBO(217, 217, 217, 0.5),
+                                  borderRadius: BorderRadius.circular(12),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: Color.fromRGBO(217, 217, 217, 1),
+                                        spreadRadius: 2,
+                                        blurRadius: 1,
+                                        offset: Offset(0,3),
+                                      )
+                                    ]
+                                ),
+                                child: Center(
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                                    child: Text(
+                                      recipes[index].name,
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w600,
+                                        color: Color.fromRGBO(48, 48, 48, 1)
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Image.asset(
+                              'assets/images/ClassicGreekSalad.png',
+                            ),
+                            Positioned(
+                              top: 27,
+                              right: 10,
+                              child: Container(
+                                width: 48,
+                                height: 23,
+                                decoration: BoxDecoration(
+                                  color: const Color.fromRGBO(255, 225, 179, 1),
+                                  borderRadius: BorderRadius.circular(20),
 
-                          ),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.star,
+                                      color: Color.fromRGBO(255, 173, 48, 1),
+                                    ),
+                                    const SizedBox(width: 1.0,),
+                                    Text(
+                                        (recipes[index].rating).toString()
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            "Time",
+                                            style: TextStyle(
+                                                fontFamily: 'Poppins',
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 11,
+                                                color: Color.fromRGBO(18, 149, 117, 1)
+                                            ),
+                                          ),
+                                          Text(
+                                            '${recipes[index].preparationTime.inMinutes.toString()} Mins',
+                                            style: const TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 11,
+                                              color: Color.fromRGBO(50, 50, 50, 1),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Container(
+                                        width: 35,
+                                        height: 35,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(40),
+                                          color: const Color.fromRGBO(255, 255, 255, 1)
+                                        ),
+                                        child: GestureDetector(
+                                          child: const Icon(
+                                            Ionicons.bookmark_outline,
+                                              color: Color.fromRGBO(18, 149, 117, 1),
+                                            size: 26,
+                                          ),
+                                          onTap: (){
+                                            ////////////////////////////////////
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                ),
+              ),
+              const SizedBox(height: 20,),
+              Container(
+                padding: const EdgeInsets.only(left: 30),
+                child: const Text(
+                  "New Recipes",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w900,
+                    fontSize: 19,
+                    color: Color.fromRGBO(0, 0, 0, 1),
+                  ),
+                ),
+              ),
+              ///////////////////////////////////////////////////////////
+              SizedBox(
+                height: 150,
+                child: ListView.builder(
+                    itemCount: newRecipes.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      bool isFirst = index == 0;
+                      bool isLast = index == newRecipes.length - 1;
+                      EdgeInsets itemMargin = EdgeInsets.only(
+                          left: isFirst ? 30 : 10, right: isLast ? 30 : 10);
+                      return Container(
+                        margin: itemMargin,
+                        width: 251,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              top: 40,
+                              child: Container(
+                                width: 251,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  color: const Color.fromRGBO(255, 255, 255, 1),
+                                  borderRadius: BorderRadius.circular(12),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Color.fromRGBO(0, 0, 0, 0.2),
+                                      spreadRadius: 0,
+                                      blurRadius: 20,
+                                      offset: Offset(0,3),
+                                    )
+                                  ]
+                                ),
+                                child: Container(
+                                  margin: const EdgeInsets.only(left: 10, top: 10),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: 125,
+                                        child: Text(
+                                          newRecipes[index].name,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w900,
+                                            fontSize: 13,
+                                            color: Color.fromRGBO(72, 72, 72, 1),
+                                          ),
+                                        ),
+                                      ),
+                                      Transform.scale(
+                                        alignment: Alignment.topLeft,
+                                        scale: 0.45,
+                                        child: RatingBar.builder(
+                                          initialRating: newRecipes[index].rating,
+                                          direction: Axis.horizontal,
+                                          allowHalfRating: true,
+                                          itemCount: 5,
+                                          itemBuilder: (context, _) => const Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                          ), onRatingUpdate: (double value) {  },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: SizedBox(
+                                width: 130,
+                                height: 130,
+                                child: Image.asset(
+                                  'assets/images/CrunchyNutColeslaw.png',
+
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       );
                     }
                 ),

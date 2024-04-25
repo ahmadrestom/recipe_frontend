@@ -16,7 +16,7 @@ class NavPage extends StatefulWidget {
 class _NavPageState extends State<NavPage> {
 
   final bottomBarPages = [
-    const HomePage(),
+    HomePage(),
     const SavedRecipes(),
     const Notifications(),
     const Profile(),

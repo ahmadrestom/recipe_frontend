@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   page_transition: ^2.1.0
+  flutter_rating_bar: ^4.0.1
   stylish_bottom_bar: ^1.1.0
   http: ^1.2.0
   standard_searchbar: ^2.0.0

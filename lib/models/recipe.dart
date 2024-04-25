@@ -13,7 +13,7 @@ class Recipe {
   final DifficultyLevel difficultyLevel;
   final Category category;
   final String chef;
-  final Rating rating;
+  double rating;
   final NutritionalInformation? nutritionalInformation;
   final String imageUrl;
   final String plateImageUrl;
@@ -31,12 +31,12 @@ class Recipe {
       required this.difficultyLevel,
       required this.category,
       required this.chef,
-      required this.rating,
+      required double rating,
       this.nutritionalInformation,
       required this.imageUrl,
       required this.plateImageUrl,
       this.reviews
-      });
+      }): rating = (rating < 1) ? 1 : (rating > 5) ? 5 : rating.toDouble();
 
   factory Recipe.fromJson(Map<String, dynamic> json) {
     return Recipe(
@@ -56,7 +56,7 @@ class Recipe {
       NutritionalInformation.fromJson(json['nutritionalInformation'] as Map<String, dynamic>),
       imageUrl: json['imageUrl'] as String,
       chef: json['chef'] as String,
-      rating: json['rating'],
+      rating: (json['rating'] as num).toDouble(),
       plateImageUrl: json['plateImageUrl'] as String,
       reviews: (json['reviews'] as List<dynamic>)
           .map((e) => Review.fromJson(e as Map<String, dynamic>))
@@ -85,6 +85,14 @@ class Recipe {
     };
   }
 
+  double getRating(){
+    return rating;
+  }
+
+  void setRating(double value){
+    rating = (value < 1) ? 1 : (value > 5) ? 5 : value.toDouble();
+  }
+
 
 }
 
@@ -108,8 +116,4 @@ enum Category{
   lebanese,
   seaFood,
   grilledDishes
-}
-
-enum Rating {
-  one, two, three, four, five
 }

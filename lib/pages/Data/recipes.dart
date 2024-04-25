@@ -29,7 +29,7 @@ List<Recipe> recipes = [
     cookingTime: const Duration(minutes: 0),
     difficultyLevel: DifficultyLevel.easy,
     category: Category.vegan,
-    rating: Rating.four,
+    rating: 4.5,
     plateImageUrl: "assets/images/ClassicGreekSalad.png",
     imageUrl: "assets/images/ChineseStyleEggFriedRiceWithSlicedPorkFillet.png",
     chef: "Alex"
@@ -65,7 +65,7 @@ List<Recipe> recipes = [
     plateImageUrl: "assets/images/CrunchyNutColeslaw.png",
     imageUrl: "assets/images/SpiceRoastedChickenWithFlavoredRice.png",
     reviews:null,
-      rating: Rating.three,
+      rating: 3.5,
     chef: "Jake"
   ),
   Recipe(
@@ -105,7 +105,7 @@ List<Recipe> recipes = [
     plateImageUrl: "assets/images/ClassicGreekSalad.png",
     imageUrl: "assets/images/LambChopsWithFruityCouscousAndMint.png",
     reviews: null,
-      rating: Rating.four,
+      rating: 2,
     chef: "Mike"
   ),
   Recipe(
@@ -147,7 +147,7 @@ List<Recipe> recipes = [
     plateImageUrl: "assets/images/ClassicGreekSalad.png",
     imageUrl: "assets/images/TraditionalSpareRibsBaked.png",
     reviews: null,
-      rating: Rating.five,
+      rating: 5.0,
     chef: "Justin"
   ),
   Recipe(
@@ -182,7 +182,7 @@ List<Recipe> recipes = [
       plateImageUrl: "assets/images/ClassicGreekSalad.png",
       imageUrl: "assets/images/TraditionalSpareRibsBaked.png",
       reviews: null,
-      rating: Rating.four,
+      rating: 4,
       chef: "Sofia"
   ),
   Recipe(
@@ -217,7 +217,7 @@ List<Recipe> recipes = [
     plateImageUrl: "",
     imageUrl: "assets/images/TraditionalSpareRibsBaked.png",
     reviews: null,
-      rating: Rating.two,
+      rating: 2,
     chef: "Mark"
   ),
   Recipe(
@@ -252,7 +252,7 @@ List<Recipe> recipes = [
     plateImageUrl:"" ,
     imageUrl: "assets/images/LambChopsWithFruityCouscousAndMint.png",
     reviews: null,
-      rating: Rating.four,
+      rating: 4.5,
     chef: "Jason"
   ),
   Recipe(
@@ -293,7 +293,7 @@ List<Recipe> recipes = [
     plateImageUrl: "",
     imageUrl: "assets/images/SpiceRoastedChickenWithFlavoredRice.png",
     reviews: null,
-      rating: Rating.four,
+      rating: 3.5,
     chef: "Melanie"
   ),
   Recipe(
@@ -334,7 +334,7 @@ List<Recipe> recipes = [
     plateImageUrl: "",
     imageUrl: "assets/images/ChineseStyleEggFriedRiceWithSlicedPorkFillet.png",
     reviews: null,
-      rating: Rating.three,
+      rating: 2.5,
     chef: "Christina"
   ),
 

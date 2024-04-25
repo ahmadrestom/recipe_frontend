@@ -68,7 +68,7 @@ class _RecentSearchesState extends State<RecentSearches> {
                       onTap: (){
                         Navigator.push(context,
                             MaterialPageRoute(builder:
-                                (context)=>const HomePage()));
+                                (context)=>HomePage()));
                       },
                       placeholder: "Search",
                       readOnly: true,

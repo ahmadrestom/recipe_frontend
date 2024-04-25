@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../models/recipe.dart';
-import '../pages/Data/recipes.dart';
 
 class RecipeCard extends StatelessWidget {
   const RecipeCard({super.key, required this.recipe});
@@ -63,7 +62,7 @@ class RecipeCard extends StatelessWidget {
             top: 10,
             right: 10,
             child: Container(
-              width: 40,
+              width: 48,
               height: 23,
               decoration: BoxDecoration(
                 color: const Color.fromRGBO(255, 225, 179, 1),
@@ -80,7 +79,7 @@ class RecipeCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 2.0,),
                   Text(
-                      (recipe.rating.index +1).toString()
+                      (recipe.rating).toString()
                   ),
                 ],
               ),
