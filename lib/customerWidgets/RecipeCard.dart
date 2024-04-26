@@ -70,8 +70,8 @@ class RecipeCard extends StatelessWidget {
 
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+
                 children: [
                   const Icon(
                     Icons.star,

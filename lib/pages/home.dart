@@ -8,6 +8,7 @@ import '../models/recipe.dart' as recipe;
 import '../models/recipe.dart';
 import '../pages/Data/recipes.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:rate_in_stars/rate_in_stars.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -371,7 +372,54 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ),
                                       ),
-                                      Transform.scale(
+
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          RatingStars(
+                                            editable: false,
+                                            rating: newRecipes[index].rating,
+                                            color: Colors.amber,
+                                            iconSize: 16,
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 5,),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "By Chef ${newRecipes[index].chef}",
+                                            style: const TextStyle(
+
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: const EdgeInsets.only(right: 15),
+                                            child: Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.timer_outlined, color: Color.fromRGBO(145, 145, 145, 1),
+                                                  size: 19,
+                                                ),
+                                                SizedBox(width: 6,),
+                                                Text(
+                                                  "${(newRecipes[index].preparationTime.inMinutes.toString())} Mins",
+                                                  style: const TextStyle(
+                                                    fontFamily: 'Poppins',
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 14,
+                                                    color: Color.fromRGBO(145, 145, 145, 1),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+
+                                        ],
+                                      ),
+
+                                      /*Transform.scale(
                                         alignment: Alignment.topLeft,
                                         scale: 0.45,
                                         child: RatingBar.builder(
@@ -384,7 +432,7 @@ class _HomePageState extends State<HomePage> {
                                             color: Colors.amber,
                                           ), onRatingUpdate: (double value) {  },
                                         ),
-                                      ),
+                                      )*/
                                     ],
                                   ),
                                 ),
