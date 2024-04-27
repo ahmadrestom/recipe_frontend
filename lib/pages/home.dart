@@ -7,8 +7,8 @@ import 'package:recipe_app/pages/recentSearches.dart';
 import '../models/recipe.dart' as recipe;
 import '../models/recipe.dart';
 import '../pages/Data/recipes.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:rate_in_stars/rate_in_stars.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,11 +20,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  int? currentSelection = 0;
+
   late List<Recipe> recipes;
   late List<Recipe> newRecipes;
+  final List<String> time = ["All", "New", "Old"];
+  final List<String> rating = ["1","2","3","4","5"];
 
   String selectedCategory = '';
-
 
   final List<String> categories = recipe.Category.values
       .map((e) => e.toString().split('.').last)
@@ -123,7 +126,9 @@ class _HomePageState extends State<HomePage> {
                         height: 45,
                       ),
                       onTap: (){
-                        //////////////////////////////
+                        Navigator.push(context,
+                            MaterialPageRoute(builder:
+                                (context)=>const RecentSearches()));
                       },
                     )
                   ],
@@ -358,7 +363,7 @@ class _HomePageState extends State<HomePage> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Container(
+                                      SizedBox(
                                         width: 125,
                                         child: Text(
                                           newRecipes[index].name,
@@ -402,7 +407,7 @@ class _HomePageState extends State<HomePage> {
                                                   Icons.timer_outlined, color: Color.fromRGBO(145, 145, 145, 1),
                                                   size: 19,
                                                 ),
-                                                SizedBox(width: 6,),
+                                                const SizedBox(width: 6,),
                                                 Text(
                                                   "${(newRecipes[index].preparationTime.inMinutes.toString())} Mins",
                                                   style: const TextStyle(

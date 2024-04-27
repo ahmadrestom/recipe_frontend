@@ -1,9 +1,7 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
 import '../customerWidgets/SquareTile.dart';
-import '../models/user.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

@@ -12,7 +12,7 @@ class RecipeCard extends StatelessWidget {
     return Container(
       child: Stack(
         children: [
-          Image.asset(recipe.imageUrl, fit:BoxFit.cover,width: width,height: height,),
+          Center(child: Image.asset(recipe.imageUrl, fit:BoxFit.cover,width: width,height: height,)),
           Container(
             width: width,
             height: height,

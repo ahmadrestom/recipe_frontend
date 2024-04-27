@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:recipe_app/pages/NavPage.dart';
-import 'package:recipe_app/pages/home.dart';
-import 'package:recipe_app/pages/landing.dart';
 import 'package:recipe_app/pages/login.dart';
 import 'package:recipe_app/pages/recentSearches.dart';
+import 'package:recipe_app/pages/savedRecipes.dart';
 import 'package:recipe_app/pages/signup.dart';
 
 void main() {
@@ -28,7 +27,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/navPage',
       routes: {
-        '/': (context) => const LandingPage(),
+        '/': (context) => const SavedRecipes(),
       },
       onGenerateRoute: (settings) {
         switch (settings.name) {

@@ -4,6 +4,8 @@ import 'package:recipe_app/customerWidgets/RecipeCard.dart';
 import 'package:recipe_app/pages/home.dart';
 import '../models/recipe.dart';
 import '../pages/Data/recipes.dart';
+import 'package:radio_grouped_buttons/radio_grouped_buttons.dart';
+import '../models/recipe.dart' as recipe;
 
 class RecentSearches extends StatefulWidget {
   const RecentSearches({super.key});
@@ -13,6 +15,14 @@ class RecentSearches extends StatefulWidget {
 }
 
 class _RecentSearchesState extends State<RecentSearches> {
+
+  final List<String> time = ["All", "New", "Old"];
+  final List<String> rating = ["1","2","3","4","5"];
+
+  final List<String> categories = recipe.Category.values
+      .map((e) => e.toString().split('.').last)
+      .map((category) => category.substring(0, 1).toUpperCase() + category.substring(1))
+      .toList();
 
   late List<Recipe> recipes;
 
@@ -68,7 +78,7 @@ class _RecentSearchesState extends State<RecentSearches> {
                       onTap: (){
                         Navigator.push(context,
                             MaterialPageRoute(builder:
-                                (context)=>HomePage()));
+                                (context)=>const HomePage()));
                       },
                       placeholder: "Search",
                       readOnly: true,
@@ -95,7 +105,146 @@ class _RecentSearchesState extends State<RecentSearches> {
                         height: 45,
                       ),
                       onTap: (){
-                        //////////////////////////////
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) => SingleChildScrollView(
+                            child: Container(
+                              width: double.infinity,
+                              margin: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Column(
+                                children: [
+                                  const Text(
+                                    "Filter Search",
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 15,
+                                        color: Color.fromRGBO(0, 0, 0, 1)
+                                    ),
+                                  ),
+                                  const SizedBox(height: 25,),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      const Text(
+                                        "Time",
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14,
+                                            color: Color.fromRGBO(0, 0, 0, 1)
+
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10,),
+
+                                      CustomRadioButton(
+                                        buttonLables: time,
+                                        buttonValues: time,
+                                        radioButtonValue: (value,index){
+
+                                        },
+                                        horizontal: true,
+                                        enableShape: false,
+                                        buttonSpace: 5,
+                                        elevation: 5,
+                                        buttonColor: const Color.fromRGBO(255, 255, 255, 1),
+                                        selectedColor: const Color.fromRGBO(18, 149, 117, 1),
+                                        selectedTextColor: const Color.fromRGBO(255, 255, 255, 1),
+                                        textColor: const Color.fromRGBO(113, 177, 161, 1),
+                                      ),
+                                      const SizedBox(height: 10,),
+                                      const Text(
+                                        "Rate",
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14,
+                                            color: Color.fromRGBO(0, 0, 0, 1)
+
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10,),
+                                      CustomRadioButton(
+                                        initialSelection: 0,
+                                        buttonLables: rating,
+                                        buttonValues: rating,
+                                        radioButtonValue: (value,index){
+
+                                        },
+                                        horizontal: true,
+                                        buttonWidth: 40,
+                                        enableShape: false,
+                                        buttonSpace: 5,
+                                        elevation: 5,
+                                        buttonColor: const Color.fromRGBO(255, 255, 255, 1),
+                                        selectedColor: const Color.fromRGBO(18, 149, 117, 1),
+                                        selectedTextColor: const Color.fromRGBO(255, 255, 255, 1),
+                                        textColor: const Color.fromRGBO(113, 177, 161, 1),
+                                      ),
+                                      const SizedBox(height: 10,),
+                                      const Text(
+                                        "Category",
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14,
+                                            color: Color.fromRGBO(0, 0, 0, 1)
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10,),
+                                      CustomRadioButton(
+                                        buttonLables: categories,
+                                        buttonValues: categories,
+                                        radioButtonValue: (value,index){
+
+                                        },
+                                        horizontal: true,
+                                        enableShape: false,
+                                        buttonSpace: 5,
+                                        elevation: 5,
+                                        buttonColor: const Color.fromRGBO(255, 255, 255, 1),
+                                        selectedColor: const Color.fromRGBO(18, 149, 117, 1),
+                                        selectedTextColor: const Color.fromRGBO(255, 255, 255, 1),
+                                        textColor: const Color.fromRGBO(113, 177, 161, 1),
+                                      ),
+                                      const SizedBox(height: 18,),
+                                      ElevatedButton(
+                                        style: ButtonStyle(
+                                          backgroundColor: MaterialStateProperty.all<Color>(
+                                            const Color.fromRGBO(18, 149, 117, 1),
+                                          ),
+                                        ),
+                                        onPressed: (){
+
+                                        },
+                                        child: const Center(
+                                          child: Text(
+                                            "Filter",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'Poppins',
+                                              color: Color.fromRGBO(255, 255, 255, 1),
+                                            ),
+                                          ),
+                                        ),
+
+                                      ),
+
+
+
+
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
                       },
                     )
                   ),
