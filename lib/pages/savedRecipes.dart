@@ -25,9 +25,6 @@ class _SavedRecipesState extends State<SavedRecipes> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.red)
-        ),
         padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
         child: Column(
           children: [
@@ -36,8 +33,8 @@ class _SavedRecipesState extends State<SavedRecipes> {
                 "Saved Recipes",
                 style: TextStyle(
                   fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 20,
                   color: Color.fromRGBO(18, 18, 18, 1),
                 ),
               ),
@@ -46,8 +43,12 @@ class _SavedRecipesState extends State<SavedRecipes> {
               child: ListView.builder(
                 itemCount: savedRecipes.length,
                 itemBuilder: (context, index){
+                  bool isFirst = index == 0;
+                  bool isLast = index == savedRecipes.length - 1;
+                  EdgeInsets itemMargin = EdgeInsets.only(
+                      top: isFirst ? 18 : 10, bottom: isLast ? 18 : 10);
                   return Container(
-                    padding: const EdgeInsets.only(bottom: 20),
+                    margin: itemMargin,
                     child: SavedRecipe(
                       recipe: savedRecipes[index],
                     ),

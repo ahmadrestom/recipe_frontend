@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: '/navPage',
+      //initialRoute: '/navPage',
       routes: {
         '/': (context) => const SavedRecipes(),
       },
@@ -39,7 +39,6 @@ class MyApp extends StatelessWidget {
               reverseDuration: const Duration(milliseconds: 200),
               settings: settings,
             );
-            break;
           case '/signup':
             return PageTransition(
               child:  const SignUpPage(),

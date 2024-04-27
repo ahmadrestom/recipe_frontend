@@ -237,16 +237,21 @@ class _HomePageState extends State<HomePage> {
 
                                 ),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     const Icon(
                                       Icons.star,
                                       color: Color.fromRGBO(255, 173, 48, 1),
+                                      size: 18,
                                     ),
-                                    const SizedBox(width: 1.0,),
                                     Text(
-                                        (recipes[index].rating).toString()
+                                      (recipes[index].rating).toString(),
+                                      style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        color: Color.fromRGBO(0, 0, 0, 1),
+                                      ),
                                     ),
                                   ],
                                 ),
