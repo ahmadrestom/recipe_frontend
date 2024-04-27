@@ -1,4 +1,5 @@
 import '../../models/recipe.dart';
+import './Chefs.dart' as chefs;
 
 List<Recipe> newRecipes =[
   Recipe(
@@ -32,7 +33,7 @@ List<Recipe> newRecipes =[
       rating: 4.5,
       plateImageUrl: "assets/images/ClassicGreekSalad.png",
       imageUrl: "assets/images/ChineseStyleEggFriedRiceWithSlicedPorkFillet.png",
-      chef: "Alex"
+      chef: chefs.Chefs[1],
   ),
   Recipe(
       id: 2,
@@ -66,7 +67,7 @@ List<Recipe> newRecipes =[
       imageUrl: "assets/images/SpiceRoastedChickenWithFlavoredRice.png",
       reviews:null,
       rating: 3.5,
-      chef: "Jake"
+    chef: chefs.Chefs[2],
   ),
   Recipe(
       id: 3,
@@ -106,7 +107,7 @@ List<Recipe> newRecipes =[
       imageUrl: "assets/images/LambChopsWithFruityCouscousAndMint.png",
       reviews: null,
       rating: 2,
-      chef: "Mike"
+    chef: chefs.Chefs[3],
   ),
   Recipe(
       id: 4,
@@ -148,7 +149,7 @@ List<Recipe> newRecipes =[
       imageUrl: "assets/images/TraditionalSpareRibsBaked.png",
       reviews: null,
       rating: 5.0,
-      chef: "Justin"
+    chef: chefs.Chefs[0],
   ),
   Recipe(
       id: 5,
@@ -183,7 +184,7 @@ List<Recipe> newRecipes =[
       imageUrl: "assets/images/TraditionalSpareRibsBaked.png",
       reviews: null,
       rating: 4,
-      chef: "Sofia"
+    chef: chefs.Chefs[4],
   ),
   Recipe(
       id: 6,
@@ -218,7 +219,7 @@ List<Recipe> newRecipes =[
       imageUrl: "assets/images/TraditionalSpareRibsBaked.png",
       reviews: null,
       rating: 2,
-      chef: "Mark"
+    chef: chefs.Chefs[4],
   ),
   Recipe(
       id: 7,
@@ -253,7 +254,7 @@ List<Recipe> newRecipes =[
       imageUrl: "assets/images/LambChopsWithFruityCouscousAndMint.png",
       reviews: null,
       rating: 4.5,
-      chef: "Jason"
+    chef: chefs.Chefs[3],
   ),
   Recipe(
       id: 8,
@@ -294,7 +295,7 @@ List<Recipe> newRecipes =[
       imageUrl: "assets/images/SpiceRoastedChickenWithFlavoredRice.png",
       reviews: null,
       rating: 3.5,
-      chef: "Melanie"
+    chef: chefs.Chefs[2],
   ),
   Recipe(
       id: 9,
@@ -335,7 +336,7 @@ List<Recipe> newRecipes =[
       imageUrl: "assets/images/ChineseStyleEggFriedRiceWithSlicedPorkFillet.png",
       reviews: null,
       rating: 2.5,
-      chef: "Christina"
+    chef: chefs.Chefs[1],
   ),
 
 

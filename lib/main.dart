@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:recipe_app/pages/NavPage.dart';
+import 'package:recipe_app/pages/landing.dart';
 import 'package:recipe_app/pages/login.dart';
 import 'package:recipe_app/pages/recentSearches.dart';
 import 'package:recipe_app/pages/savedRecipes.dart';
@@ -25,9 +26,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      //initialRoute: '/navPage',
+      initialRoute: '/navPage',
       routes: {
-        '/': (context) => const SavedRecipes(),
+        '/': (context) => const LandingPage(),
       },
       onGenerateRoute: (settings) {
         switch (settings.name) {

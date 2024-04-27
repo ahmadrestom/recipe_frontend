@@ -1,6 +1,6 @@
 import '../../models/user.dart';
 
-List<User> getUsers() {
+/*List<User> getUsers() {
   return [
     User(
       id: 1,
@@ -16,4 +16,4 @@ List<User> getUsers() {
     ),
     // Add more users here if needed
   ];
-}
+}*/

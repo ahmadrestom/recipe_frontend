@@ -399,7 +399,7 @@ class _HomePageState extends State<HomePage> {
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            "By Chef ${newRecipes[index].chef}",
+                                            "By Chef ${newRecipes[index].chef.firstName} ${newRecipes[index].chef.lastName}",
                                             style: const TextStyle(
 
                                             ),

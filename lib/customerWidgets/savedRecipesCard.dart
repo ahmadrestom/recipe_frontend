@@ -99,7 +99,7 @@ class SavedRecipe extends StatelessWidget {
                       ),
                       const SizedBox(height: 5,),
                       Text(
-                        "By Chef ${recipe.chef}",
+                        "By Chef ${recipe.chef.firstName} ${recipe.chef.lastName}",
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,

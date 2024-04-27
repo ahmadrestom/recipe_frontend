@@ -1,4 +1,5 @@
 import 'package:recipe_app/models/helpingModels/nutritional_information.dart';
+import 'chef.dart';
 import 'helpingModels/review.dart';
 
 class Recipe {
@@ -12,7 +13,7 @@ class Recipe {
   final Duration cookingTime;
   final DifficultyLevel difficultyLevel;
   final Category category;
-  final String chef;
+  final Chef chef;
   double rating;
   final NutritionalInformation? nutritionalInformation;
   final String imageUrl;
@@ -55,7 +56,7 @@ class Recipe {
       nutritionalInformation:
       NutritionalInformation.fromJson(json['nutritionalInformation'] as Map<String, dynamic>),
       imageUrl: json['imageUrl'] as String,
-      chef: json['chef'] as String,
+      chef: Chef.fromJson(json['chef'] as Map<String, dynamic>),
       rating: (json['rating'] as num).toDouble(),
       plateImageUrl: json['plateImageUrl'] as String,
       reviews: (json['reviews'] as List<dynamic>)
@@ -78,7 +79,7 @@ class Recipe {
       'category': category.toString().split('.').last,
       'nutritionalInformation': nutritionalInformation?.toJson(),
       'imageUrl': imageUrl,
-      'chef': chef,
+      'chef': chef.toJson(),
       'rating': rating,
       'plateImageUrl': plateImageUrl,
       'reviews': reviews?.map((e) => e.toJson()).toList(),

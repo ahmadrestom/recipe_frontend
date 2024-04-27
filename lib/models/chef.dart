@@ -1,51 +1,68 @@
 import 'package:recipe_app/models/recipe.dart';
+import 'package:recipe_app/models/user.dart';
 
 import 'helpingModels/review.dart';
 
-class User{
+class Chef extends User{
+  final String location;
+  final String phoneNumber;
+  final String bio;
+  final List<String> specialities;
+  final int yearsOfExperience;
 
-  final int id;
-  final String firstName;
-  final String lastName;
-  final String email;
-  final String password;
-  final String? imageUrl;
-  final List<Recipe>? favorites;
-  final List<Review>? reviews;
-  final List<String>? savedSearches;
-  final List<User>? followers;
-  final List<User>? followings;
+  Chef({
+    required int id,
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String password,
+    required String? imageUrl,
+    required this.location,
+    required this.phoneNumber,
+    required this.bio,
+    required this.specialities,
+    required this.yearsOfExperience,
+    List<Recipe>? favorites,
+    List<Review>? reviews,
+    List<String>? savedSearches,
+    List<User>? followers,
+    List<User>? followings,
+  }) : super(
+    id: id,
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    password: password,
+    imageUrl: imageUrl,
+    favorites: favorites,
+    reviews: reviews,
+    savedSearches: savedSearches,
+    followers: followers ?? [],
+    followings: followings ?? [],
+  );
 
-  User({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    required this.password,
-    this.imageUrl,
-    this.favorites,
-    this.reviews,
-    this.savedSearches,
-    this.followers = const [],
-    this.followings = const [],
-  });
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  factory Chef.fromJson(Map<String, dynamic> json) {
+    return Chef(
       id: json['id'],
       firstName: json['firstName'],
       lastName: json['lastName'],
       email: json['email'],
       password: json['password'],
       imageUrl: json['imageUrl'],
+      location: json['location'],
+      phoneNumber: json['phoneNumber'],
+      bio: json['bio'],
+      specialities: List<String>.from(json['specialities']),
+      yearsOfExperience: json['yearsOfExperience'],
       favorites: _parseRecipes(json['favorites']),
       reviews: _parseReviews(json['reviews']),
-      savedSearches: _parseSavedSearches(json['savedSearches']),
+      savedSearches: List<String>.from(json['savedSearches']),
       followers: _parseUsers(json['followers']),
       followings: _parseUsers(json['followings']),
     );
   }
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -54,6 +71,11 @@ class User{
       'email': email,
       'password': password,
       'imageUrl': imageUrl,
+      'location': location,
+      'phoneNumber': phoneNumber,
+      'bio': bio,
+      'specialities': specialities,
+      'yearsOfExperience': yearsOfExperience,
       'favorites': _toJsonList(favorites),
       'reviews': _toJsonList(reviews),
       'savedSearches': savedSearches,
@@ -72,11 +94,6 @@ class User{
     return json.map((item) => Review.fromJson(item)).toList();
   }
 
-  static List<String>? _parseSavedSearches(List<dynamic>? json) {
-    if (json == null) return null;
-    return List<String>.from(json);
-  }
-
   static List<User>? _parseUsers(List<dynamic>? json) {
     if (json == null) return null;
     return json.map((item) => User.fromJson(item)).toList();
@@ -91,4 +108,10 @@ class User{
     if (users == null) return [];
     return users.map((user) => user.toJson()).toList();
   }
+
+
+
+
+
+
 }
