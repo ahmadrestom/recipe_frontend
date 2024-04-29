@@ -4,6 +4,7 @@ import 'package:recipe_app/customerWidgets/CategoryItem.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_app/pages/Data/newRecipes.dart';
 import 'package:recipe_app/pages/recentSearches.dart';
+import 'package:recipe_app/pages/recipeInformation.dart';
 import '../models/recipe.dart' as recipe;
 import '../models/recipe.dart';
 import '../pages/Data/recipes.dart';
@@ -181,137 +182,147 @@ class _HomePageState extends State<HomePage> {
                       bool isLast = index == recipes.length - 1;
                       EdgeInsets itemMargin = EdgeInsets.only(
                           left: isFirst ? 30 : 10, right: isLast ? 30 : 10);
-                      return Container(
-                        margin: itemMargin,
-                        width: 150,
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              top: 50,
-                              child: Container(
-                                width: 150,
-                                height: 176,
-                                decoration: BoxDecoration(
-                                  //color: const Color.fromRGBO(217, 217, 217, 0.5),
-                                  borderRadius: BorderRadius.circular(12),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Color.fromRGBO(217, 217, 217, 1),
-                                        spreadRadius: 2,
-                                        blurRadius: 1,
-                                        offset: Offset(0,3),
-                                      )
-                                    ]
-                                ),
-                                child: Center(
-                                  child: Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: Text(
-                                      recipes[index].name,
-                                      textAlign: TextAlign.center,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
-                                      style: const TextStyle(
-                                        fontSize: 15,
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w600,
-                                        color: Color.fromRGBO(48, 48, 48, 1)
+                      return GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RecipeInformation(recipe: recipes[index]),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          margin: itemMargin,
+                          width: 150,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                top: 50,
+                                child: Container(
+                                  width: 150,
+                                  height: 176,
+                                  decoration: BoxDecoration(
+                                    //color: const Color.fromRGBO(217, 217, 217, 0.5),
+                                    borderRadius: BorderRadius.circular(12),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: Color.fromRGBO(217, 217, 217, 1),
+                                          spreadRadius: 2,
+                                          blurRadius: 1,
+                                          offset: Offset(0,3),
+                                        )
+                                      ]
+                                  ),
+                                  child: Center(
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                                      child: Text(
+                                        recipes[index].name,
+                                        textAlign: TextAlign.center,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w600,
+                                          color: Color.fromRGBO(48, 48, 48, 1)
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Image.asset(
-                              'assets/images/ClassicGreekSalad.png',
-                            ),
-                            Positioned(
-                              top: 27,
-                              right: 10,
-                              child: Container(
-                                width: 48,
-                                height: 23,
-                                decoration: BoxDecoration(
-                                  color: const Color.fromRGBO(255, 225, 179, 1),
-                                  borderRadius: BorderRadius.circular(20),
-
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(
-                                      Icons.star,
-                                      color: Color.fromRGBO(255, 173, 48, 1),
-                                      size: 18,
-                                    ),
-                                    Text(
-                                      (recipes[index].rating).toString(),
-                                      style: const TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                        color: Color.fromRGBO(0, 0, 0, 1),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                              Image.asset(
+                                'assets/images/ClassicGreekSalad.png',
                               ),
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                              Positioned(
+                                top: 27,
+                                right: 10,
+                                child: Container(
+                                  width: 48,
+                                  height: 23,
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromRGBO(255, 225, 179, 1),
+                                    borderRadius: BorderRadius.circular(20),
+
+                                  ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            "Time",
-                                            style: TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 11,
-                                                color: Color.fromRGBO(18, 149, 117, 1)
-                                            ),
-                                          ),
-                                          Text(
-                                            '${recipes[index].preparationTime.inMinutes.toString()} Mins',
-                                            style: const TextStyle(
-                                              fontFamily: 'Poppins',
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 11,
-                                              color: Color.fromRGBO(50, 50, 50, 1),
-                                            ),
-                                          ),
-                                        ],
+                                      const Icon(
+                                        Icons.star,
+                                        color: Color.fromRGBO(255, 173, 48, 1),
+                                        size: 18,
                                       ),
-                                      Container(
-                                        width: 35,
-                                        height: 35,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(40),
-                                          color: const Color.fromRGBO(255, 255, 255, 1)
-                                        ),
-                                        child: GestureDetector(
-                                          child: const Icon(
-                                            Ionicons.bookmark_outline,
-                                              color: Color.fromRGBO(18, 149, 117, 1),
-                                            size: 26,
-                                          ),
-                                          onTap: (){
-                                            ////////////////////////////////////
-                                          },
+                                      Text(
+                                        (recipes[index].rating).toString(),
+                                        style: const TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                          color: Color.fromRGBO(0, 0, 0, 1),
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ],
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              "Time",
+                                              style: TextStyle(
+                                                  fontFamily: 'Poppins',
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 11,
+                                                  color: Color.fromRGBO(18, 149, 117, 1)
+                                              ),
+                                            ),
+                                            Text(
+                                              '${recipes[index].preparationTime.inMinutes.toString()} Mins',
+                                              style: const TextStyle(
+                                                fontFamily: 'Poppins',
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 11,
+                                                color: Color.fromRGBO(50, 50, 50, 1),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Container(
+                                          width: 35,
+                                          height: 35,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(40),
+                                            color: const Color.fromRGBO(255, 255, 255, 1)
+                                          ),
+                                          child: GestureDetector(
+                                            child: const Icon(
+                                              Ionicons.bookmark_outline,
+                                                color: Color.fromRGBO(18, 149, 117, 1),
+                                              size: 26,
+                                            ),
+                                            onTap: (){
+                                              ////////////////////////////////////
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     }
@@ -341,125 +352,135 @@ class _HomePageState extends State<HomePage> {
                       bool isLast = index == newRecipes.length - 1;
                       EdgeInsets itemMargin = EdgeInsets.only(
                           left: isFirst ? 30 : 10, right: isLast ? 30 : 10);
-                      return Container(
-                        margin: itemMargin,
-                        width: 251,
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              top: 40,
-                              child: Container(
-                                width: 251,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  color: const Color.fromRGBO(255, 255, 255, 1),
-                                  borderRadius: BorderRadius.circular(12),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: Color.fromRGBO(0, 0, 0, 0.2),
-                                      spreadRadius: 0,
-                                      blurRadius: 20,
-                                      offset: Offset(0,3),
-                                    )
-                                  ]
-                                ),
+                      return GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RecipeInformation(recipe: newRecipes[index]),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          margin: itemMargin,
+                          width: 251,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                top: 40,
                                 child: Container(
-                                  margin: const EdgeInsets.only(left: 10, top: 10),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        width: 125,
-                                        child: Text(
-                                          newRecipes[index].name,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: 13,
-                                            color: Color.fromRGBO(72, 72, 72, 1),
-                                          ),
-                                        ),
-                                      ),
-
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          RatingStars(
-                                            editable: false,
-                                            rating: newRecipes[index].rating,
-                                            color: Colors.amber,
-                                            iconSize: 16,
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 5,),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "By Chef ${newRecipes[index].chef.firstName} ${newRecipes[index].chef.lastName}",
+                                  width: 251,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromRGBO(255, 255, 255, 1),
+                                    borderRadius: BorderRadius.circular(12),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: Color.fromRGBO(0, 0, 0, 0.2),
+                                        spreadRadius: 0,
+                                        blurRadius: 20,
+                                        offset: Offset(0,3),
+                                      )
+                                    ]
+                                  ),
+                                  child: Container(
+                                    margin: const EdgeInsets.only(left: 10, top: 10),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: 125,
+                                          child: Text(
+                                            newRecipes[index].name,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
                                             style: const TextStyle(
-
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.w900,
+                                              fontSize: 13,
+                                              color: Color.fromRGBO(72, 72, 72, 1),
                                             ),
                                           ),
-                                          Container(
-                                            padding: const EdgeInsets.only(right: 15),
-                                            child: Row(
-                                              children: [
-                                                const Icon(
-                                                  Icons.timer_outlined, color: Color.fromRGBO(145, 145, 145, 1),
-                                                  size: 19,
-                                                ),
-                                                const SizedBox(width: 6,),
-                                                Text(
-                                                  "${(newRecipes[index].preparationTime.inMinutes.toString())} Mins",
-                                                  style: const TextStyle(
-                                                    fontFamily: 'Poppins',
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: 14,
-                                                    color: Color.fromRGBO(145, 145, 145, 1),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-
-                                        ],
-                                      ),
-
-                                      /*Transform.scale(
-                                        alignment: Alignment.topLeft,
-                                        scale: 0.45,
-                                        child: RatingBar.builder(
-                                          initialRating: newRecipes[index].rating,
-                                          direction: Axis.horizontal,
-                                          allowHalfRating: true,
-                                          itemCount: 5,
-                                          itemBuilder: (context, _) => const Icon(
-                                            Icons.star,
-                                            color: Colors.amber,
-                                          ), onRatingUpdate: (double value) {  },
                                         ),
-                                      )*/
-                                    ],
+
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            RatingStars(
+                                              editable: false,
+                                              rating: newRecipes[index].rating,
+                                              color: Colors.amber,
+                                              iconSize: 16,
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 5,),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "By Chef ${newRecipes[index].chef.firstName} ${newRecipes[index].chef.lastName}",
+                                              style: const TextStyle(
+
+                                              ),
+                                            ),
+                                            Container(
+                                              padding: const EdgeInsets.only(right: 15),
+                                              child: Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.timer_outlined, color: Color.fromRGBO(145, 145, 145, 1),
+                                                    size: 19,
+                                                  ),
+                                                  const SizedBox(width: 6,),
+                                                  Text(
+                                                    "${(newRecipes[index].preparationTime.inMinutes.toString())} Mins",
+                                                    style: const TextStyle(
+                                                      fontFamily: 'Poppins',
+                                                      fontWeight: FontWeight.w400,
+                                                      fontSize: 14,
+                                                      color: Color.fromRGBO(145, 145, 145, 1),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+
+                                          ],
+                                        ),
+
+                                        /*Transform.scale(
+                                          alignment: Alignment.topLeft,
+                                          scale: 0.45,
+                                          child: RatingBar.builder(
+                                            initialRating: newRecipes[index].rating,
+                                            direction: Axis.horizontal,
+                                            allowHalfRating: true,
+                                            itemCount: 5,
+                                            itemBuilder: (context, _) => const Icon(
+                                              Icons.star,
+                                              color: Colors.amber,
+                                            ), onRatingUpdate: (double value) {  },
+                                          ),
+                                        )*/
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: SizedBox(
-                                width: 130,
-                                height: 130,
-                                child: Image.asset(
-                                  'assets/images/CrunchyNutColeslaw.png',
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: SizedBox(
+                                  width: 130,
+                                  height: 130,
+                                  child: Image.asset(
+                                    'assets/images/CrunchyNutColeslaw.png',
 
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       );
                     }
@@ -472,4 +493,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_app/customerWidgets/RecipeCard.dart';
 import 'package:recipe_app/pages/home.dart';
+import 'package:recipe_app/pages/recipeInformation.dart';
 import '../models/recipe.dart';
 import '../pages/Data/recipes.dart';
 import 'package:radio_grouped_buttons/radio_grouped_buttons.dart';
@@ -279,7 +280,16 @@ class _RecentSearchesState extends State<RecentSearches> {
                   childAspectRatio: 1, // Aspect ratio of each grid item
                 ),
                 itemBuilder: (BuildContext context, int index) {
-                  return RecipeCard(recipe: recipes[index]);
+                  return GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RecipeInformation(recipe: recipes[index]),
+                          ),
+                        );
+                      },
+                    child: RecipeCard(recipe: recipes[index]));
                 },
               ),
             ),

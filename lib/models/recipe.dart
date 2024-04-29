@@ -1,3 +1,4 @@
+import 'package:recipe_app/models/helpingModels/ingredients.dart';
 import 'package:recipe_app/models/helpingModels/nutritional_information.dart';
 import 'chef.dart';
 import 'helpingModels/review.dart';
@@ -7,7 +8,7 @@ class Recipe {
   final String name;
   final String description;
   final DateTime timeUploaded;
-  final List<String> ingredients;
+  final List<Ingredients> ingredients;
   final List<String> instructions;
   final Duration preparationTime;
   final Duration cookingTime;
@@ -45,7 +46,7 @@ class Recipe {
       name: json['name'] as String,
       description: json['description'] as String,
       timeUploaded: DateTime.parse(json['timeUploaded'] as String),
-      ingredients: (json['ingredients'] as List<dynamic>).cast<String>(),
+      ingredients: List<Ingredients>.from(json['ingredients'].map((x) => Ingredients.fromJson(x))),
       instructions: (json['instructions'] as List<dynamic>).cast<String>(),
       preparationTime: Duration(minutes: json['preparationTime'] as int),
       cookingTime: Duration(minutes: json['cookingTime'] as int),
@@ -71,7 +72,7 @@ class Recipe {
       'name': name,
       'description': description,
       'timeUploaded': timeUploaded.toIso8601String(),
-      'ingredients': ingredients,
+      'ingredients': ingredients.map((ingredient) => ingredient.toJson()).toList(),
       'instructions': instructions,
       'preparationTime': preparationTime.inMinutes,
       'cookingTime': cookingTime.inMinutes,
@@ -92,6 +93,13 @@ class Recipe {
 
   void setRating(double value){
     rating = (value < 1) ? 1 : (value > 5) ? 5 : value.toDouble();
+  }
+
+  int getNumberOfReviews() {
+    if (reviews == null || reviews!.isEmpty) {
+      return 0;
+    }
+    return reviews!.length;
   }
 
 

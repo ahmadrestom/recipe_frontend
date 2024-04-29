@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_app/pages/recipeInformation.dart';
 
 import '../customerWidgets/savedRecipesCard.dart';
 import '../models/recipe.dart';
@@ -47,10 +48,20 @@ class _SavedRecipesState extends State<SavedRecipes> {
                   bool isLast = index == savedRecipes.length - 1;
                   EdgeInsets itemMargin = EdgeInsets.only(
                       top: isFirst ? 18 : 10, bottom: isLast ? 18 : 10);
-                  return Container(
-                    margin: itemMargin,
-                    child: SavedRecipe(
-                      recipe: savedRecipes[index],
+                  return GestureDetector(
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RecipeInformation(recipe: savedRecipes[index]),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      margin: itemMargin,
+                      child: SavedRecipe(
+                        recipe: savedRecipes[index],
+                      ),
                     ),
                   );
                 },
