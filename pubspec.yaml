@@ -29,6 +29,8 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   page_transition: ^2.1.0
+  dialog_alert_transition: ^1.0.6
+  flutter_rating_bar: ^4.0.1
   rate_in_stars: ^0.0.3
   custom_radio_grouped_button: ^2.2.1
   radio_grouped_buttons: ^1.0.1

@@ -1,24 +1,31 @@
+import 'package:dialog_alert_transition/animated/bounces.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:radio_grouped_buttons/custom_buttons/custom_radio_buttons_group.dart';
 import 'package:recipe_app/pages/Data/recipes.dart';
 import '../customerWidgets/RecipeInformationCard.dart';
 import '../models/recipe.dart';
+import 'package:dialog_alert_transition/dialog_alert_transition.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class RecipeInformation extends StatefulWidget {
   RecipeInformation({super.key, required this.recipe});
   final Recipe recipe;
   String selectedOption = "Ingredients";
 
+
   @override
   State<RecipeInformation> createState() => _RecipeInformationState();
 }
 
 class _RecipeInformationState extends State<RecipeInformation> {
+  final TextEditingController _controller = TextEditingController(text: "https://google.com");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        margin: const EdgeInsets.fromLTRB(30, 25, 30, 25),
+        margin: const EdgeInsets.fromLTRB(30, 12, 30, 25),
         child: Column(
           children: [
             Row(
@@ -35,15 +42,234 @@ class _RecipeInformationState extends State<RecipeInformation> {
                   ),
                 ),
 
-                GestureDetector(
-                  onTap: (){
-                    ////////////////////////////////
-                  },
-                  child: const Icon(
+                PopupMenuButton(
+                  elevation: 10,
+                  offset: const Offset(0,40),
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  shadowColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10), // Adjust the radius as needed
+                  ),
+                  color: const Color.fromRGBO(255, 255, 255, 1),
+                  icon: const Icon(
                     Icons.more_horiz,
                     size: 27,
-                    color: Color.fromRGBO(41, 45, 50, 1),
                   ),
+                  onSelected: (String value){
+
+                  },
+                  itemBuilder: (BuildContext context)=> <PopupMenuEntry<String>>[
+                    PopupMenuItem(
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      child: const Row(
+                        children: [
+                          Icon(Icons.share, size: 20,),
+                          SizedBox(width: 30,),
+                          Text(
+                            "Share",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Poppins',
+                              color: Color.fromRGBO(18, 18, 18, 1),
+
+                            ),
+                          ),
+                        ],
+                      ),
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context){
+                            return Center(
+                              child: SingleChildScrollView(
+                                child: Container(
+                                  constraints: BoxConstraints(
+                                    minHeight:  MediaQuery.of(context).size.height * 0.38,
+                                  ),
+                                  child: AlertDialog(
+                                    backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+                                    title: const Text(
+                                      "Recipe Link",
+                                      style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20,
+                                        color: Color.fromRGBO(0, 0, 0, 1),
+                                      ),
+                                    ),
+                                    content: Column(
+                                      children: [
+                                        const Text(
+                                          "Copy recipe link and share your recipe link with friends and family.",
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 11,
+                                            color: Color.fromRGBO(121, 121, 121, 1),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10,),
+                                        CupertinoTextField(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                          readOnly: true,
+                                          enabled: false,
+                                          controller: _controller,
+                                          suffix: ElevatedButton(
+                                            style: ButtonStyle(
+                                              shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                              ),
+                                              backgroundColor: MaterialStateProperty.all(
+                                                const Color.fromRGBO(18, 149, 117, 1),
+                                              ),
+
+                                            ),
+                                            onPressed: (){
+                                              /////////////////////////////////
+                                            },
+                                            child: const Text(
+                                              "Copy Link",
+                                              style: TextStyle(
+                                                fontFamily: "Poppins",
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 11,
+                                                color: Color.fromRGBO(255, 255, 255, 1),
+                                              ),
+                                            ),
+                                          ),
+
+                                        ),
+                                      ],
+                                    ),
+
+
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                        );
+                      },
+                    ),
+                    PopupMenuItem(
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      child: const Row(
+                        children: [
+                          Icon(Icons.star, size: 20,),
+                          SizedBox(width: 30,),
+                          Text(
+                            "Rate Recipe",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Poppins',
+                              color: Color.fromRGBO(18, 18, 18, 1),
+
+                            ),
+                          ),
+                        ],
+                      ),
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context){
+                              return Center(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white,
+                                  ),
+                                  height: MediaQuery.of(context).size.height * 0.16,
+                                  width: MediaQuery.of(context).size.width * 0.54,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Text(
+                                          "Rate Recipe",
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 13,
+                                          color: Color.fromRGBO(18, 18, 18, 1),
+                                        ),
+                                      ),
+                                      SizedBox(height: 5.0,),
+                                      RatingBar.builder(
+                                        itemPadding: EdgeInsets.only(right: 3),
+                                        glowColor: Colors.amberAccent,
+                                        unratedColor: Color.fromRGBO(100,100,100,1),
+                                        minRating: 1,
+                                        maxRating: 5,
+                                        itemSize: 25.0,
+                                        allowHalfRating: true,
+                                        initialRating: 0,
+                                        itemBuilder: (context, index)=>const Icon(
+                                          Ionicons.star,
+                                          color: Colors.amber,
+                                        ),
+                                        onRatingUpdate: (rating){
+                                          print(rating);
+                                        }
+                                      ),
+                                      SizedBox(height: 10.0,),
+                                      ElevatedButton(
+                                        style: ButtonStyle(
+                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                          ),
+                                          backgroundColor: MaterialStateProperty.all<Color>(
+                                            const Color.fromRGBO(18, 149, 117, 1),
+                                          )
+                                        ),
+                                          onPressed: (){
+                                            ///////////////////////////////////////
+                                          },
+                                          child: const Text(
+                                            "Rate",
+                                            style: TextStyle(
+                                              color: Color.fromRGBO(255, 255, 255, 1),
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 11,
+                                            ),
+
+                                          ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
+                        );
+                      },
+                    ),
+                    const PopupMenuItem(
+                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      child: Row(
+                        children: [
+                          Icon(Icons.rate_review_sharp, size: 20,),
+                          SizedBox(width: 30,),
+                          Text(
+                            "Review",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Poppins',
+                              color: Color.fromRGBO(18, 18, 18, 1),
+
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]
                 ),
               ],
             ),
@@ -291,7 +517,7 @@ class _RecipeInformationState extends State<RecipeInformation> {
                     itemCount: widget.recipe.instructions.length,
                     itemBuilder: (context, index){
                       return Container(
-                        constraints: BoxConstraints(minHeight: 50),
+                        constraints: const BoxConstraints(minHeight: 50),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: const Color.fromRGBO(217, 217, 217, 1),
