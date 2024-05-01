@@ -1,5 +1,6 @@
 import 'package:recipe_app/models/helpingModels/ingredients.dart';
-
+import 'package:recipe_app/models/helpingModels/review.dart';
+import 'package:recipe_app/pages/Data/users.dart' as users;
 import '../../models/recipe.dart';
 import './Chefs.dart' as chefs;
 List<Recipe> recipes = [
@@ -35,6 +36,13 @@ List<Recipe> recipes = [
     plateImageUrl: "assets/images/ClassicGreekSalad.png",
     imageUrl: "assets/images/ChineseStyleEggFriedRiceWithSlicedPorkFillet.png",
     chef: chefs.Chefs[1],
+    reviews: [
+      Review(
+          user: users.users[1],
+          text: "This was a really good experience. We really liked the food. Bravo!",
+          rating: 4.5,
+      )
+    ],
   ),
   Recipe(
     id: 2,
@@ -66,9 +74,71 @@ List<Recipe> recipes = [
     nutritionalInformation: null,
     plateImageUrl: "assets/images/CrunchyNutColeslaw.png",
     imageUrl: "assets/images/SpiceRoastedChickenWithFlavoredRice.png",
-    reviews:null,
+    reviews: [
+      Review(
+        user: users.users[0],
+        text: "We really liked the food good job",
+        rating: 4,
+      ),
+      Review(
+        user: users.users[1],
+        text: "I liked the food but the service is bad",
+        rating: 2.5,
+      ),
+      Review(
+        user: users.users[0],
+        text: "Perfect taste! We really like the food",
+        rating: 4.5,
+      ),
+      Review(
+        user: users.users[1],
+        text: "Not so good",
+        rating: 1,
+      ),
+      Review(
+        user: users.users[0],
+        text: "We really liked the food good job",
+        rating: 4,
+      ),
+      Review(
+        user: users.users[1],
+        text: "I liked the food but the service is bad",
+        rating: 2.5,
+      ),
+      Review(
+        user: users.users[0],
+        text: "Perfect taste! We really like the food",
+        rating: 4.5,
+      ),
+      Review(
+        user: users.users[1],
+        text: "Not so good",
+        rating: 1,
+      ),
+      Review(
+        user: users.users[0],
+        text: "We really liked the food good job",
+        rating: 4,
+      ),
+      Review(
+        user: users.users[1],
+        text: "I liked the food but the service is bad",
+        rating: 2.5,
+      ),
+      Review(
+        user: users.users[0],
+        text: "Perfect taste! We really like the food",
+        rating: 4.5,
+      ),
+      Review(
+        user: users.users[1],
+        text: "Not so good",
+        rating: 1,
+      ),
+    ],
       rating: 3.5,
     chef: chefs.Chefs[2],
+
   ),
   Recipe(
     id: 3,
@@ -106,8 +176,14 @@ List<Recipe> recipes = [
     //imageUrl: "assets/images/ShrimpChickenAndouilleSausageJambalaya.png",
     plateImageUrl: "assets/images/ClassicGreekSalad.png",
     imageUrl: "assets/images/LambChopsWithFruityCouscousAndMint.png",
-    reviews: null,
-      rating: 2,
+    reviews: [
+      Review(
+        user: users.users[1],
+        text: "The food was good but i dont like the service",
+        rating: 3,
+      )
+    ],
+    rating: 2,
     chef: chefs.Chefs[0],
   ),
   Recipe(

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import '../models/recipe.dart';
@@ -73,7 +72,7 @@ class SavedRecipe extends StatelessWidget {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(17, 0, 17, 17),
+            margin: const EdgeInsets.fromLTRB(17, 0, 17, 17),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

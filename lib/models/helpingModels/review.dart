@@ -6,6 +6,7 @@ class Review{
   final double rating;
   int likes;
   int dislikes;
+  final DateTime timeUploaded;
 
   Review({
     required this.user,
@@ -13,7 +14,8 @@ class Review{
     required this.rating,
     this.likes = 0,
     this.dislikes = 0,
-  });
+    DateTime? timeUploaded,
+  }) : timeUploaded = timeUploaded ?? DateTime.now();
 
   factory Review.fromJson(Map<String, dynamic> json) {
     return Review(
@@ -22,6 +24,7 @@ class Review{
       rating: json['rating'] as double,
       likes: json['likes'] as int,
       dislikes: json['dislikes'] as int,
+      timeUploaded: DateTime.parse(json['timeUploaded']),
     );
   }
 
@@ -31,7 +34,8 @@ class Review{
       'text': text,
       'rating': rating,
       'likes': likes,
-      'dislikes': dislikes
+      'dislikes': dislikes,
+      'timeUploaded': timeUploaded.toIso8601String(),
     };
   }
 }

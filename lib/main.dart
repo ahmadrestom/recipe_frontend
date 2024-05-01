@@ -7,6 +7,7 @@ import 'package:recipe_app/pages/landing.dart';
 import 'package:recipe_app/pages/login.dart';
 import 'package:recipe_app/pages/recentSearches.dart';
 import 'package:recipe_app/pages/recipeInformation.dart';
+import 'package:recipe_app/pages/reviews.dart';
 import 'package:recipe_app/pages/signup.dart';
 import 'package:recipe_app/pages/Data/recipes.dart' as recipes;
 
@@ -28,10 +29,10 @@ class MyApp extends StatelessWidget {
         //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: '/recipeInformation',
+      initialRoute: '/reviews',
       routes: {
         '/': (context) => const LandingPage(),
-        '/recipeInformation': (context) => RecipeInformation(recipe: recipes.recipes[0]),
+        '/reviews': (context) => Reviews(recipe: recipes.recipes[1]),
       },
       onGenerateRoute: (settings) {
         switch (settings.name) {
@@ -67,6 +68,19 @@ class MyApp extends StatelessWidget {
               reverseDuration: const Duration(milliseconds: 200),
               settings: settings,
             );
+          case '/reviews':
+            final args = settings.arguments;
+            if(args is Recipe) {
+              return PageTransition(
+                child: Reviews(recipe: args),
+                type: PageTransitionType.fade,
+                duration: const Duration(milliseconds: 350),
+                reverseDuration: const Duration(milliseconds: 200),
+                settings: settings,
+              );
+            }else{
+              return null;
+            }
           case '/recipeInformation':
             final args = settings.arguments;
             if(args is Recipe) {

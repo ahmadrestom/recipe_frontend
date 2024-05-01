@@ -1,12 +1,9 @@
-import 'package:dialog_alert_transition/animated/bounces.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:radio_grouped_buttons/custom_buttons/custom_radio_buttons_group.dart';
-import 'package:recipe_app/pages/Data/recipes.dart';
 import '../customerWidgets/RecipeInformationCard.dart';
 import '../models/recipe.dart';
-import 'package:dialog_alert_transition/dialog_alert_transition.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class RecipeInformation extends StatefulWidget {
@@ -198,11 +195,11 @@ class _RecipeInformationState extends State<RecipeInformation> {
                                           color: Color.fromRGBO(18, 18, 18, 1),
                                         ),
                                       ),
-                                      SizedBox(height: 5.0,),
+                                      const SizedBox(height: 5.0,),
                                       RatingBar.builder(
-                                        itemPadding: EdgeInsets.only(right: 3),
+                                        itemPadding: const EdgeInsets.only(right: 3),
                                         glowColor: Colors.amberAccent,
-                                        unratedColor: Color.fromRGBO(100,100,100,1),
+                                        unratedColor: const Color.fromRGBO(100,100,100,1),
                                         minRating: 1,
                                         maxRating: 5,
                                         itemSize: 25.0,
@@ -216,7 +213,7 @@ class _RecipeInformationState extends State<RecipeInformation> {
                                           print(rating);
                                         }
                                       ),
-                                      SizedBox(height: 10.0,),
+                                      const SizedBox(height: 10.0,),
                                       ElevatedButton(
                                         style: ButtonStyle(
                                           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -250,9 +247,9 @@ class _RecipeInformationState extends State<RecipeInformation> {
                         );
                       },
                     ),
-                    const PopupMenuItem(
-                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                      child: Row(
+                    PopupMenuItem(
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      child: const Row(
                         children: [
                           Icon(Icons.rate_review_sharp, size: 20,),
                           SizedBox(width: 30,),
@@ -268,6 +265,14 @@ class _RecipeInformationState extends State<RecipeInformation> {
                           ),
                         ],
                       ),
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RecipeInformation(recipe: widget.recipe),
+                          ),
+                        );
+                      },
                     ),
                   ]
                 ),
