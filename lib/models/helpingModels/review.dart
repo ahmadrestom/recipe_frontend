@@ -6,6 +6,8 @@ class Review{
   final double rating;
   int likes;
   int dislikes;
+  bool isLiked;
+  bool isDisliked;
   final DateTime timeUploaded;
 
   Review({
@@ -13,6 +15,8 @@ class Review{
     required this.text,
     required this.rating,
     this.likes = 0,
+    this.isDisliked = false,
+    this.isLiked = false,
     this.dislikes = 0,
     DateTime? timeUploaded,
   }) : timeUploaded = timeUploaded ?? DateTime.now();
