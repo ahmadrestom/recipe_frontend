@@ -111,6 +111,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 8.0),
                     TextField(
+                      obscureText: true,
+                      obscuringCharacter: '*',
                       controller: _password,
                       decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(

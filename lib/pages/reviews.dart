@@ -197,7 +197,9 @@ class _ReviewsState extends State<Reviews> {
                                 Container(
                                   decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10.0),
-                                  color: const Color.fromRGBO(219, 235, 231, 1),
+                                    color: widget.recipe.reviews![index].isLiked ?
+                                    const Color.fromRGBO(18, 149, 117, 1):
+                                        const Color.fromRGBO(219, 235, 231, 1),
                                     ),
                                   width: 35,
                                   height: 19,
@@ -242,7 +244,9 @@ class _ReviewsState extends State<Reviews> {
                                 Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10.0),
-                                    color: const Color.fromRGBO(219, 235, 231, 1),
+                                    color: widget.recipe.reviews![index].isDisliked?
+                                        const Color.fromRGBO(255, 30, 30, 1):
+                                    const Color.fromRGBO(219, 235, 231, 1)
                                   ),
                                   width: 35,
                                   height: 19,

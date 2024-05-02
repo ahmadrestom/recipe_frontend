@@ -3,7 +3,6 @@ import 'package:recipe_app/models/recipe.dart';
 import 'helpingModels/review.dart';
 
 class User{
-
   final int id;
   final String firstName;
   final String lastName;
