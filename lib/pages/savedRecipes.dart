@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:recipe_app/pages/recipeInformation.dart';
 
 import '../customerWidgets/savedRecipesCard.dart';
 import '../models/recipe.dart';
-import 'Data/savedRecipes.dart';
+//import 'Data/savedRecipes.dart';
 
 class SavedRecipes extends StatefulWidget {
   const SavedRecipes({super.key});
@@ -19,7 +19,7 @@ class _SavedRecipesState extends State<SavedRecipes> {
   @override
   void initState(){
     super.initState();
-    savedRecipes = getSavedRecipes();
+    //savedRecipes = getSavedRecipes();
   }
 
   @override
@@ -73,3 +73,4 @@ class _SavedRecipesState extends State<SavedRecipes> {
     );
   }
 }
+*/

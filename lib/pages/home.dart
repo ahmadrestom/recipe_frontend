@@ -1,13 +1,14 @@
+/*
 import 'package:flutter/cupertino.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:recipe_app/customerWidgets/CategoryItem.dart';
 import 'package:flutter/material.dart';
-import 'package:recipe_app/pages/Data/newRecipes.dart';
+//import 'package:recipe_app/pages/Data/newRecipes.dart';
 import 'package:recipe_app/pages/recentSearches.dart';
 import 'package:recipe_app/pages/recipeInformation.dart';
 import '../models/recipe.dart' as recipe;
 import '../models/recipe.dart';
-import '../pages/Data/recipes.dart';
+//import '../pages/Data/recipes.dart';
 import 'package:rate_in_stars/rate_in_stars.dart';
 
 
@@ -38,8 +39,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState(){
     super.initState();
-    recipes = getRecipes();
-    newRecipes = getNewRecipes();
+    //recipes = getRecipes();
+    //newRecipes = getNewRecipes();
   }
 
   @override
@@ -492,4 +493,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
+}*/

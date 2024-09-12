@@ -6,6 +6,8 @@ import 'package:recipe_app/pages/savedRecipes.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 import 'package:ionicons/ionicons.dart';
 
+import 'delete.dart';
+
 class NavPage extends StatefulWidget {
   const NavPage({super.key});
 
@@ -17,7 +19,7 @@ class _NavPageState extends State<NavPage> {
 
   final bottomBarPages = [
     const HomePage(),
-    const SavedRecipes(),
+    /////////////////const SavedRecipes(),
     const Notifications(),
     const Profile(),
   ];

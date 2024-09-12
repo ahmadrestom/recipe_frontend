@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
-import '../models/recipe.dart';
+import '../models/GetRecipe.dart';
 
 class SavedRecipe extends StatelessWidget {
   const SavedRecipe({super.key, required this.recipe});
@@ -155,3 +155,4 @@ class SavedRecipe extends StatelessWidget {
     );
   }
 }
+*/

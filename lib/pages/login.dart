@@ -1,10 +1,18 @@
-
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:provider/provider.dart';
+import 'package:recipe_app/Providers/UserProvider.dart';
+import 'package:recipe_app/models/UserManagement/userAuthentication.dart';
+import 'package:recipe_app/pages/delete.dart';
+import 'package:recipe_app/services/UserServices/AuthService.dart';
+import '../Providers/UserProvider.dart';
+import '../Providers/UserProvider.dart';
 import '../customerWidgets/SquareTile.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final AuthService authService;
+  const LoginPage({super.key, required this.authService});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -12,47 +20,72 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
+
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _password = TextEditingController();
-  String? _errorText;
+  bool _isLoading = false;
+  final AuthService authService = AuthService();
 
+
+
+  Future<void> _login() async{
+    setState(() {
+      _isLoading = true;
+    });
+
+    UserAuthentication userAuth = UserAuthentication(
+        email: _emailController.text, password: _password.text
+    );
+
+    try{
+      widget.authService.login(userAuth);
+      print('Login successful');
+    }catch(e){
+      print('error: $e');
+    }finally{
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return KeyboardDismisser(
       gestures: const [GestureType.onPanUpdateAnyDirection, GestureType.onTap],
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        body: SingleChildScrollView(
+        body: _isLoading
+            ? const CircularProgressIndicator()
+            : SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 94, left: 30),
-                child: Container(
-                  child: const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Hello',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                          color: Color.fromRGBO(0, 0, 0, 1),
-                          fontSize: 30
-                        ),
+              const Padding(
+                padding: EdgeInsets.only(top: 94, left: 30),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Hello',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
+                        color: Color.fromRGBO(0, 0, 0, 1),
+                        fontSize: 30
                       ),
-                      Text(
-                        'Welcome Back!',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w400,
-                          color: Color.fromRGBO(0, 0, 0, 1),
-                          fontSize: 20
-                        ),
+                    ),
+                    Text(
+                      'Welcome Back!',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        color: Color.fromRGBO(0, 0, 0, 1),
+                        fontSize: 20
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
               Padding(
@@ -157,9 +190,34 @@ class _LoginPageState extends State<LoginPage> {
                     width: 315,
                     height: 60,
                     child: ElevatedButton(
-                      onPressed: () {
-                        //////////////////////////////////
-                      },
+                      onPressed: () async{
+                        final userProvider = Provider.of<UserProvider>(context, listen: false);
+                        final userAuth = UserAuthentication(
+                            email: _emailController.text,
+                            password: _password.text
+                        );
+                        await userProvider.login(userAuth);
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (userProvider.isAuthenticated){
+                        print("XXX");
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomePage(),
+                          ),
+                        );
+                      } else {
+                        print("CCC");
+                        _emailController.text = '';
+                        _password.text = '';
+                        showToast('This is normal toast with animation',
+                          context: context,
+                          animation: StyledToastAnimation.scale,
+                        );
+
+                      }
+                        });
+                    },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromRGBO(18, 149, 117, 1),
                         shape: RoundedRectangleBorder(

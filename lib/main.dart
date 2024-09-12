@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:recipe_app/models/recipe.dart';
+import 'package:recipe_app/Providers/UserProvider.dart';
 import 'package:recipe_app/pages/NavPage.dart';
 import 'package:recipe_app/pages/landing.dart';
 import 'package:recipe_app/pages/login.dart';
@@ -9,10 +9,18 @@ import 'package:recipe_app/pages/recentSearches.dart';
 import 'package:recipe_app/pages/recipeInformation.dart';
 import 'package:recipe_app/pages/reviews.dart';
 import 'package:recipe_app/pages/signup.dart';
-import 'package:recipe_app/pages/Data/recipes.dart' as recipes;
-
+//import 'package:recipe_app/pages/Data/recipes.dart' as recipes;
+import 'package:provider/provider.dart';
+import 'package:recipe_app/services/UserServices/AuthService.dart';
 void main() {
-  runApp(const MyApp());
+  runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => UserProvider())
+        ],
+          child: const MyApp()
+      )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -23,22 +31,24 @@ class MyApp extends StatelessWidget {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky); //to hide upper and lower bars
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Recipe App',
       theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromRGBO(240, 240, 240, 1),
         //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: '/reviews',
-      routes: {
-        '/': (context) => const LandingPage(),
+      home: const LandingPage(),
+
+      /*routes: {
+
         '/reviews': (context) => Reviews(recipe: recipes.recipes[1]),
-      },
+      },*/
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/login':
+            final AuthService authService = settings.arguments as AuthService;
             return PageTransition(
-              child: const LoginPage(),
+              child:  LoginPage(authService: authService),
               type: PageTransitionType.fade,
               duration: const Duration(milliseconds: 400),
               reverseDuration: const Duration(milliseconds: 200),
@@ -60,7 +70,7 @@ class MyApp extends StatelessWidget {
               reverseDuration: const Duration(milliseconds: 200),
               settings: settings,
             );
-          case '/recentSearches':
+          /*case '/recentSearches':
             return PageTransition(
               child:  const RecentSearches(),
               type: PageTransitionType.fade,
@@ -93,7 +103,7 @@ class MyApp extends StatelessWidget {
               );
             }else{
               return null;
-            }
+            }*/
           default:
             return null;
         }

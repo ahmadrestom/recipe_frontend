@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:http/http.dart';
+import 'package:provider/provider.dart';
+import 'package:recipe_app/models/UserManagement/userRegistration.dart';
+import 'package:recipe_app/services/UserServices/AuthService.dart';
+import '../Providers/UserProvider.dart';
 import '../customerWidgets/SquareTile.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
@@ -263,8 +268,76 @@ class _SignUpPageState extends State<SignUpPage> {
                           width: 315,
                           height: 60,
                           child: ElevatedButton(
-                            onPressed: () {
-                              //////////////////////////////////
+                            onPressed: () async{
+                              if(_passwordController.text.compareTo(_confirmPasswordController.text) != 0){
+                                showToast(
+                                  'Password mismatch. Please ensure both passwords are identical',
+                                  context: context,
+                                  animation: StyledToastAnimation.fade,
+                                  duration: const Duration(seconds: 3),
+                                );
+                                return;
+                              }
+                              if(isChecked == false){
+                                showToast(
+                                  'Please accept terms and conditions',
+                                  context: context,
+                                  animation: StyledToastAnimation.fade,
+                                  duration: const Duration(seconds: 3),
+                                );
+                                return;
+                              }
+                              String fullName = _nameController.text.trim();
+                              List<String> nameParts = fullName.split(' ');
+                              String firstName = '';
+                              String lastName = '';
+                              if(nameParts.isNotEmpty){
+                                firstName = nameParts[0];
+                                if(nameParts.length>1){
+                                  lastName = nameParts.sublist(1).join(' ');
+                                }
+                              }
+                              print(firstName);
+                              print(lastName);
+                              final userProvider = Provider.of<UserProvider>(context, listen: false);
+                              final userRegistration = UserRegistration(
+                                  firstName: firstName,
+                                  lastName: lastName,
+                                  email: _emailController.text,
+                                  password: _passwordController.text
+                              );
+                              bool isSuccess = await userProvider.signUp(userRegistration, context);
+                              if (isSuccess) {
+                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                  // Ensure that the context is still valid
+                                  if (context.mounted) {
+                                    showToast(
+                                      'Registration successful. Please log in to continue',
+                                      context: context,
+                                      animation: StyledToastAnimation.scale,
+                                      duration: const Duration(seconds: 3),
+                                    );
+                            Future.delayed(const Duration(seconds: 2), ()
+                                    {
+                                      Navigator.pushReplacementNamed(
+                                          context,
+                                          '/login',
+                                          arguments: AuthService()
+                                      );
+                                    });
+                                  }
+                                });
+                              } else {
+                                // Handle the case where the sign-up was not successful
+                                if (context.mounted) {
+                                  showToast(
+                                    'An error occurred during registration',
+                                    context: context,
+                                    animation: StyledToastAnimation.fade,
+                                    duration: const Duration(seconds: 3),
+                                  );
+                                }
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color.fromRGBO(18, 149, 117, 1),
@@ -358,7 +431,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         TextButton(
                           onPressed: (){
-                            Navigator.pushNamed(context, '/login');
+                            Navigator.pushNamed(context, '/login',arguments: AuthService());
+
                           },
                           child: const Text(
                             'Sign In',

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import '../models/recipe.dart';
+/*import 'package:flutter/material.dart';
+
 
 class RecipeCard extends StatelessWidget {
   const RecipeCard({super.key, required this.recipe});
@@ -90,3 +90,4 @@ class RecipeCard extends StatelessWidget {
     );
   }
 }
+*/

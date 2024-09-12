@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:recipe_app/Providers/UserProvider.dart';
+import 'package:recipe_app/pages/home.dart';
+import 'package:recipe_app/pages/login.dart';
+import 'package:recipe_app/services/UserServices/AuthService.dart';
+
+import 'delete.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    //final authService = Provider.of<UserProvider>(context, listen: false);
+    final authService = AuthService();
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -77,7 +86,19 @@ class LandingPage extends StatelessWidget {
                           height: 54,
                           child: ElevatedButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(context, '/login');
+                                  final authProvider = Provider.of<UserProvider>(context, listen: false);
+
+                                  if(authProvider.isAuthenticated){
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(builder: (context)=>const HomePage()),
+                                    );
+                                  }else {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(builder: (context)=> LoginPage(authService: authService)),
+                                    );
+                                  }
                                 },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color.fromRGBO(18, 149, 117, 1),

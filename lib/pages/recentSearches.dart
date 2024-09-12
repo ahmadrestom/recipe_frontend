@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
+/*import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_app/customerWidgets/RecipeCard.dart';
 import 'package:recipe_app/pages/home.dart';
 import 'package:recipe_app/pages/recipeInformation.dart';
 import '../models/recipe.dart';
-import '../pages/Data/recipes.dart';
+//import '../pages/Data/recipes.dart';
 import 'package:radio_grouped_buttons/radio_grouped_buttons.dart';
 import '../models/recipe.dart' as recipe;
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
@@ -31,7 +31,7 @@ class _RecentSearchesState extends State<RecentSearches> {
   @override
   void initState(){
     super.initState();
-    recipes = getRecipes();
+    //recipes = getRecipes();
   }
 
   @override
@@ -303,3 +303,4 @@ class _RecentSearchesState extends State<RecentSearches> {
     );
   }
 }
+*/
