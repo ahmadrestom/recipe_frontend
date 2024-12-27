@@ -1,11 +1,12 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
-import '../models/recipe.dart';
+
+import '../models/Recipe.dart';
 
 class RecipeInformationCard extends StatelessWidget {
 
 
-  final Recipe recipe;
+  final RecipeBase recipe;
 
   const RecipeInformationCard({super.key, required this.recipe});
 
@@ -121,4 +122,3 @@ class RecipeInformationCard extends StatelessWidget {
     );
   }
 }
-*/

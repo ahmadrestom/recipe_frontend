@@ -4,11 +4,12 @@ import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/Providers/UserProvider.dart';
 import 'package:recipe_app/models/UserManagement/userAuthentication.dart';
-import 'package:recipe_app/pages/delete.dart';
+import 'package:recipe_app/pages/NavPage.dart';
 import 'package:recipe_app/services/UserServices/AuthService.dart';
 import '../Providers/UserProvider.dart';
 import '../Providers/UserProvider.dart';
 import '../customerWidgets/SquareTile.dart';
+import 'home.dart';
 
 class LoginPage extends StatefulWidget {
   final AuthService authService;
@@ -203,7 +204,7 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const HomePage(),
+                            builder: (context) => const NavPage(),
                           ),
                         );
                       } else {

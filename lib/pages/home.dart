@@ -1,16 +1,13 @@
-/*
 import 'package:flutter/cupertino.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:provider/provider.dart';
+import 'package:recipe_app/Providers/RecipeProvider.dart';
+import 'package:recipe_app/Providers/UserProvider.dart';
 import 'package:recipe_app/customerWidgets/CategoryItem.dart';
 import 'package:flutter/material.dart';
-//import 'package:recipe_app/pages/Data/newRecipes.dart';
 import 'package:recipe_app/pages/recentSearches.dart';
 import 'package:recipe_app/pages/recipeInformation.dart';
-import '../models/recipe.dart' as recipe;
-import '../models/recipe.dart';
-//import '../pages/Data/recipes.dart';
 import 'package:rate_in_stars/rate_in_stars.dart';
-
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,28 +20,72 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   int? currentSelection = 0;
+  bool _isBookmarked = false;
 
-  late List<Recipe> recipes;
-  late List<Recipe> newRecipes;
+  /*late List<Recipe> recipes = [];
+  late List<Recipe> newRecipes = [];
   final List<String> time = ["All", "New", "Old"];
-  final List<String> rating = ["1","2","3","4","5"];
+  final List<String> rating = ["1","2","3","4","5"];*/
 
   String selectedCategory = '';
 
-  final List<String> categories = recipe.Category.values
+  final List<String> categories = [
+    "All",
+    "Indian",
+    "Asian",
+    "Chinese",
+    "Pizza",
+    "Pasta",
+    "Burgers",
+    "Vegan",
+    "Sandwiches",
+    "Desserts",
+    "Lebanese",
+    "SeaFood",
+    "Grilled Dishes"
+  ];
+
+  /*final List<String> categories = recipe.Category.values
       .map((e) => e.toString().split('.').last)
       .map((category) => category.substring(0, 1).toUpperCase() + category.substring(1))
-      .toList();
+      .toList();*/
 
   @override
   void initState(){
     super.initState();
-    //recipes = getRecipes();
-    //newRecipes = getNewRecipes();
   }
 
+  /*Future<void> _fetchRecipes() async{
+    try{
+      final fetchedRecipes = await RecipeService().fetchRecipes();
+      final fetchedNewRecipes = await RecipeService().fetchRecentRecipes();
+
+      setState(() {
+        recipes = fetchedRecipes;
+        newRecipes = fetchedNewRecipes;
+      });
+    }catch(error){
+      print("Error fetching recipes in home page: $error");
+    }
+  }*/
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final userDetails = userProvider.userDetails;
+    final userFavorites = userProvider.userFavorites;
+
+    final recipeProvider = Provider.of<RecipeProvider>(context);
+    final recipeDetails = recipeProvider.recipeDetails;
+    final recentRecipeDetails = recipeProvider.recentRecipeDetails;
+    if(recipeDetails == null || recentRecipeDetails==null){
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       extendBody: true,
       body: SafeArea(
@@ -53,42 +94,46 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 50, left: 30, right: 30),
+                padding:  EdgeInsets.only(
+                    top: screenHeight*0.05, left: screenWidth*0.08, right: screenWidth*0.08
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Hello Ahmad',
-                          style: TextStyle(
+                          'Hello ${userDetails?['firstName']} ${userDetails?['lastName']}',
+                          style:  TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
-                            fontSize: 20,
-                            color: Color.fromRGBO(0, 0, 0, 1),
+                            fontSize: screenWidth*0.05,
+                            color: const Color.fromRGBO(0, 0, 0, 1),
                           ),
                         ),
-                        SizedBox(height: 6,),
-                        Text(
+                        const SizedBox(height: 6,),
+                         Text(
                           'What are you cooking today?',
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w400,
-                            fontSize: 11,
-                            color: Color.fromRGBO(169, 169, 169, 1),
+                            fontSize: screenWidth*0.035,
+                            color: const Color.fromRGBO(169, 169, 169, 1),
                           ),
                         ),
                       ],
                     ),
                     Container(
-                      width: 50,
-                      height: 50,
+                      width: screenWidth * 0.12,
+                      height: screenWidth * 0.12,
+
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.amber
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.amber
                       ),
                       child: Image.asset('assets/images/avatar.png'),
+                      //child: userDetails?['imageUrl'] == null? Image.asset('assets/icons/profile.png'):Image.network(userDetails?['imageUrl']),
                     ),
                   ],
                 ),
@@ -99,8 +144,8 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     SizedBox(
-                      width: 255,
-                      height: 40,
+                      width: screenWidth * 0.7,
+                      height: screenHeight * 0.05,
                       child: CupertinoTextField(
                         onTap: (){
                           Navigator.push(context,
@@ -110,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                         placeholder: "Search",
                         readOnly: true,
                         prefix: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(screenWidth * 0.02),
                           child: Image.asset('assets/icons/search.png'),
 
                         ),
@@ -124,8 +169,8 @@ class _HomePageState extends State<HomePage> {
                     GestureDetector(
                       child: Image.asset(
                         'assets/icons/filter.png',
-                        width: 45,
-                        height: 45,
+                        width: screenWidth * 0.12,
+                        height: screenWidth * 0.12,
                       ),
                       onTap: (){
                         Navigator.push(context,
@@ -144,15 +189,16 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                     child: SizedBox(
                       height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      child: ListView.builder(
+
+                      child:  ListView.builder(
                           itemCount: categories.length,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index){
                             bool isFirst = index == 0;
-                            bool isLast = index == recipes.length - 1;
+                            bool isLast = index == recipeDetails.length - 1;
                             EdgeInsets itemMargin = EdgeInsets.only(
-                                left: isFirst ? 30 : 3, right: isLast ? 30 : 3);
+                                left: isFirst ? screenWidth * 0.05 : screenWidth * 0.02,
+                                right: isLast ? screenWidth * 0.05 : screenWidth * 0.02);
                             return Container(
                               margin: itemMargin,
                               child: CategoryItem(
@@ -172,39 +218,46 @@ class _HomePageState extends State<HomePage> {
                 ],
 
               ),
-              Container(
+              recipeDetails.isEmpty?
+              const Center(
+                child: CircularProgressIndicator(),
+              )
+                  :Container(
                 margin: const EdgeInsets.fromLTRB(0, 12, 0, 0),
                 height: 231,
                 child: ListView.builder(
-                    itemCount: recipes.length,
+                    itemCount: recipeDetails.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
+                      final recipe = recipeDetails[index];
+                      final isFavorite = userProvider.userFavorites?.any((fav) => fav.recipeId == recipe.recipeId) ?? false;
                       bool isFirst = index == 0;
-                      bool isLast = index == recipes.length - 1;
+                      bool isLast = index == recipeDetails.length - 1;
                       EdgeInsets itemMargin = EdgeInsets.only(
-                          left: isFirst ? 30 : 10, right: isLast ? 30 : 10);
+                          left: isFirst ? screenWidth * 0.08 : 10,
+                          right: isLast ? screenWidth * 0.08 : 10);
                       return GestureDetector(
                         onTap: (){
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => RecipeInformation(recipe: recipes[index]),
+                              builder: (context) => RecipeInformation(recipe: recipeDetails[index]),
                             ),
                           );
                         },
                         child: Container(
                           margin: itemMargin,
-                          width: 150,
+                          width: screenWidth * 0.4,
                           child: Stack(
                             children: [
                               Positioned(
-                                top: 50,
+                                top: screenHeight * 0.07,
                                 child: Container(
-                                  width: 150,
-                                  height: 176,
+                                  width: screenWidth * 0.4,
+                                  height: screenHeight * 0.22,
                                   decoration: BoxDecoration(
                                     //color: const Color.fromRGBO(217, 217, 217, 0.5),
-                                    borderRadius: BorderRadius.circular(12),
+                                      borderRadius: BorderRadius.circular(12),
                                       boxShadow: const [
                                         BoxShadow(
                                           color: Color.fromRGBO(217, 217, 217, 1),
@@ -216,17 +269,18 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   child: Center(
                                     child: Container(
-                                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: screenWidth * 0.03),
                                       child: Text(
-                                        recipes[index].name,
+                                        recipeDetails[index].recipeName,
                                         textAlign: TextAlign.center,
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 2,
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.w600,
-                                          color: Color.fromRGBO(48, 48, 48, 1)
+                                        style: TextStyle(
+                                            fontSize: screenWidth * 0.04,
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w600,
+                                            color: const Color.fromRGBO(48, 48, 48, 1)
                                         ),
                                       ),
                                     ),
@@ -237,11 +291,11 @@ class _HomePageState extends State<HomePage> {
                                 'assets/images/ClassicGreekSalad.png',
                               ),
                               Positioned(
-                                top: 27,
-                                right: 10,
+                                top: screenHeight * 0.05,
+                                right: screenWidth * 0.03,
                                 child: Container(
-                                  width: 48,
-                                  height: 23,
+                                  width: screenWidth * 0.12,
+                                  height: screenHeight * 0.03,
                                   decoration: BoxDecoration(
                                     color: const Color.fromRGBO(255, 225, 179, 1),
                                     borderRadius: BorderRadius.circular(20),
@@ -256,12 +310,12 @@ class _HomePageState extends State<HomePage> {
                                         size: 18,
                                       ),
                                       Text(
-                                        (recipes[index].rating).toString(),
-                                        style: const TextStyle(
+                                        (recipeDetails[index].rating).toString(),
+                                        style:  TextStyle(
                                           fontFamily: 'Poppins',
-                                          fontSize: 12,
+                                          fontSize: screenWidth * 0.03,
                                           fontWeight: FontWeight.w400,
-                                          color: Color.fromRGBO(0, 0, 0, 1),
+                                          color: const Color.fromRGBO(0, 0, 0, 1),
                                         ),
                                       ),
                                     ],
@@ -279,41 +333,45 @@ class _HomePageState extends State<HomePage> {
                                         Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            const Text(
+                                             Text(
                                               "Time",
                                               style: TextStyle(
                                                   fontFamily: 'Poppins',
                                                   fontWeight: FontWeight.w400,
-                                                  fontSize: 11,
-                                                  color: Color.fromRGBO(18, 149, 117, 1)
+                                                  fontSize: screenWidth * 0.03,
+                                                  color: const Color.fromRGBO(18, 149, 117, 1)
                                               ),
                                             ),
                                             Text(
-                                              '${recipes[index].preparationTime.inMinutes.toString()} Mins',
-                                              style: const TextStyle(
+                                              '${recipeDetails[index].preparationTime.inMinutes.toString()} Mins',
+                                              style: TextStyle(
                                                 fontFamily: 'Poppins',
                                                 fontWeight: FontWeight.w600,
-                                                fontSize: 11,
-                                                color: Color.fromRGBO(50, 50, 50, 1),
+                                                fontSize: screenWidth * 0.03,
+                                                color: const Color.fromRGBO(50, 50, 50, 1),
                                               ),
                                             ),
                                           ],
                                         ),
                                         Container(
-                                          width: 35,
-                                          height: 35,
+                                          width: screenWidth * 0.08,
+                                          height: screenHeight * 0.04,
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(40),
-                                            color: const Color.fromRGBO(255, 255, 255, 1)
+                                              borderRadius: BorderRadius.circular(40),
+                                              color: const Color.fromRGBO(255, 255, 255, 1)
                                           ),
                                           child: GestureDetector(
-                                            child: const Icon(
-                                              Ionicons.bookmark_outline,
-                                                color: Color.fromRGBO(18, 149, 117, 1),
-                                              size: 26,
+                                            child:  Icon(
+                                              isFavorite
+                                                  ? Ionicons.bookmark
+                                                  : Ionicons.bookmark_outline,
+                                              color: isFavorite
+                                                  ? const Color.fromRGBO(18, 149, 117, 1)
+                                                  : const Color.fromRGBO(18, 149, 117, 1),
+                                              size: screenWidth * 0.063,
                                             ),
                                             onTap: (){
-                                              ////////////////////////////////////
+                                              userProvider.addFavoriteRecipe(recipe.recipeId);
                                             },
                                           ),
                                         ),
@@ -329,118 +387,132 @@ class _HomePageState extends State<HomePage> {
                     }
                 ),
               ),
-              const SizedBox(height: 20,),
+               SizedBox(height: screenHeight*0.05,),
               Container(
-                padding: const EdgeInsets.only(left: 30),
-                child: const Text(
+                padding: EdgeInsets.only(left: screenWidth * 0.08),
+                child:  Text(
                   "New Recipes",
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w900,
-                    fontSize: 19,
-                    color: Color.fromRGBO(0, 0, 0, 1),
+                    fontSize: screenWidth * 0.05,
+                    color: const Color.fromRGBO(0, 0, 0, 1),
                   ),
                 ),
               ),
               ///////////////////////////////////////////////////////////
               SizedBox(
-                height: 150,
+                height: screenHeight * 0.25,
+
                 child: ListView.builder(
-                    itemCount: newRecipes.length,
+                    itemCount: recentRecipeDetails.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       bool isFirst = index == 0;
-                      bool isLast = index == newRecipes.length - 1;
+                      bool isLast = index == recentRecipeDetails.length - 1;
                       EdgeInsets itemMargin = EdgeInsets.only(
-                          left: isFirst ? 30 : 10, right: isLast ? 30 : 10);
+                          left: isFirst ? screenWidth * 0.08 : 10,
+                          right: isLast ? screenWidth * 0.08 : 10);
                       return GestureDetector(
                         onTap: (){
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => RecipeInformation(recipe: newRecipes[index]),
+                              builder: (context) => RecipeInformation(recipe: recentRecipeDetails[index]),
                             ),
                           );
                         },
                         child: Container(
                           margin: itemMargin,
-                          width: 251,
+                          width: screenWidth * 0.6,
                           child: Stack(
                             children: [
                               Positioned(
-                                top: 40,
+                                top: screenHeight * 0.05,
                                 child: Container(
-                                  width: 251,
-                                  height: 100,
+                                  width: screenWidth * 0.6,
+                                  height: screenHeight * 0.15,
+
                                   decoration: BoxDecoration(
-                                    color: const Color.fromRGBO(255, 255, 255, 1),
-                                    borderRadius: BorderRadius.circular(12),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Color.fromRGBO(0, 0, 0, 0.2),
-                                        spreadRadius: 0,
-                                        blurRadius: 20,
-                                        offset: Offset(0,3),
-                                      )
-                                    ]
+                                      color: const Color.fromRGBO(255, 255, 255, 1),
+                                      borderRadius: BorderRadius.circular(12),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: Color.fromRGBO(0, 0, 0, 0.2),
+                                          spreadRadius: 0,
+                                          blurRadius: 20,
+                                          offset: Offset(0,3),
+                                        )
+                                      ]
                                   ),
                                   child: Container(
-                                    margin: const EdgeInsets.only(left: 10, top: 10),
+                                    //margin: const EdgeInsets.only(left: 7, top: 10, right: 0),
+                                    padding: EdgeInsets.only(
+                                      left: screenWidth * 0.02,
+                                      top: screenHeight * 0.01,
+                                    ),
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         SizedBox(
-                                          width: 125,
+                                          width: screenWidth * 0.4,
                                           child: Text(
-                                            newRecipes[index].name,
+                                            recentRecipeDetails[index].recipeName,
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontFamily: 'Poppins',
                                               fontWeight: FontWeight.w900,
-                                              fontSize: 13,
-                                              color: Color.fromRGBO(72, 72, 72, 1),
+                                              fontSize: screenWidth * 0.035,
+                                              color: const Color.fromRGBO(72, 72, 72, 1),
                                             ),
                                           ),
                                         ),
 
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            RatingStars(
-                                              editable: false,
-                                              rating: newRecipes[index].rating,
-                                              color: Colors.amber,
-                                              iconSize: 16,
-                                            ),
-                                          ],
+                                        Container(
+                                          margin: EdgeInsets.only(top: screenHeight* 0.01),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              RatingStars(
+                                                editable: false,
+                                                rating: recentRecipeDetails[index].rating,
+                                                color: Colors.amber,
+                                                iconSize: screenWidth * 0.04,
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                        const SizedBox(height: 5,),
+                                        SizedBox(height: screenHeight * 0.03),
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
-                                              "By Chef ${newRecipes[index].chef.firstName} ${newRecipes[index].chef.lastName}",
-                                              style: const TextStyle(
-
+                                            Expanded(
+                                              child: Text(
+                                                "By Chef ${recentRecipeDetails[index].chef.firstName} ${recentRecipeDetails[index].chef.lastName}",
+                                                style: TextStyle(
+                                                  fontSize: screenWidth * 0.03,
+                                                  fontFamily: 'Poppins',
+                                                ),
                                               ),
                                             ),
                                             Container(
-                                              padding: const EdgeInsets.only(right: 15),
+                                              padding: EdgeInsets.only(right: screenWidth*0.06),
                                               child: Row(
                                                 children: [
-                                                  const Icon(
-                                                    Icons.timer_outlined, color: Color.fromRGBO(145, 145, 145, 1),
-                                                    size: 19,
+                                                   Icon(
+                                                    Icons.timer_outlined, color: const Color.fromRGBO(145, 145, 145, 1),
+                                                    size: screenWidth * 0.045,
+
                                                   ),
-                                                  const SizedBox(width: 6,),
+                                                  SizedBox(width: screenWidth * 0.01),
                                                   Text(
-                                                    "${(newRecipes[index].preparationTime.inMinutes.toString())} Mins",
-                                                    style: const TextStyle(
+                                                    "${(recentRecipeDetails[index].preparationTime.inMinutes.toString())} Mins",
+                                                    style: TextStyle(
                                                       fontFamily: 'Poppins',
                                                       fontWeight: FontWeight.w400,
-                                                      fontSize: 14,
-                                                      color: Color.fromRGBO(145, 145, 145, 1),
+                                                      fontSize: screenWidth * 0.03,
+                                                      color: const Color.fromRGBO(145, 145, 145, 1),
                                                     ),
                                                   ),
                                                 ],
@@ -472,11 +544,10 @@ class _HomePageState extends State<HomePage> {
                               Align(
                                 alignment: Alignment.topRight,
                                 child: SizedBox(
-                                  width: 130,
-                                  height: 130,
+                                  width: screenWidth * 0.3,
+                                  height: screenWidth * 0.3,
                                   child: Image.asset(
                                     'assets/images/CrunchyNutColeslaw.png',
-
                                   ),
                                 ),
                               ),
@@ -493,4 +564,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}*/
+}

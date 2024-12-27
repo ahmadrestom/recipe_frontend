@@ -1,4 +1,6 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+
+import '../models/Recipe.dart';
 
 
 class RecipeCard extends StatelessWidget {
@@ -35,7 +37,7 @@ class RecipeCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                recipe.name,
+                recipe.recipeName,
                 style: const TextStyle(
                   overflow: TextOverflow.fade,
                   fontFamily: 'Poppins',
@@ -90,4 +92,3 @@ class RecipeCard extends StatelessWidget {
     );
   }
 }
-*/

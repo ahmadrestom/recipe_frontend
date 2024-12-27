@@ -1,15 +1,15 @@
-/*import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:radio_grouped_buttons/custom_buttons/custom_radio_buttons_group.dart';
 import '../customerWidgets/RecipeInformationCard.dart';
-import '../models/recipe.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+import '../models/Recipe.dart';
+
 class RecipeInformation extends StatefulWidget {
-  RecipeInformation({super.key, required this.recipe});
+  const RecipeInformation({super.key, required this.recipe});
   final Recipe recipe;
-  String selectedOption = "Ingredients";
 
 
   @override
@@ -17,9 +17,11 @@ class RecipeInformation extends StatefulWidget {
 }
 
 class _RecipeInformationState extends State<RecipeInformation> {
+  String selectedOption = "Ingredients";
   final TextEditingController _controller = TextEditingController(text: "https://google.com");
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Container(
         margin: const EdgeInsets.fromLTRB(30, 12, 30, 25),
@@ -290,7 +292,7 @@ class _RecipeInformationState extends State<RecipeInformation> {
                       Expanded(
                         child: Text(
                           //overflow: TextOverflow.ellipsis,
-                          widget.recipe.name,
+                          widget.recipe.recipeName,
                           style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
@@ -407,7 +409,7 @@ class _RecipeInformationState extends State<RecipeInformation> {
                   buttonValues: const ["Ingredients", "Procedure"],
                   radioButtonValue: (value,index){
                     setState(() {
-                      widget.selectedOption = value;
+                      selectedOption = value;
                     });
                   },
                   horizontal: true,
@@ -434,7 +436,7 @@ class _RecipeInformationState extends State<RecipeInformation> {
                       color: Color.fromRGBO(169, 169, 169, 1),
                     ),
                     Text(
-                      "1 serve",
+                      "1 serving",
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
@@ -444,7 +446,7 @@ class _RecipeInformationState extends State<RecipeInformation> {
                     )
                   ],
                 ),
-                if(widget.selectedOption == "Ingredients")
+                if(selectedOption == "Ingredients")
                   Text(
                     "${widget.recipe.ingredients.length} Items",
                     style: const TextStyle(
@@ -455,7 +457,7 @@ class _RecipeInformationState extends State<RecipeInformation> {
                     ),
 
                   ),
-                if(widget.selectedOption == "Procedure")
+                if(selectedOption == "Procedure")
                   Text(
                     "${widget.recipe.instructions.length} Steps",
                     style: const TextStyle(
@@ -468,13 +470,14 @@ class _RecipeInformationState extends State<RecipeInformation> {
               ],
             ),
             
-            if(widget.selectedOption == "Ingredients")
+            if(selectedOption == "Ingredients")
               Expanded(
                 child: Container(
                   margin: const EdgeInsets.fromLTRB(13, 7, 13, 0),
                   child: ListView.builder(
                     itemCount: widget.recipe.ingredients.length,
                     itemBuilder: (context, index){
+                      final ingredient = widget.recipe.ingredients.elementAt(index);
                       return Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
@@ -484,11 +487,10 @@ class _RecipeInformationState extends State<RecipeInformation> {
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         height: 75,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Flexible(
-                              child: Text(
-                                widget.recipe.ingredients[index].name,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                              Text(
+                                ingredient.name,
                                 style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w600,
@@ -496,25 +498,23 @@ class _RecipeInformationState extends State<RecipeInformation> {
                                   color: Color.fromRGBO(18, 18, 18, 1),
                                 ),
                               ),
-                            ),
-                            Text(
-                              "${widget.recipe.ingredients[index].grams} g",
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 14,
-                                color: Color.fromRGBO(155, 155, 155, 1),
-
+                              Text(
+                                "${ingredient.grams} g",
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: Color.fromRGBO(155, 155, 155, 1),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                      ),
                       );
                     },
                   ),
                 ),
               ),
-            if(widget.selectedOption == "Procedure")
+            if(selectedOption == "Procedure")
               Expanded(
                 child: Container(
                   margin: const EdgeInsets.fromLTRB(13, 7, 13, 0),
@@ -534,7 +534,7 @@ class _RecipeInformationState extends State<RecipeInformation> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Step ${index+1} ",
+                              "Step ${widget.recipe.instructions[index].instructionOrder} ",
                               style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w600,
@@ -543,7 +543,7 @@ class _RecipeInformationState extends State<RecipeInformation> {
                               ),
                             ),
                             Text(
-                              widget.recipe.instructions[index],
+                              widget.recipe.instructions[index].instruction,
                               style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w400,
@@ -565,4 +565,3 @@ class _RecipeInformationState extends State<RecipeInformation> {
     );
   }
 }
-*/

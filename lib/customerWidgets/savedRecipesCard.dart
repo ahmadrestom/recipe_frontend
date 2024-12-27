@@ -1,11 +1,13 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
-import '../models/GetRecipe.dart';
+
+import '../models/Recipe.dart';
+
 
 class SavedRecipe extends StatelessWidget {
   const SavedRecipe({super.key, required this.recipe});
 
-  final Recipe recipe;
+  final RecipeFavorites recipe;
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +87,7 @@ class SavedRecipe extends StatelessWidget {
                       SizedBox(
                         width: 150,
                         child: Text(
-                          recipe.name,
+                          recipe.recipeName,
                           style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
@@ -98,7 +100,7 @@ class SavedRecipe extends StatelessWidget {
                       ),
                       const SizedBox(height: 5,),
                       Text(
-                        "By Chef ${recipe.chef.firstName} ${recipe.chef.lastName}",
+                        "By Chef ${recipe.chefName}",
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,
@@ -155,4 +157,3 @@ class SavedRecipe extends StatelessWidget {
     );
   }
 }
-*/

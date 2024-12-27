@@ -1,13 +1,14 @@
-/*import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_app/customerWidgets/RecipeCard.dart';
 import 'package:recipe_app/pages/home.dart';
 import 'package:recipe_app/pages/recipeInformation.dart';
-import '../models/recipe.dart';
 //import '../pages/Data/recipes.dart';
 import 'package:radio_grouped_buttons/radio_grouped_buttons.dart';
-import '../models/recipe.dart' as recipe;
+import '../models/Recipe.dart' as recipe;
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+
+import '../models/Recipe.dart';
 
 class RecentSearches extends StatefulWidget {
   const RecentSearches({super.key});
@@ -21,10 +22,26 @@ class _RecentSearchesState extends State<RecentSearches> {
   final List<String> time = ["All", "New", "Old"];
   final List<String> rating = ["1","2","3","4","5"];
 
-  final List<String> categories = recipe.Category.values
+  /*final List<String> categories = recipe.Category.values
       .map((e) => e.toString().split('.').last)
       .map((category) => category.substring(0, 1).toUpperCase() + category.substring(1))
-      .toList();
+      .toList();*/
+
+  final List<String> categories = [
+    "all",
+    "indian",
+    "asian",
+    "chinese",
+    "pizza",
+    "pasta",
+    "burgers",
+    "vegan",
+    "sandwiches",
+    "desserts",
+    "lebanese",
+    "seaFood",
+    "grilledDishes"
+  ];
 
   late List<Recipe> recipes;
 
@@ -303,4 +320,3 @@ class _RecentSearchesState extends State<RecentSearches> {
     );
   }
 }
-*/

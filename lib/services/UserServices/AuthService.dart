@@ -5,7 +5,7 @@ import 'package:recipe_app/models/UserManagement/userAuthentication.dart';
 import 'package:http/http.dart' as http;
 import 'package:recipe_app/services/BaseAPI.dart';
 
-import '../../models/UserManagement/userRegistration.dart';
+import '../../models/Recipe.dart';
 class AuthService extends BaseAPI{
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
@@ -20,6 +20,7 @@ class AuthService extends BaseAPI{
       final token = data['token'];
 
       await secureStorage.write(key: 'authToken', value: token);
+      //print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX $token");
       return response;
     }else{
       throw Exception('Failed to log in: ${response.statusCode} ${response.body}');
@@ -68,7 +69,100 @@ class AuthService extends BaseAPI{
     return response;
   }
 
+  Future<Map<String, dynamic>> getUserInfo(String token) async {
+    try{
+      final response = await http.get(
+        Uri.parse(super.userInfoAPI),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        }
+      );
+      if(response.statusCode == 200){
+        return jsonDecode(response.body) as Map<String, dynamic>;
+      }else{
+        throw Exception("Failed to fetch user info: ${response.statusCode}");
+      }
+    }catch(e){
+      print("Error with user info: $e");
+      throw Exception('Error fetching user info');
+    }
 
+}
 
+  Future<List<RecipeFavorites>> fetchUserFavorites(String token) async{
+    try{
+      final headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      };
+      final response = await http.get(
+          Uri.parse(super.getUserFavoriteRecipesAPI),
+          headers: headers
+      );
+      print("HMARRRRRRRRRRRRRRRRRRRRRRRRR${response.statusCode}");
+      if(response.statusCode == 200){
+        print("Favorites: ${response.body}");
+        List<dynamic> data = jsonDecode(response.body);
+        return data.map((json) => RecipeFavorites.fromJson(json)).toList();
+      }else{
+        print("Error code: ${response.statusCode}");
+        throw Exception("Error: No favorites with error code: ${response.statusCode}");
+      }
+
+    }catch(e){
+      print("Can't fetch user favorite recipes: $e");
+      throw Exception('Error fetching user favorite recipes: $e');
+    }
+  }
+
+  Future<bool> addRecipeToFavorites(String recipeId, String token) async{
+    try{
+      final headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      };
+      final response = await http.post(
+          Uri.parse("${super.postUserFavoriteRecipeAPI}/$recipeId"),
+          headers: headers
+      );
+
+      if(response.statusCode==200 || response.statusCode==201){
+        print("Recipe added to user favorites");
+        return true;
+      }else{
+        print("Recipe not added to favorites ${response.statusCode}");
+        return false;
+      }
+
+    }catch(e){
+      print("Not added to favorites. Exception: $e");
+      throw Exception("Not added to favorites: $e");
+    }
+  }
+
+  Future<bool> removeRecipeFromFavorites(String recipeId, String token) async{
+    try{
+      final headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      };
+      final response = await http.delete(
+          Uri.parse("${super.deleteUserFavoriteRecipeAPI}/$recipeId"),
+          headers: headers
+      );
+      if(response.statusCode == 200){
+        print("Deleted successfully from favorites");
+        return true;
+      }else{
+        print("Error deleting from favorites");
+        return false;
+      }
+    }catch(e){
+      print("Favorite recipe not deleted. Exception: $e");
+      throw Exception("Not delete from favorites: $e");
+    }
+
+  }
 
 }

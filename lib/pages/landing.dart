@@ -5,8 +5,6 @@ import 'package:recipe_app/pages/home.dart';
 import 'package:recipe_app/pages/login.dart';
 import 'package:recipe_app/services/UserServices/AuthService.dart';
 
-import 'delete.dart';
-
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
 

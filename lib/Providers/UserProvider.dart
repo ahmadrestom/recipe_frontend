@@ -1,9 +1,8 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_styled_toast/flutter_styled_toast.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:recipe_app/models/UserManagement/userAuthentication.dart';
-
+import 'package:recipe_app/services/Recipe%20Service.dart';
+import '../models/Recipe.dart';
 import '../models/UserManagement/userRegistration.dart';
 import '../services/UserServices/AuthService.dart';
 import '../services/UserServices/Registration.dart';
@@ -13,14 +12,19 @@ class UserProvider extends ChangeNotifier{
   final AuthService _authService = AuthService();
   final RegistrationService _registrationService = RegistrationService();
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+  final RecipeService _recipeService = RecipeService();
 
   String? _token;
   bool _isAuthenticated = false;
+  Map<String, dynamic>? _userDetails;
+  List<dynamic>? _userFavorites;
 
   String? get token => _token;
   bool get isAuthenticated => _isAuthenticated;
+  Map<String, dynamic>? get userDetails => _userDetails;
+  List<dynamic>? get userFavorites => _userFavorites;
 
-  AuthProvider(){
+  UserProvider(){
     _loadToken();
   }
 
@@ -28,6 +32,7 @@ class UserProvider extends ChangeNotifier{
     _token = await _secureStorage.read(key: 'authToken');
     if(_token !=null && !_authService.isTokenExpired(_token!)){
       _isAuthenticated = true;
+      await _fetchUserDetails();
     }else{
       _token = null;
       _isAuthenticated = false;
@@ -41,6 +46,7 @@ class UserProvider extends ChangeNotifier{
       _token = await _secureStorage.read(key: 'authToken');
       print(_token);
       _isAuthenticated = true;
+      await _fetchUserDetails();
       notifyListeners();
     }
   }
@@ -49,6 +55,7 @@ class UserProvider extends ChangeNotifier{
     await _authService.logout();
     _token = null;
     _isAuthenticated = false;
+    _userDetails = null;
     notifyListeners();
   }
 
@@ -75,6 +82,72 @@ class UserProvider extends ChangeNotifier{
       _isAuthenticated = false;
       print("Error during sign up : $e");
       return false;
+    }finally{
+      notifyListeners();
+    }
+  }
+
+  Future<void> _fetchUserDetails() async{
+    try{
+      if(token!=null){
+        final userInfo = await _authService.getUserInfo(_token!);
+        _userDetails = userInfo;
+        print("User details fetched: $_userDetails");
+      }
+    }catch(e) {
+      print("Error fetching user details: $e");
+    }finally{
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchFavoriteRecipes() async{
+    try{
+      if(token != null){
+        final userFavs = await _authService.fetchUserFavorites(_token!);
+        _userFavorites = userFavs;
+        print(userFavs);
+        print("User's favorties fetched successfully");
+      }
+    }catch(e){
+      print("Can't fetch favorites");
+    }finally{
+      notifyListeners();
+    }
+  }
+
+  Future<void> addFavoriteRecipe(String recipeId) async{
+
+    try{
+      if(token!=null){
+        _userFavorites ??=[]; //initialize if null
+        final Recipe recipe = await _recipeService.fetchRecipeById(recipeId);
+        final RecipeFavorites fav = RecipeFavorites.convertFromRecipe(recipe);
+        bool isFavorite = _userFavorites?.any((fav) => fav.recipeId == recipeId) ?? false;
+
+        if(isFavorite){
+          final bool removed = await _authService.removeRecipeFromFavorites(recipeId, _token!);
+          if(removed){
+            _userFavorites?.removeWhere((fav) => fav.recipeId==recipeId);
+            print("Recipe removed from favorites");
+          }else{
+            print("Failed to remove recipe from favorites");
+          }
+        }
+        else{
+          final bool added = await _authService.addRecipeToFavorites(recipeId, _token!);
+          if(added){
+            final recipe = await _recipeService.fetchRecipeById(recipeId);
+            _userFavorites?.add(fav);
+            print("Recipe added to favorites");
+          }else{
+            print("Failed to add recipe to favorites");
+          }
+        }
+      }
+    }catch(e){
+      print("ERROR adding favorites");
+      throw Exception("Error adding favs: $e");
     }finally{
       notifyListeners();
     }
