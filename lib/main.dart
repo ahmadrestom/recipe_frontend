@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
               reverseDuration: const Duration(milliseconds: 200),
               settings: settings,
             );
-          /*case '/recentSearches':
+          case '/recentSearches':
             return PageTransition(
               child:  const RecentSearches(),
               type: PageTransitionType.fade,
@@ -82,7 +82,7 @@ class MyApp extends StatelessWidget {
               reverseDuration: const Duration(milliseconds: 200),
               settings: settings,
             );
-          case '/reviews':
+          /*case '/reviews':
             final args = settings.arguments;
             if(args is Recipe) {
               return PageTransition(

@@ -20,7 +20,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   int? currentSelection = 0;
-  bool _isBookmarked = false;
 
   /*late List<Recipe> recipes = [];
   late List<Recipe> newRecipes = [];
@@ -51,9 +50,12 @@ class _HomePageState extends State<HomePage> {
       .toList();*/
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider.fetchFavoriteRecipes();
   }
+
 
   /*Future<void> _fetchRecipes() async{
     try{
@@ -287,9 +289,19 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-                              Image.asset(
-                                'assets/images/ClassicGreekSalad.png',
+                              Positioned(
+                                left: screenWidth*0.07,
+                                top: screenHeight * 0.02,
+                                child: ClipOval(
+                                  child: Image.network(
+                                    recipeDetails[index].plateImageUrl,
+                                    width: screenWidth * 0.25, // Set desired width
+                                    height: screenWidth * 0.25, // Set desired height
+                                    fit: BoxFit.cover, // Ensures the image covers the circular area
+                                  ),
+                                ),
                               ),
+
                               Positioned(
                                 top: screenHeight * 0.05,
                                 right: screenWidth * 0.03,

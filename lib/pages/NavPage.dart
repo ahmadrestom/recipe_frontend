@@ -26,7 +26,17 @@ class _NavPageState extends State<NavPage> {
   final pageController = PageController();
 
   @override
-  void dispose(){
+  void initState() {
+    super.initState();
+    pageController.addListener(() {
+      setState(() {
+        selected = pageController.page?.round() ?? 0;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
     pageController.dispose();
     super.dispose();
   }

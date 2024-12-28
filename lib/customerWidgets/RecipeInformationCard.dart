@@ -21,7 +21,7 @@ class RecipeInformationCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
-                image: AssetImage(recipe.imageUrl),
+                image: NetworkImage(recipe.imageUrl),
                 fit: BoxFit.cover,
               ),
             ),

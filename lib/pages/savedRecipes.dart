@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:recipe_app/Providers/RecipeProvider.dart';
 import 'package:recipe_app/Providers/UserProvider.dart';
 import 'package:recipe_app/pages/recipeInformation.dart';
+import 'package:recipe_app/services/Recipe%20Service.dart';
 import '../customerWidgets/savedRecipesCard.dart';
 import '../models/Recipe.dart';
 
@@ -14,14 +15,14 @@ class SavedRecipes extends StatefulWidget {
 }
 
 class _SavedRecipesState extends State<SavedRecipes> {
-
   @override
   void initState() {
     super.initState();
+    _fetchFavorites();
+  }
+  Future<void> _fetchFavorites() async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    if (userProvider.isAuthenticated) {
-      userProvider.fetchFavoriteRecipes();
-    }
+    await userProvider.fetchFavoriteRecipes();
   }
 
   @override
@@ -33,7 +34,7 @@ class _SavedRecipesState extends State<SavedRecipes> {
 
     if(userFavs == null || userFavs.isEmpty){
       return const Center(
-        child: CircularProgressIndicator(),
+        child: Text("No Favorite Recipes For you"),
       );
     }
     return Scaffold(
@@ -61,16 +62,20 @@ class _SavedRecipesState extends State<SavedRecipes> {
                   EdgeInsets itemMargin = EdgeInsets.only(
                       top: isFirst ? 18 : 10, bottom: isLast ? 18 : 10);
                   return GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       final id = userFavs[index].recipeId;
-                      print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX $id");
-                      final Recipe r = recipeProvider.fetchRecipeById(id) as Recipe;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RecipeInformation(recipe: r),
-                        ),
-                      );
+                      print("Recipe ID: $id");
+                      final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
+                      recipeProvider.fetchRecipeById(id).then((_) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RecipeInformation(
+                              recipe: recipeProvider.recipeByID!,
+                            ),
+                          ),
+                        );
+                      });
                     },
                     child: Container(
                       margin: itemMargin,
