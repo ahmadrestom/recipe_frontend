@@ -22,6 +22,9 @@ class _RecipeInformationState extends State<RecipeInformation> {
   @override
   Widget build(BuildContext context) {
 
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Container(
         margin: const EdgeInsets.fromLTRB(30, 12, 30, 25),
@@ -276,6 +279,207 @@ class _RecipeInformationState extends State<RecipeInformation> {
                         );
                       },
                     ),
+                    PopupMenuItem(
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      child: const Row(
+                        children: [
+                          Icon(Icons.view_headline_outlined, size: 20,),
+                          SizedBox(width: 30,),
+                          Text(
+                            "Nutrition Information",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Poppins',
+                              color: Color.fromRGBO(18, 18, 18, 1),
+                            ),
+                          ),
+                        ],
+                      ),
+                      onTap: (){
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context){
+                              return AlertDialog(
+                                backgroundColor: Color.fromRGBO(255, 255, 255, 1),
+                                title: const Text(
+                                  "Nutrition Information",
+                                  style: TextStyle(
+                                    fontFamily: "Poppins",
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FontStyle.italic,
+                                    fontSize: 24,
+                                    color: Color.fromRGBO(23, 155, 132, 1.0),
+                                  ),
+                                ),
+                                content: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxHeight: screenHeight*0.6,
+                                    minWidth: screenWidth*0.9,
+                                  ),
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        ListTile(
+                                          title: const Text(
+                                              "Calories",
+                                            style: TextStyle(
+                                              color: Color.fromRGBO(18, 149, 117, 1),
+                                              fontStyle: FontStyle.italic,
+                                              fontSize: 18
+                                            ),
+                                          ),
+                                          subtitle: Text(widget.recipe.nutritionalInformation!.calories.toString()),
+                                        ),
+                                        const Divider(
+                                          color: Color.fromRGBO(18, 149, 117, 1),
+                                        ),
+                                        ListTile(
+                                          title: const Text(
+                                              "Total Fat",
+                                            style: TextStyle(
+                                                color: Color.fromRGBO(18, 149, 117, 1),
+                                                fontStyle: FontStyle.italic,
+                                                fontSize: 18
+                                            ),
+                                          ),
+                                          subtitle: Text(widget.recipe.nutritionalInformation!.totalFat.toString()),
+                                        ),
+                                        const Divider(
+                                          color: Color.fromRGBO(18, 149, 117, 1),
+                                        ),
+                                        ListTile(
+                                          title: const Text(
+                                              "Cholesterol",
+                                            style: TextStyle(
+                                                color: Color.fromRGBO(18, 149, 117, 1),
+                                                fontStyle: FontStyle.italic,
+                                                fontSize: 18
+                                            ),
+                                          ),
+                                          subtitle: Text(widget.recipe.nutritionalInformation!.cholesterol.toString()),
+                                        ),
+                                        const Divider(
+                                          color: Color.fromRGBO(18, 149, 117, 1),
+                                        ),
+                                        ListTile(
+                                          title: const Text(
+                                              "Carbohydrates",
+                                            style: TextStyle(
+                                                color: Color.fromRGBO(18, 149, 117, 1),
+                                                fontStyle: FontStyle.italic,
+                                                fontSize: 18
+                                            ),
+                                          ),
+                                          subtitle: Text(widget.recipe.nutritionalInformation!.carbohydrates.toString()),
+                                        ),
+                                        const Divider(
+                                          color: Color.fromRGBO(18, 149, 117, 1),
+                                        ),
+                                        ListTile(
+                                          title: const Text(
+                                              "Protein",
+                                            style: TextStyle(
+                                                color: Color.fromRGBO(18, 149, 117, 1),
+                                                fontStyle: FontStyle.italic,
+                                                fontSize: 18
+                                            ),
+                                          ),
+                                          subtitle: Text(widget.recipe.nutritionalInformation!.protein.toString()),
+                                        ),
+                                        const Divider(
+                                          color: Color.fromRGBO(18, 149, 117, 1),
+                                        ),
+                                        ListTile(
+                                          title: const Text(
+                                              "Sugar",
+                                            style: TextStyle(
+                                                color: Color.fromRGBO(18, 149, 117, 1),
+                                                fontStyle: FontStyle.italic,
+                                                fontSize: 18
+                                            ),
+                                          ),
+                                          subtitle: Text(widget.recipe.nutritionalInformation!.sugar.toString()),
+                                        ),
+                                        const Divider(
+                                          color: Color.fromRGBO(18, 149, 117, 1),
+                                        ),
+                                        ListTile(
+                                          title: const Text(
+                                              "Sodium",
+                                            style: TextStyle(
+                                                color: Color.fromRGBO(18, 149, 117, 1),
+                                                fontStyle: FontStyle.italic,
+                                                fontSize: 18
+                                            ),
+                                          ),
+                                          subtitle: Text(widget.recipe.nutritionalInformation!.sodium.toString()),
+                                        ),
+                                        const Divider(
+                                          color: Color.fromRGBO(18, 149, 117, 1),
+                                        ),
+                                        ListTile(
+                                          title: const Text(
+                                              "Fiber",
+                                            style: TextStyle(
+                                                color: Color.fromRGBO(18, 149, 117, 1),
+                                                fontStyle: FontStyle.italic,
+                                                fontSize: 18
+                                            ),
+                                          ),
+                                          subtitle: Text(widget.recipe.nutritionalInformation!.fiber.toString()),
+                                        ),
+                                        const Divider(
+                                          color: Color.fromRGBO(18, 149, 117, 1),
+                                        ),
+                                        ListTile(
+                                          title: const Text(
+                                              "Zinc",
+                                            style: TextStyle(
+                                                color: Color.fromRGBO(18, 149, 117, 1),
+                                                fontStyle: FontStyle.italic,
+                                                fontSize: 18
+                                            ),
+                                          ),
+                                          subtitle: Text(widget.recipe.nutritionalInformation!.zinc.toString()),
+                                        ),
+                                        const Divider(
+                                          color: Color.fromRGBO(18, 149, 117, 1),
+                                        ),
+                                        ListTile(
+                                          title: const Text(
+                                              "Magnesium",
+                                            style: TextStyle(
+                                                color: Color.fromRGBO(18, 149, 117, 1),
+                                                fontStyle: FontStyle.italic,
+                                                fontSize: 18
+                                            ),
+                                          ),
+                                          subtitle: Text(widget.recipe.nutritionalInformation!.magnesium.toString()),
+                                        ),
+                                        const Divider(
+                                          color: Color.fromRGBO(18, 149, 117, 1),
+                                        ),
+                                        ListTile(
+                                          title: const Text(
+                                              "Potassium",
+                                            style: TextStyle(
+                                                color: Color.fromRGBO(18, 149, 117, 1),
+                                                fontStyle: FontStyle.italic,
+                                                fontSize: 18
+                                            ),
+                                          ),
+                                          subtitle: Text(widget.recipe.nutritionalInformation!.potassium.toString()),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ),
+                              );
+                            }
+                        );
+                      },
+                    ),
                   ]
                 ),
               ],
@@ -344,7 +548,7 @@ class _RecipeInformationState extends State<RecipeInformation> {
                     Column(
                       children: [
                         Text(
-                          "${widget.recipe.chef.firstName} ${widget.recipe.chef.firstName}",
+                          "${widget.recipe.chef.firstName} ${widget.recipe.chef.lastName}",
                           style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16,

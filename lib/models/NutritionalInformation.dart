@@ -25,6 +25,10 @@ class NutritionalInformation{
     required this.potassium
   });
 
+  int getCount(){
+    return 11;//return the number of info attributes for the listview
+  }
+
   factory NutritionalInformation.fromJson(Map<String, dynamic> json) {
     return NutritionalInformation(
       calories: json['calories'] as double,
