@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:provider/provider.dart';
 
+import '../Providers/UserProvider.dart';
+import '../Providers/UserProvider.dart';
 import '../models/Recipe.dart';
 
 
@@ -143,7 +146,8 @@ class SavedRecipe extends StatelessWidget {
                           size: 18,
                         ),
                         onTap: (){
-                          ////////////////////////////////////
+                          final userProvider = Provider.of<UserProvider>(context, listen: false);
+                          userProvider.removeFromFavorites(recipe);
                         },
                       ),
                     ),

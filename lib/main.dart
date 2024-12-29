@@ -3,14 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:recipe_app/Providers/UserProvider.dart';
 import 'package:recipe_app/pages/NavPage.dart';
-import 'package:recipe_app/pages/home.dart';
 import 'package:recipe_app/pages/landing.dart';
 import 'package:recipe_app/pages/login.dart';
 import 'package:recipe_app/pages/recentSearches.dart';
-import 'package:recipe_app/pages/recipeInformation.dart';
-import 'package:recipe_app/pages/reviews.dart';
 import 'package:recipe_app/pages/signup.dart';
-//import 'package:recipe_app/pages/Data/recipes.dart' as recipes;
 import 'package:provider/provider.dart';
 import 'package:recipe_app/services/UserServices/AuthService.dart';
 

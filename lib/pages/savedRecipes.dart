@@ -64,7 +64,7 @@ class _SavedRecipesState extends State<SavedRecipes> {
                   return GestureDetector(
                     onTap: () {
                       final id = userFavs[index].recipeId;
-                      print("Recipe ID: $id");
+                      print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXRecipe ID: $id");
                       final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
                       recipeProvider.fetchRecipeById(id).then((_) {
                         Navigator.push(

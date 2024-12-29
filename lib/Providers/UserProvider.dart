@@ -160,4 +160,26 @@ class UserProvider extends ChangeNotifier {
         notifyListeners();
       }
     }
+
+    Future<void> removeFromFavorites(RecipeFavorites recipe) async{
+      try{
+        if(token!=null) {
+          final bool removed = await _authService.removeRecipeFromFavorites(
+              recipe.recipeId, _token!);
+          _userFavorites?.remove(recipe);
+          if(removed) {
+            print("Removed from favorites successfully");
+            notifyListeners();
+          } else {
+            print("Not removed from favorites");
+          }
+        }else{
+          print("Token is null");
+          throw Exception("Token is null");
+        }
+      }catch(e){
+        print("Error removing favorite recipe: $e");
+        throw Exception("Exception: $e");
+      }
+    }
 }
