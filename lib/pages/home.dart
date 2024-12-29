@@ -295,8 +295,8 @@ class _HomePageState extends State<HomePage> {
                                 child: ClipOval(
                                   child: Image.network(
                                     recipeDetails[index].plateImageUrl,
-                                    width: screenWidth * 0.25, // Set desired width
-                                    height: screenWidth * 0.25, // Set desired height
+                                    width: screenWidth * 0.25,
+                                    height: screenWidth * 0.25,
                                     fit: BoxFit.cover, // Ensures the image covers the circular area
                                   ),
                                 ),
@@ -553,16 +553,19 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-                              Align(
+                              /*Align(
+                                heightFactor: 2,
                                 alignment: Alignment.topRight,
-                                child: SizedBox(
-                                  width: screenWidth * 0.3,
-                                  height: screenWidth * 0.3,
-                                  child: Image.asset(
-                                    'assets/images/CrunchyNutColeslaw.png',
+                                child: ClipOval(
+
+                                  child: Image.network(
+                                      width: screenWidth * 0.17,
+                                      height: screenWidth * 0.17,
+                                    recipeDetails[index].plateImageUrl,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
-                              ),
+                              ),*/
                             ],
                           ),
                         ),
