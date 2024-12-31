@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-
+import '../models/category.dart';
 class CategoryItem extends StatelessWidget {
-  final String categoryName;
-  final String selectedCategory;
-  final Function(String) onCategorySelected;
+  final Category category;
+  final Category selectedCategory;
+  final Function(Category) onCategorySelected;
 
   const CategoryItem({
     Key? key,
-    required this.categoryName,
+    required this.category,
     required this.selectedCategory,
     required this.onCategorySelected,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    bool isSelected = categoryName == selectedCategory;
+  Widget build(BuildContext context){
+    bool isSelected = (category.categoryName.toLowerCase() == selectedCategory.categoryName.toLowerCase());
 
     return Container(
       height: 32,
@@ -26,14 +26,14 @@ class CategoryItem extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
-          if (!isSelected) {
-            onCategorySelected(categoryName);
+          if (!isSelected){
+            onCategorySelected(category);
           }
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
-            categoryName,
+            category.categoryName,
             style: TextStyle(
               color: isSelected ? const Color.fromRGBO(255, 255, 255, 1):const Color.fromRGBO(113, 177, 161, 1),
               fontSize: 14,

@@ -7,15 +7,15 @@ class Category{
   factory Category.fromJson(Map<String, dynamic> json) {
 
     return Category(
-      categoryId: json['categoryId'] as String,
-      categoryName: json['categoryName']??'',
+      categoryId: json['category_id'],
+      categoryName: json['category_name'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'categoryId': categoryId,
-      'categoryName': categoryName,
+      'category_id': categoryId,
+      'category_name': categoryName,
     };
   }
 

@@ -286,7 +286,7 @@ class _RecipeInformationState extends State<RecipeInformation> {
                           Icon(Icons.view_headline_outlined, size: 20,),
                           SizedBox(width: 30,),
                           Text(
-                            "Nutrition Information",
+                            "Nutrition Facts",
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,

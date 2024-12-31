@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:recipe_app/pages/recentSearches.dart';
 import 'package:recipe_app/pages/recipeInformation.dart';
 import 'package:rate_in_stars/rate_in_stars.dart';
+import '../models/category.dart' as category;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,24 +26,6 @@ class _HomePageState extends State<HomePage> {
   late List<Recipe> newRecipes = [];
   final List<String> time = ["All", "New", "Old"];
   final List<String> rating = ["1","2","3","4","5"];*/
-
-  String selectedCategory = '';
-
-  final List<String> categories = [
-    "All",
-    "Indian",
-    "Asian",
-    "Chinese",
-    "Pizza",
-    "Pasta",
-    "Burgers",
-    "Vegan",
-    "Sandwiches",
-    "Desserts",
-    "Lebanese",
-    "SeaFood",
-    "Grilled Dishes"
-  ];
 
   /*final List<String> categories = recipe.Category.values
       .map((e) => e.toString().split('.').last)
@@ -74,10 +57,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final userDetails = userProvider.userDetails;
-    final userFavorites = userProvider.userFavorites;
-
-    final recipeProvider = Provider.of<RecipeProvider>(context);
-    final recipeDetails = recipeProvider.recipeDetails;
+    final recipeProvider = Provider.of<RecipeProvider>(context, listen: true);
+    final recipeDetails = recipeProvider.filteredRecipes?? recipeProvider.recipeDetails;
+    final categories = recipeProvider.categoryList??[];
+    //categories.forEach((element) {print(element.categoryName);});
+    category.Category selectedCategory = recipeProvider.selectedCategory;
     final recentRecipeDetails = recipeProvider.recentRecipeDetails;
     if(recipeDetails == null || recentRecipeDetails==null){
       return const Center(
@@ -202,14 +186,13 @@ class _HomePageState extends State<HomePage> {
                                 left: isFirst ? screenWidth * 0.05 : screenWidth * 0.02,
                                 right: isLast ? screenWidth * 0.05 : screenWidth * 0.02);
                             return Container(
+
                               margin: itemMargin,
                               child: CategoryItem(
-                                categoryName: categories[index],
-                                selectedCategory: selectedCategory,
+                                category: categories[index],
+                                selectedCategory: recipeProvider.selectedCategory,
                                 onCategorySelected: (category){
-                                  setState(() {
-                                    selectedCategory = category;
-                                  });
+                                  recipeProvider.updateCategory(category);
                                 },
                               ),
                             );
@@ -218,7 +201,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ],
-
               ),
               recipeDetails.isEmpty?
               const Center(

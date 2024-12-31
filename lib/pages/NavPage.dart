@@ -1,10 +1,15 @@
+import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:recipe_app/Providers/UserProvider.dart';
+import 'package:recipe_app/pages/AddRecipe.dart';
 import 'package:recipe_app/pages/home.dart';
 import 'package:recipe_app/pages/notifications.dart';
 import 'package:recipe_app/pages/profile.dart';
 import 'package:recipe_app/pages/savedRecipes.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:cherry_toast/cherry_toast.dart';
 
 class NavPage extends StatefulWidget {
   const NavPage({super.key});
@@ -97,6 +102,27 @@ class _NavPageState extends State<NavPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
+          final userProvider = Provider.of<UserProvider>(context, listen:false);
+          if(userProvider.userDetails?['role'] == "USER"){
+            CherryToast.error(
+                description:  const Text("Only a chef can add new recipes", style: TextStyle(color: Colors.black)),
+
+                animationType:  AnimationType.fromTop,
+
+                animationDuration:  const Duration(milliseconds:  2000),
+
+                autoDismiss:  true
+
+            ).show(context);
+          }else{
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder:(context)=>const AddRecipe()
+                )
+            );
+          }
+
 
         },
         backgroundColor: const Color.fromRGBO(18, 149, 117, 1),

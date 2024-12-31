@@ -36,6 +36,7 @@ dependencies:
   intl: ^0.18.1
   fluentui_emoji_icon: ^0.0.2
   keyboard_dismisser: ^3.0.0
+  cherry_toast: ^1.11.0
   dialog_alert_transition: ^1.0.6
   flutter_rating_bar: ^4.0.1
   rate_in_stars: ^0.0.3

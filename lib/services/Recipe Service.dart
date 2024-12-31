@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 import 'package:recipe_app/services/BaseAPI.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/Recipe.dart';
+import '../models/category.dart' as category;
 
 class RecipeService extends BaseAPI{
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
@@ -91,7 +91,29 @@ class RecipeService extends BaseAPI{
         print("Error fetching recipe by ID: $e");
         throw Exception("Error cannot fetch recipe by id: $e");
       }
-
+    }
+    Future<List<category.Category>?> getAllCategories() async{
+      try{
+        final token = await secureStorage.read(key: 'authToken');
+        if (token == null) {
+          throw Exception('No token found');
+        }
+        final response = await http.get(
+          Uri.parse(super.getCategoriesAPI),
+          headers: BaseAPI().headers
+        );
+        print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX ${response.body}");
+        if(response.statusCode==200){
+          final List<dynamic> data = jsonDecode(response.body);
+          return data.map((json) => category.Category.fromJson(json)).toList();
+        }else{
+          print("Error: No categories where fetched: StatusCode: ${response.statusCode}");
+          throw Exception("No categories");
+        }
+      }catch(e){
+        print("Error fetching categories");
+        throw Exception("Error: $e");
+      }
     }
 }
 
