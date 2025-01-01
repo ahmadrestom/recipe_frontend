@@ -33,10 +33,12 @@ dependencies:
   jwt_decode: ^0.3.1
   provider: ^6.1.2
   flutter_styled_toast: ^2.0.0
-  intl: ^0.18.1
+  intl: ^0.19.0
   fluentui_emoji_icon: ^0.0.2
   keyboard_dismisser: ^3.0.0
   cherry_toast: ^1.11.0
+  image_picker: ^1.0.8
+  dropdown_button2: ^2.3.9
   dialog_alert_transition: ^1.0.6
   flutter_rating_bar: ^4.0.1
   rate_in_stars: ^0.0.3
@@ -46,6 +48,8 @@ dependencies:
   http: ^1.2.0
   standard_searchbar: ^2.0.0
   ionicons: ^0.2.2
+  firebase_core: ^3.9.0
+  firebase_storage: ^12.3.7
   flutter:
     sdk: flutter
 

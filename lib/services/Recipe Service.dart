@@ -8,7 +8,7 @@ import '../models/category.dart' as category;
 class RecipeService extends BaseAPI{
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
-  Future<List<Recipe>> fetchRecipes() async{
+    Future<List<Recipe>> fetchRecipes() async{
 
     try {
       final token = await secureStorage.read(key: 'authToken');
@@ -39,7 +39,7 @@ class RecipeService extends BaseAPI{
     }
     }
 
-  Future<List<Recipe>> fetchRecentRecipes() async {
+    Future<List<Recipe>> fetchRecentRecipes() async {
     try {
       final token = await secureStorage.read(key: 'authToken');
       if (token == null) {
@@ -65,6 +65,7 @@ class RecipeService extends BaseAPI{
       throw Exception('Error loading recent recipes');
     }
     }
+
     Future<Recipe> fetchRecipeById(String id) async{
       try {
         final token = await secureStorage.read(key: 'authToken');
@@ -92,6 +93,7 @@ class RecipeService extends BaseAPI{
         throw Exception("Error cannot fetch recipe by id: $e");
       }
     }
+
     Future<List<category.Category>?> getAllCategories() async{
       try{
         final token = await secureStorage.read(key: 'authToken');
@@ -115,6 +117,9 @@ class RecipeService extends BaseAPI{
         throw Exception("Error: $e");
       }
     }
+
+
+
 }
 
   
