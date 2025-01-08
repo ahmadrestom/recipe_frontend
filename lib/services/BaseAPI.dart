@@ -12,6 +12,7 @@ class BaseAPI {
   var postUserFavoriteRecipeAPI = "$secureAPI/user/addFavoriteRecipe";
   var deleteUserFavoriteRecipeAPI = "$secureAPI/user/removeFavoriteRecipe";
   var getCategoriesAPI = "$publicAPI/category/getAllCategories";
+  var addRecipeAPI = "$secureAPI/recipe/createRecipe";
   Map<String, String> headers = {
      "Content-Type": "application/json; charset=UTF-8"
    };

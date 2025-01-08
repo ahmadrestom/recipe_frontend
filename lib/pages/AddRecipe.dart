@@ -2,9 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:recipe_app/Providers/UserProvider.dart';
+import 'package:recipe_app/models/NutritionalInformation.dart';
+import 'package:recipe_app/models/Recipe.dart';
 import 'package:recipe_app/models/category.dart';
+import 'package:recipe_app/models/ingredients.dart';
+import 'package:recipe_app/models/instruction.dart';
+import 'package:recipe_app/services/Recipe%20Service.dart';
 import '../Providers/RecipeProvider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 
 class AddRecipe extends StatefulWidget {
   const AddRecipe({Key? key}) : super(key: key);
@@ -16,12 +23,15 @@ class AddRecipe extends StatefulWidget {
 class AddRecipeState extends State<AddRecipe> {
   late final List<Category> _categories;
   final _difficultyLevels = ['Easy', 'Medium', 'Hard'];
-  String? _selectedCategory;
+  Category? _selectedCategory;
   String? _selectedDifficulty;
+
+
 
   File? _recipeImage;
   File? _plateImage;
   final ImagePicker _picker = ImagePicker();
+  final RecipeService recipeService = RecipeService();
 
   Future<void> _pickImage(Function(File) onImagePicked) async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -29,6 +39,78 @@ class AddRecipeState extends State<AddRecipe> {
       setState(() {
         onImagePicked(File(pickedFile.path));
       });
+    }
+  }
+
+  Future<void> _submitRecipe()async{
+    try{
+      if(_recipeImage==null || _plateImage==null){
+        print("SSSSSSSSSSSSSSSSSSSSSSERROR IMages are null");
+        throw Exception("SSSSSSSSSSSSSSSSSSSSSSERROR IMages are null");
+      }else{
+        print("Images picked successfully:  Recipe Image - $_recipeImage, Plate Image - $_plateImage");
+      }
+      if (_selectedCategory == null || _selectedDifficulty == null) {
+        print("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSss");
+        throw Exception("Category or difficulty level is not selected");
+      }
+      String? recipeImageUrl = await recipeService.uploadImage(
+        _recipeImage!,
+        'RecipeImages',
+        path.basename(_recipeImage!.path),
+      );
+      print("Uploading Recipe Image...");
+      String? plateImageUrl = await recipeService.uploadImage(
+        _plateImage!,
+        'PlateImages',
+        path.basename(_plateImage!.path),
+      );
+      print("Uploading Plate Image...");
+      if(recipeImageUrl==null || plateImageUrl==null) {
+        print("RECIPEIMAGE IS NULL XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        throw Exception("ERROR: Image URLs are null");
+      }
+        if(!mounted) return;
+      final userProvider = Provider.of<UserProvider>(context,listen: false);
+      final chefId = userProvider.userDetails?['id'];
+
+      NutritionalInformation ni = NutritionalInformation(
+          calories: double.parse(_caloriesController.value.text),
+          totalFat: double.parse(_totalFatController.value.text),
+          cholesterol: double.parse(_cholesterolController.value.text),
+          carbohydrates: double.parse(_carbohydratesController.value.text),
+          protein: double.parse(_proteinController.value.text),
+          sugar: double.parse(_sugarController.value.text),
+          sodium: double.parse(_sodiumController.value.text),
+          fiber: double.parse(_fiberController.value.text),
+          zinc: double.parse(_zincController.value.text),
+          magnesium: double.parse(_magnesiumController.value.text),
+          potassium: double.parse(_potassiumController.value.text),
+      );
+      print("Nutrition Information: ${ni.toJson()}");
+      final RecipePost recipe = RecipePost.name(
+        _recipeNameController.value.text,
+        _descriptionController.value.text,
+        int.parse(_prepTimeController.value.text),
+        int.parse(_cookTimeController.value.text),
+        _selectedDifficulty!,
+        3,  // Rating starts at 3 and then when people rate, it will be updated
+        recipeImageUrl,
+        plateImageUrl,
+        _selectedCategory!.categoryId,
+        chefId,
+        ni,
+        _ingredients,
+        _instructions,
+      );
+
+
+      print("Recipe Object: ${recipe.toJson()}");
+      final x = await RecipeService().uploadRecipe(recipe);
+      print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxx $x");
+    }catch(e){
+      print("Could not submit recipe: $e");
+      throw Exception("Could not submit recipe : $e");
     }
   }
 
@@ -40,8 +122,8 @@ class AddRecipeState extends State<AddRecipe> {
   final TextEditingController _cookTimeController = TextEditingController();
   //final TextEditingController _imageUrlController = TextEditingController();
   //final TextEditingController _plateImageUrlController = TextEditingController();
-  final List<Map<String, String>> _ingredients = [];
-  final List<String> _instructions = [];
+  final Set<Ingredients> _ingredients = {};
+  final List<Instruction> _instructions = [];
   final TextEditingController _caloriesController = TextEditingController();
   final TextEditingController _totalFatController = TextEditingController();
   final TextEditingController _cholesterolController = TextEditingController();
@@ -130,7 +212,7 @@ class AddRecipeState extends State<AddRecipe> {
                 _buildSectionTitle('Category'),
                 _buildDropdown(_categories, 'Select Category', (value) {
                   setState(() {
-                    _selectedCategory = value;
+                    _selectedCategory = _categories.firstWhere((category) => category.categoryName == value);
                   });
                 }),
 
@@ -141,7 +223,7 @@ class AddRecipeState extends State<AddRecipe> {
                     margin: const EdgeInsets.symmetric(vertical: 8.0),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     child: ListTile(
-                      title: Text('${ingredient['name']} - ${ingredient['grams']} grams'),
+                      title: Text('${ingredient.name} - ${ingredient.grams} grams'),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
@@ -165,7 +247,7 @@ class AddRecipeState extends State<AddRecipe> {
                     margin: const EdgeInsets.symmetric(vertical: 8.0),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     child: ListTile(
-                      title: Text('Step ${entry.key + 1}: ${entry.value}'),
+                      title: Text('Step ${entry.key + 1}: ${entry.value.instruction}'),
                       trailing: const Icon(Icons.delete, color: Colors.red),
                       onTap: () {
                         setState(() {
@@ -224,7 +306,7 @@ class AddRecipeState extends State<AddRecipe> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(color: Color(0xFF00796B)),
+            borderSide: const BorderSide(color: Color(0xFF00796B)),
           ),
         ),
         validator: validator,
@@ -232,7 +314,7 @@ class AddRecipeState extends State<AddRecipe> {
     );
   }
 
-  Widget _buildDropdown(List<Category> items, String hint, Function(String?) onChanged) {
+  Widget _buildDropdown(List<Category> items, String hint, Function(String?) onChanged){
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
       child: DropdownButtonFormField<String>(
@@ -356,8 +438,16 @@ class AddRecipeState extends State<AddRecipe> {
   Widget _buildSubmitButton() {
     return Center(
       child: ElevatedButton(
-        onPressed: () {
-          if (_formKey.currentState?.validate() ?? false){
+        onPressed: () async {
+          if (_formKey.currentState!.validate()) {
+            await _submitRecipe();
+            if(mounted) {
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Recipe added successfully!')),
+              );
+
+            }// Navigate back to the home page
           }
         },
         style: ElevatedButton.styleFrom(
@@ -404,10 +494,7 @@ class AddRecipeState extends State<AddRecipe> {
               onPressed: () {
                 if (ingredientNameController.text.isNotEmpty && ingredientGramsController.text.isNotEmpty) {
                   setState(() {
-                    _ingredients.add({
-                      'name': ingredientNameController.text,
-                      'grams': ingredientGramsController.text,
-                    });
+                    _ingredients.add(Ingredients(ingredientNameController.text, int.parse(ingredientGramsController.text)));
                   });
                   Navigator.pop(context);
                 }
@@ -461,7 +548,10 @@ class AddRecipeState extends State<AddRecipe> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  _instructions.add(instructionController.text);
+                  _instructions.add(Instruction(
+                      instructionController.value.text,
+                      _instructions.length+1
+                  ));
                 });
                 Navigator.pop(context);
               },

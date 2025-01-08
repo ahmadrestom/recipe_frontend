@@ -1,5 +1,3 @@
-import 'package:recipe_app/services/BaseAPI.dart';
-
 import 'NutritionalInformation.dart';
 import 'Review.dart';
 import 'category.dart';
@@ -205,5 +203,73 @@ class RecipeFavorites extends RecipeBase{
       chefPictureUrl: recipe.chef.imageUrl, // Optional chef picture
     );
   }
+}
 
+class RecipePost{
+  final String recipeName;
+  final String description;
+  final int preparationTime;
+  final int cookingTime;
+  final String difficultyLevel;
+  final double rating;
+  final String imageUrl;
+  final String plateUrl;
+  final String categoryId;
+  final String chefId;
+  final NutritionalInformation ni;
+  final Set<Ingredients> ingredients;
+  List<Instruction> instructions;
+
+  RecipePost.name(
+      this.recipeName,
+      this.description,
+      this.preparationTime,
+      this.cookingTime,
+      this.difficultyLevel,
+      this.rating,
+      this.imageUrl,
+      this.plateUrl,
+      this.categoryId,
+      this.chefId,
+      this.ni,
+      this.ingredients,
+      this.instructions
+      );
+
+  Map<String, dynamic> toJson() {
+    return {
+      'recipeName': recipeName,
+      'description': description,
+      'preparationTime': preparationTime,
+      'cookingTime': cookingTime,
+      'difficultyLevel': difficultyLevel,
+      'rating': rating,
+      'imageUrl': imageUrl,
+      'plateImageUrl': plateUrl,
+      'categoryId': categoryId,
+      'chefId': chefId,
+      'ni': ni.toJson(), // Assuming NutritionalInformation has a toJson() method
+      'ingredients': ingredients.map((e) => e.toJson()).toList(), // Assuming Ingredients has a toJson() method
+      'instructions': instructions.map((e) => e.toJson()).toList(), // Assuming Instruction has a toJson() method
+    };
+  }
+
+  // Convert JSON to RecipePost
+  factory RecipePost.fromJson(Map<String, dynamic> json) {
+    return RecipePost.name(
+      json['recipeName'],
+      json['description'],
+      json['preparationTime'],
+      json['cookingTime'],
+      json['difficultyLevel'],
+      json['rating'],
+      json['imageUrl'],
+      json['plateImageUrl'],
+      json['categoryId'],
+      json['chefId'],
+      NutritionalInformation.fromJson(json['ni']), // Assuming NutritionalInformation has a fromJson() method
+      Set<Ingredients>.from(json['ingredients'].map((x) => Ingredients.fromJson(x))), // Assuming Ingredients has a fromJson() method
+      List<Instruction>.from(json['instructions'].map((x) => Instruction.fromJson(x))), // Assuming Instruction has a fromJson() method
+    );
+  }
 }

@@ -1,6 +1,6 @@
 class Category{
   final String categoryId;
-  final String categoryName;
+  late final String categoryName;
 
   Category({required this.categoryId, required this.categoryName});
 

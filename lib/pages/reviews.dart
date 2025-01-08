@@ -1,4 +1,4 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:recipe_app/models/recipe.dart';
 import 'package:intl/intl.dart';
 import 'package:fluentui_emoji_icon/fluentui_emoji_icon.dart';
@@ -84,21 +84,21 @@ class _ReviewsState extends State<Reviews> {
                             borderSide: const BorderSide(color: Colors.grey, width: 1.5, style: BorderStyle.solid, strokeAlign: BorderSide.strokeAlignInside), // Customize border color and width
                             borderRadius: BorderRadius.circular(10.0),
                           ),
-      
+
                           hintText: "Say something",
                           hintStyle: const TextStyle(
                             color: Color.fromRGBO(200, 200, 200, 1),
                             fontWeight: FontWeight.w400,
                             fontFamily: 'Poppins',
                             fontSize: 14,
-      
+
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
                             borderSide: const BorderSide(color: Color.fromRGBO(200, 200, 200, 1)),
                           )
                       ),
-      
+
                     ),
                     const SizedBox(height: 5.0,),
                     ElevatedButton(
@@ -111,7 +111,7 @@ class _ReviewsState extends State<Reviews> {
                         backgroundColor: MaterialStateProperty.all(
                           const Color.fromRGBO(18, 149, 117, 1),
                         ),
-      
+
                       ),
                       onPressed: (){
                         setState(() {
@@ -175,10 +175,10 @@ class _ReviewsState extends State<Reviews> {
                                         color: Color.fromRGBO(169, 169, 169, 1),
                                       ),
                                     ),
-      
+
                                   ],
                                 ),
-      
+
                               ],
                             ),
                             const SizedBox(height: 10.0,),
@@ -237,7 +237,7 @@ class _ReviewsState extends State<Reviews> {
                                       ),
                                     ),
                                   ],
-      
+
                                 ),
                                 ),
                                 const SizedBox(width: 4.0,),
@@ -282,7 +282,7 @@ class _ReviewsState extends State<Reviews> {
                                         ),
                                       ),
                                     ],
-      
+
                                   ),
                                 ),
                           ],
@@ -301,4 +301,3 @@ class _ReviewsState extends State<Reviews> {
     );
   }
 }
-*/

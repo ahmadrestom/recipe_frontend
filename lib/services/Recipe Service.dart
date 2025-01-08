@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:recipe_app/services/BaseAPI.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/Recipe.dart';
 import '../models/category.dart' as category;
 
@@ -117,6 +119,62 @@ class RecipeService extends BaseAPI{
         throw Exception("Error: $e");
       }
     }
+
+  Future<String?> uploadImage(File imageFile, String bucketName, String path) async {
+    final supabase = Supabase.instance.client;
+    try {
+      print("Starting upload for $path");
+
+      // Perform the upload
+      final response = await supabase.storage.from(bucketName).upload(path, imageFile);
+      print("Upload Response: $response");
+
+      // Check if the response indicates an error (Supabase might throw exceptions on failure)
+      if (response.isEmpty) {
+        throw Exception("Upload failed: Empty response");
+      }
+
+      // If no error, get the public URL
+      final publicUrl = supabase.storage.from(bucketName).getPublicUrl(path);
+      print("Public URL: $publicUrl");
+
+      return publicUrl;
+    } catch (e) {
+      print("Error uploading image: $e");
+      throw Exception("Error uploading image: $e");
+    }
+  }
+
+  Future<bool> uploadRecipe(RecipePost recipe) async{
+      try{
+        final token = await secureStorage.read(key: 'authToken');
+        if(token == null){
+          throw Exception('No token found');
+        }
+        final response = await http.post(
+          Uri.parse(super.addRecipeAPI),
+          headers : {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+        },
+          body: jsonEncode(recipe.toJson()),
+        );
+        if(response.statusCode==200 || response.statusCode==201){
+          print("Recipe uploaded successfully");
+          return true;
+        }else{
+          print("Failed to upload recipe: ${response.statusCode}");
+          print("Response body: ${response.body}");
+          print("Response headers: ${response.headers}");
+          return false;
+        }
+      }catch(e){
+        print("Cannot add recipe in service: $e");
+        throw Exception("Recipe not added in service");
+      }
+
+    }
+
 
 
 
