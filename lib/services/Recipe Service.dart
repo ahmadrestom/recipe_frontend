@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:recipe_app/models/Review.dart';
 import 'package:recipe_app/services/BaseAPI.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -120,7 +121,7 @@ class RecipeService extends BaseAPI{
       }
     }
 
-  Future<String?> uploadImage(File imageFile, String bucketName, String path) async {
+    Future<String?> uploadImage(File imageFile, String bucketName, String path) async {
     final supabase = Supabase.instance.client;
     try {
       print("Starting upload for $path");
@@ -145,7 +146,7 @@ class RecipeService extends BaseAPI{
     }
   }
 
-  Future<bool> uploadRecipe(RecipePost recipe) async{
+    Future<bool> uploadRecipe(RecipePost recipe) async{
       try{
         final token = await secureStorage.read(key: 'authToken');
         if(token == null){
@@ -175,9 +176,63 @@ class RecipeService extends BaseAPI{
 
     }
 
-
-
-
+    Future<bool> addReview(String text,String recipeId) async{
+      try{
+        final token = await secureStorage.read(key: 'authToken');
+        if(token==null){
+          print("No token to add review");
+          throw Exception("No token found");
+        }
+        final response = await http.post(
+          Uri.parse("${super.addReviewAPI}/$recipeId"),
+          headers : {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $token',
+          },
+          body: text
+        );
+        if(response.statusCode == 200 || response.statusCode==201){
+          print("Review added to recipe with id: $recipeId");
+          return true;
+        }else{
+          print("Error adding review to recipe with id: $recipeId");
+          print("XXXXXXXXXXXXXXX ${response.statusCode}");
+          print(response.body);
+          return false;
+        }
+      }catch(e){
+        print("Error adding review: $e");
+        throw Exception("Error adding review::$e");
+      }
+    }
+    
+    Future<Set<Review>> getRecipeReviews(String recipeId) async{
+      try{
+        final token = await secureStorage.read(key: 'authToken');
+        if(token==null){
+          print("No token available to get reviews");
+          throw Exception("No token");
+        }
+        final response = await http.get(
+          Uri.parse("${super.getReviewsAPI}/$recipeId"),
+          headers : {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $token',
+          },
+        );
+        if(response.statusCode == 200){
+          List<dynamic> responseData = jsonDecode(response.body);
+          Set<Review> reviews = responseData
+              .map((reviewJson) => Review.fromJson(reviewJson))
+              .toSet();
+          return reviews;
+        }else {
+          print("Failed to fetch reviews. Status code: ${response.statusCode}");
+          throw Exception("Failed to fetch reviews");
+        }
+      }catch(e){
+        print("Error getting reviews: $e");
+        throw Exception("Error getting reviews: $e");
+      }
+    }
 }
-
-  

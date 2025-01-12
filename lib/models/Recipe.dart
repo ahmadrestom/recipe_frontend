@@ -126,7 +126,7 @@ class Recipe extends RecipeBase{
     rating = (value < 1) ? 1 : (value > 5) ? 5 : value.toDouble();
   }
 
-  int getNumberOfReviews() {
+  int getNumberOfReviews(){
     if (reviews == null || reviews!.isEmpty) {
       return 0;
     }

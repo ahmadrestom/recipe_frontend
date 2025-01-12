@@ -271,11 +271,10 @@ class _RecipeInformationState extends State<RecipeInformation> {
                         ],
                       ),
                       onTap: (){
-                        Navigator.push(
+                        Navigator.pushNamed(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => RecipeInformation(recipe: widget.recipe),
-                          ),
+                          '/reviews',
+                          arguments: widget.recipe.recipeId,
                         );
                       },
                     ),

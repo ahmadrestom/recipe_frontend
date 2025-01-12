@@ -6,12 +6,14 @@ import 'package:recipe_app/pages/NavPage.dart';
 import 'package:recipe_app/pages/landing.dart';
 import 'package:recipe_app/pages/login.dart';
 import 'package:recipe_app/pages/recentSearches.dart';
+import 'package:recipe_app/pages/reviews.dart';
 import 'package:recipe_app/pages/signup.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/services/UserServices/AuthService.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import 'Providers/RecipeProvider.dart';
+import 'Providers/ReviewProvider.dart';
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
@@ -22,7 +24,8 @@ void main() async{
       MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => UserProvider()),
-          ChangeNotifierProvider(create: (_) => RecipeProvider())
+          ChangeNotifierProvider(create: (_) => RecipeProvider()),
+          ChangeNotifierProvider(create: (_) => ReviewProvider())
         ],
           child: const MyApp()
       )
@@ -84,11 +87,11 @@ class MyApp extends StatelessWidget {
               reverseDuration: const Duration(milliseconds: 200),
               settings: settings,
             );
-          /*case '/reviews':
+          case '/reviews':
             final args = settings.arguments;
-            if(args is Recipe) {
+            if(args is String) {
               return PageTransition(
-                child: Reviews(recipe: args),
+                child: Reviews(recipeId: args),
                 type: PageTransitionType.fade,
                 duration: const Duration(milliseconds: 350),
                 reverseDuration: const Duration(milliseconds: 200),
@@ -97,7 +100,7 @@ class MyApp extends StatelessWidget {
             }else{
               return null;
             }
-          case '/recipeInformation':
+          /*case '/recipeInformation':
             final args = settings.arguments;
             if(args is Recipe) {
               return PageTransition(

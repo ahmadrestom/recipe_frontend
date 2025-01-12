@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     SizedBox(
-                      width: screenWidth * 0.7,
+                      width: screenWidth * 0.85,
                       height: screenHeight * 0.05,
                       child: CupertinoTextField(
                         onTap: (){
@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> {
 
                       ),
                     ),
-                    GestureDetector(
+                    /*GestureDetector(
                       child: Image.asset(
                         'assets/icons/filter.png',
                         width: screenWidth * 0.12,
@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                             MaterialPageRoute(builder:
                                 (context)=>const RecentSearches()));
                       },
-                    )
+                    )*/
                   ],
                 ),
               ),

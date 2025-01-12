@@ -1,22 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:recipe_app/models/recipe.dart';
+import 'package:provider/provider.dart';
+import 'package:recipe_app/Providers/RecipeProvider.dart';
+import 'package:recipe_app/Providers/ReviewProvider.dart';
+import 'package:recipe_app/models/Recipe.dart';
 import 'package:intl/intl.dart';
 import 'package:fluentui_emoji_icon/fluentui_emoji_icon.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
-class Reviews extends StatefulWidget{
-  const Reviews({super.key, required this.recipe});
+import '../models/Review.dart';
 
-  final Recipe recipe;
+class Reviews extends StatefulWidget{
+  final String recipeId;
+
+  const Reviews({super.key, required this.recipeId});
 
   @override
   State<Reviews> createState() => _ReviewsState();
 }
 
+
+
+
 class _ReviewsState extends State<Reviews> {
+
   final TextEditingController _commentController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ReviewProvider>().fetchRecipeReviews(widget.recipeId);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final reviewProvider = Provider.of<ReviewProvider>(context, listen: true);
+    Set<Review>? reviews = reviewProvider.reviews;
     return KeyboardDismisser(
       gestures: const [GestureType.onTap, GestureType.onPanUpdateAnyDirection],
       child: Scaffold(
@@ -53,7 +71,7 @@ class _ReviewsState extends State<Reviews> {
               ),
               const SizedBox(height: 26.0,),
               Text(
-                "${widget.recipe.getNumberOfReviews().toString()} comments",
+                "${reviews?.length ?? 0} comments",
                 style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
@@ -113,10 +131,20 @@ class _ReviewsState extends State<Reviews> {
                         ),
 
                       ),
-                      onPressed: (){
-                        setState(() {
-                          //////////////////////////////
-                        });
+                      onPressed: () async{
+                        if (_commentController.text.trim().isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Review cannot be empty!')),
+                          );
+                          return;
+                        }
+                        final res = await reviewProvider.addReview(_commentController.text, widget.recipeId);
+                        if(!mounted) return;
+                        showResultSnackBar(res);
+                        if (res) {
+                          _commentController.clear(); // Clear the text field after successful submission
+                        }
+
                       },
                       child: const Text(
                         "Send",
@@ -134,65 +162,69 @@ class _ReviewsState extends State<Reviews> {
               Expanded(
                 child: Container(
                   margin: const EdgeInsets.fromLTRB(1, 7, 1, 7),
-                  child: ListView.builder(
-                    itemCount: widget.recipe.getNumberOfReviews(),
-                    itemBuilder: (context, index){
-                      return Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          //color: Colors.white
-                          color: const Color.fromRGBO(240, 240, 240, 1),
-                        ),
-                        padding: const EdgeInsets.all(10.0),
-                        margin: const EdgeInsets.only(top: 12.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                const CircleAvatar(
-                                  child: Icon(Icons.account_circle_rounded),
-                                ),
-                                const SizedBox(width: 5.0,),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${widget.recipe.reviews![index].user.firstName} ${widget.recipe.reviews![index].user.lastName}",
-                                      style: const TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12,
-                                        color: Color.fromRGBO(18, 18, 18, 1),
-                                      ),
-                                    ),
-                                    Text(
-                                      DateFormat('dd-MM-yyyy HH:mm').format(widget.recipe.reviews![index].timeUploaded),
-                                      style: const TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 11,
-                                        color: Color.fromRGBO(169, 169, 169, 1),
-                                      ),
-                                    ),
-
-                                  ],
-                                ),
-
-                              ],
+                  child: reviews?.isEmpty ?? true
+                    ? const Center(child: Text("No Reviews yet"),)
+                    :ListView.builder(
+                    itemCount: reviews?.toList().length,
+                      itemBuilder: (context, index){
+                          final revs = reviews?.toList();
+                          final review = revs?[index];
+                          return Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              //color: Colors.white
+                              color: const Color.fromRGBO(240, 240, 240, 1),
                             ),
-                            const SizedBox(height: 10.0,),
-                            Text(
-                              widget.recipe.reviews![index].text,
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 13,
-                                color: Color.fromRGBO(128, 128, 128, 1),
-                              ),
-                            ),
-                            const SizedBox(height: 3.0,),
-                            Row(
+                            padding: const EdgeInsets.all(10.0),
+                            margin: const EdgeInsets.only(top: 12.0),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      const CircleAvatar(
+                                        child: Icon(Icons.account_circle_rounded),
+                                      ),
+                                      const SizedBox(width: 5.0,),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "${review?.user.firstName} ${review?.user.lastName}",
+                                            style: const TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 12,
+                                              color: Color.fromRGBO(18, 18, 18, 1),
+                                            ),
+                                          ),
+                                          Text(
+                                            DateFormat('dd-MM-yyyy HH:mm').format(review!.timeUploaded),
+                                            style: const TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 11,
+                                              color: Color.fromRGBO(169, 169, 169, 1),
+                                            ),
+                                          ),
+
+                                        ],
+                                      ),
+
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10.0,),
+                                  Text(
+                                    review.text,
+                                    style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 13,
+                                      color: Color.fromRGBO(128, 128, 128, 1),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 3.0,),
+                                  /*Row(
                               children: [
                                 Container(
                                   decoration: BoxDecoration(
@@ -268,7 +300,7 @@ class _ReviewsState extends State<Reviews> {
                                             });
                                           }else{
                                             setState(() {
-                                              widget.recipe.reviews![index].dislikes--;
+                                              review.dislikes--;
                                               widget.recipe.reviews![index].isDisliked = false;
                                             });
                                           }
@@ -276,7 +308,7 @@ class _ReviewsState extends State<Reviews> {
                                       ),
                                       const SizedBox(width: 1.0,),
                                       Text(
-                                        widget.recipe.reviews![index].dislikes.toString(),
+                                        review.dislikes.toString(),
                                         style: const TextStyle(
                                           fontSize: 14,
                                         ),
@@ -286,18 +318,29 @@ class _ReviewsState extends State<Reviews> {
                                   ),
                                 ),
                           ],
-                        ),
-                        ]
-                      ),
-                      );
+                        ),*/
+                                ]
+                            ),
+                          );
                     }
                   ),
                 ),
               )
-            ],
+              ],
           ),
         ),
       ),
     );
   }
+  void showResultSnackBar(bool success) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          success ? 'Review added successfully!' : 'You already added a review',
+        ),
+      ),
+    );
+  }
 }
+
+
