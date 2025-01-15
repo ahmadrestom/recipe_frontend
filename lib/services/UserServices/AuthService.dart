@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:recipe_app/services/BaseAPI.dart';
 
 import '../../models/Recipe.dart';
+import '../../models/chef.dart';
 class AuthService extends BaseAPI{
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
@@ -161,6 +162,33 @@ class AuthService extends BaseAPI{
     }catch(e){
       print("Favorite recipe not deleted. Exception: $e");
       throw Exception("Not delete from favorites: $e");
+    }
+
+  }
+
+  Future<Map<String, dynamic>> getChefInfo(String chefId, String token) async{
+    try{
+      final headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      };
+      final response = await http.get(
+          Uri.parse("${super.getChefInfoAPI}/$chefId"),
+          headers: headers
+      );
+      if(response.statusCode == 200){
+        print("Got chef info");
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        print(data);
+        return data;
+      }else{
+        print("Error: no data returned, statusCode: ${response.statusCode}");
+        throw Exception("No data");
+      }
+
+    }catch(e){
+      print("Error in the service layer: $e");
+      throw Exception("Error getting chef info: $e");
     }
 
   }

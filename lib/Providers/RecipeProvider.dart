@@ -11,6 +11,7 @@ class RecipeProvider extends ChangeNotifier {
   List<Recipe>? _filterRecipes;
   List<Recipe>? _newRecipeDetails;
   List<model_category.Category>? _categoryList;
+  List<RecipeForProfile>? _recipesForProfile;
 
   Recipe? _recipeByID;
   final List<String> time = ["All", "New", "Old"];
@@ -21,6 +22,7 @@ class RecipeProvider extends ChangeNotifier {
   Recipe? get recipeByID => _recipeByID;
   List<model_category.Category>? get categoryList => _categoryList;
   List<Recipe>? get filteredRecipes => _filterRecipes;
+  List<RecipeForProfile>? get recipesForProfile => _recipesForProfile;
 
   RecipeProvider() {
     _fetchRecipeDetails();
@@ -87,11 +89,23 @@ class RecipeProvider extends ChangeNotifier {
       return recipe.category.categoryName.toLowerCase()==
           category.categoryName.toLowerCase();})
           .toList();
-
     }
-    print("xxxxcdsfghjtkyfyjdhtdsgfafrtyutyjtrewRTEYUTITYDTSREAFiltered Recipes: ${_filterRecipes?.length ?? 0}");
+    //print("Recipes: ${_filterRecipes?.length ?? 0}");
     _filterRecipes?.forEach((element) {print("Filtered: ${element.category.categoryName}");});
     notifyListeners();
+  }
+
+  Future<void> fetchRecipesForProfile(String chefId) async{
+    try{
+      _recipesForProfile = [];
+      final List<RecipeForProfile> recipes = await _recipeService.getRecipesForProfile(chefId);
+      _recipesForProfile = recipes;
+    }catch(e){
+      print("Error: $e");
+      throw Exception("Error fetching recipes for profile: $e");
+    }finally{
+      notifyListeners();
+    }
   }
 
 

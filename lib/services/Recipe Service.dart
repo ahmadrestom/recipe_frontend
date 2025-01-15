@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:recipe_app/models/Review.dart';
+import 'package:recipe_app/models/chef.dart';
 import 'package:recipe_app/services/BaseAPI.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -233,6 +234,37 @@ class RecipeService extends BaseAPI{
       }catch(e){
         print("Error getting reviews: $e");
         throw Exception("Error getting reviews: $e");
+      }
+    }
+
+    Future<List<RecipeForProfile>> getRecipesForProfile(String chefId) async{
+      try{
+        final token = await secureStorage.read(key: 'authToken');
+        if(token == null){
+          print("No token");
+          throw Exception("No token available");
+        }
+        final response = await http.get(
+          Uri.parse("${super.getRecipesByChefIdAPI}/$chefId"),
+          headers : {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $token',
+          },
+        );
+        print(response.body);
+        if(response.statusCode == 200){
+          final List<dynamic> data = jsonDecode(response.body);
+          List<RecipeForProfile> recipes = data.map((item){
+            return RecipeForProfile.fromJson(item);
+          }).toList();
+          return recipes;
+        }else{
+          print("XX ${response.statusCode}");
+          throw Exception("Failed to load recipes: ${response.statusCode}");
+        }
+      }catch(e){
+        print("Error getting recipes for chef with id: $chefId");
+        throw Exception("Error getting recipes for chef with id: $chefId");
       }
     }
 }

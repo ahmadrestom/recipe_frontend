@@ -121,12 +121,12 @@ class _RecipeInformationState extends State<RecipeInformation> {
                                           controller: _controller,
                                           suffix: ElevatedButton(
                                             style: ButtonStyle(
-                                              shape: MaterialStateProperty.all(
+                                              shape: WidgetStateProperty.all(
                                                 RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.circular(10),
                                                 ),
                                               ),
-                                              backgroundColor: MaterialStateProperty.all(
+                                              backgroundColor: WidgetStateProperty.all(
                                                 const Color.fromRGBO(18, 149, 117, 1),
                                               ),
 
@@ -221,12 +221,12 @@ class _RecipeInformationState extends State<RecipeInformation> {
                                       const SizedBox(height: 10.0,),
                                       ElevatedButton(
                                         style: ButtonStyle(
-                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                                             RoundedRectangleBorder(
                                               borderRadius: BorderRadius.circular(10),
                                             ),
                                           ),
-                                          backgroundColor: MaterialStateProperty.all<Color>(
+                                          backgroundColor: WidgetStateProperty.all<Color>(
                                             const Color.fromRGBO(18, 149, 117, 1),
                                           )
                                         ),
@@ -300,7 +300,7 @@ class _RecipeInformationState extends State<RecipeInformation> {
                             context: context,
                             builder: (BuildContext context){
                               return AlertDialog(
-                                backgroundColor: Color.fromRGBO(255, 255, 255, 1),
+                                backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
                                 title: const Text(
                                   "Nutrition Information",
                                   style: TextStyle(
@@ -582,10 +582,10 @@ class _RecipeInformationState extends State<RecipeInformation> {
                     /////////////////
                   },
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
+                    backgroundColor: WidgetStateProperty.all<Color>(
                       const Color.fromRGBO(18, 149, 117, 1),
                     ),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),

@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:recipe_app/models/UserManagement/userAuthentication.dart';
+import 'package:recipe_app/models/chef.dart';
 import 'package:recipe_app/services/Recipe%20Service.dart';
 import '../models/Recipe.dart';
 import '../models/UserManagement/userRegistration.dart';
@@ -17,6 +18,7 @@ class UserProvider extends ChangeNotifier {
   String? _token;
   bool _isAuthenticated = false;
   Map<String, dynamic>? _userDetails;
+  Map<String, dynamic>? _chefDetails;
   List<dynamic>? _userFavorites;
 
   String? get token => _token;
@@ -25,9 +27,11 @@ class UserProvider extends ChangeNotifier {
 
   Map<String, dynamic>? get userDetails => _userDetails;
 
+  Map<String, dynamic>? get chefDetails => _chefDetails;
+
   List<dynamic>? get userFavorites => _userFavorites;
 
-  UserProvider() {
+  UserProvider(){
     _loadToken();
   }
 
@@ -60,6 +64,7 @@ class UserProvider extends ChangeNotifier {
     _isAuthenticated = false;
     _userDetails = null;
     _userFavorites = null;
+    _secureStorage.delete(key: 'authToken');
     notifyListeners();
   }
 
@@ -182,4 +187,17 @@ class UserProvider extends ChangeNotifier {
         throw Exception("Exception: $e");
       }
     }
+
+  Future<void> getChefInfo(String chefId) async{
+    try{
+      if(token!=null){
+        final data = await _authService.getChefInfo(chefId, _token!);
+        _chefDetails = data;
+        notifyListeners();
+      }
+    }catch(e){
+      print("Error: level provider, $e");
+      throw Exception("Error getting chef info");
+    }
+  }
 }

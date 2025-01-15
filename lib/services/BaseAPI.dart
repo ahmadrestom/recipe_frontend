@@ -15,6 +15,8 @@ class BaseAPI {
   var addRecipeAPI = "$secureAPI/recipe/createRecipe";
   var addReviewAPI = "$secureAPI/review/addReview";
   var getReviewsAPI = "$secureAPI/review/getRecipeReviews";
+  var getChefInfoAPI = "$secureAPI/user/getChefData";
+  var getRecipesByChefIdAPI = "$secureAPI/recipe/getRecipeByChefId";
   Map<String, String> headers = {
      "Content-Type": "application/json; charset=UTF-8"
    };

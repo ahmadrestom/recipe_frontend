@@ -6,10 +6,7 @@ import 'package:recipe_app/Providers/UserProvider.dart';
 import 'package:recipe_app/models/UserManagement/userAuthentication.dart';
 import 'package:recipe_app/pages/NavPage.dart';
 import 'package:recipe_app/services/UserServices/AuthService.dart';
-import '../Providers/UserProvider.dart';
-import '../Providers/UserProvider.dart';
 import '../customerWidgets/SquareTile.dart';
-import 'home.dart';
 
 class LoginPage extends StatefulWidget {
   final AuthService authService;

@@ -5,7 +5,6 @@ import 'package:recipe_app/pages/home.dart';
 import 'package:recipe_app/pages/recipeInformation.dart';
 //import '../pages/Data/recipes.dart';
 import 'package:radio_grouped_buttons/radio_grouped_buttons.dart';
-import '../models/Recipe.dart' as recipe;
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 import '../models/Recipe.dart';
@@ -235,7 +234,7 @@ class _RecentSearchesState extends State<RecentSearches> {
                                         const SizedBox(height: 18,),
                                         ElevatedButton(
                                           style: ButtonStyle(
-                                            backgroundColor: MaterialStateProperty.all<Color>(
+                                            backgroundColor: WidgetStateProperty.all<Color>(
                                               const Color.fromRGBO(18, 149, 117, 1),
                                             ),
                                           ),

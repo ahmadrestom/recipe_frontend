@@ -3,9 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:recipe_app/Providers/RecipeProvider.dart';
 import 'package:recipe_app/Providers/UserProvider.dart';
 import 'package:recipe_app/pages/recipeInformation.dart';
-import 'package:recipe_app/services/Recipe%20Service.dart';
 import '../customerWidgets/savedRecipesCard.dart';
-import '../models/Recipe.dart';
 
 class SavedRecipes extends StatefulWidget {
   const SavedRecipes({super.key});
@@ -26,7 +24,7 @@ class _SavedRecipesState extends State<SavedRecipes> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     final userProvider = Provider.of<UserProvider>(context);
     final userFavs = userProvider.userFavorites;
 

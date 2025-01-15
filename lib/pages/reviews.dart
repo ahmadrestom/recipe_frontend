@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:recipe_app/Providers/RecipeProvider.dart';
 import 'package:recipe_app/Providers/ReviewProvider.dart';
-import 'package:recipe_app/models/Recipe.dart';
 import 'package:intl/intl.dart';
-import 'package:fluentui_emoji_icon/fluentui_emoji_icon.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 import '../models/Review.dart';
@@ -121,12 +118,12 @@ class _ReviewsState extends State<Reviews> {
                     const SizedBox(height: 5.0,),
                     ElevatedButton(
                       style: ButtonStyle(
-                        shape: MaterialStateProperty.all(
+                        shape: WidgetStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        backgroundColor: MaterialStateProperty.all(
+                        backgroundColor: WidgetStateProperty.all(
                           const Color.fromRGBO(18, 149, 117, 1),
                         ),
 

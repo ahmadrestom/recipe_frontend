@@ -6,10 +6,12 @@ import '../Providers/UserProvider.dart';
 import '../models/Recipe.dart';
 
 
-class SavedRecipe extends StatelessWidget {
-  const SavedRecipe({super.key, required this.recipe});
+class Recipeforprofile extends StatelessWidget {
 
-  final RecipeFavorites recipe;
+
+  final RecipeForProfile recipe;
+
+  const Recipeforprofile({super.key, required this.recipe});
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +64,7 @@ class SavedRecipe extends StatelessWidget {
                       size: 18,
                     ),
                     Text(
-                        (recipe.rating).toString(),
+                      (recipe.rating).toString(),
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
@@ -101,16 +103,16 @@ class SavedRecipe extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 5,),
-                      Text(
-                        "By Chef ${recipe.chefName}",
-                        style: const TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 11,
-                          color: Color.fromRGBO(255, 255, 255, 1),
-                        ),
-                      ),
-            
+                      // Text(
+                      //   "By Chef ${recipe.chefName}",
+                      //   style: const TextStyle(
+                      //     fontFamily: 'Poppins',
+                      //     fontWeight: FontWeight.w400,
+                      //     fontSize: 11,
+                      //     color: Color.fromRGBO(255, 255, 255, 1),
+                      //   ),
+                      // ),
+
                     ],
                   ),
                 ),
@@ -130,26 +132,7 @@ class SavedRecipe extends StatelessWidget {
                         color: Color.fromRGBO(217, 217, 217, 1),
                       ),
                     ),
-                    const SizedBox(width: 13,),
-                    Container(
-                      width: 26,
-                      height: 26,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40),
-                          color: const Color.fromRGBO(255, 255, 255, 1)
-                      ),
-                      child: GestureDetector(
-                        child: const Icon(
-                          Ionicons.bookmark,
-                          color: Color.fromRGBO(18, 149, 117, 1),
-                          size: 18,
-                        ),
-                        onTap: (){
-                          final userProvider = Provider.of<UserProvider>(context, listen: false);
-                          userProvider.removeFromFavorites(recipe);
-                        },
-                      ),
-                    ),
+
                   ],
                 ),
               ],

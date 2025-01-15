@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/models/UserManagement/userRegistration.dart';
 import 'package:recipe_app/services/UserServices/AuthService.dart';
@@ -231,9 +230,9 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: Row(
                         children: [
                           Checkbox(
-                            side: MaterialStateBorderSide.resolveWith(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.selected)) {
+                            side: WidgetStateBorderSide.resolveWith(
+                                  (Set<WidgetState> states) {
+                                if (states.contains(WidgetState.selected)) {
                                   return const BorderSide(color: Colors.transparent);
                                 }
                                 return const BorderSide(color:Color.fromRGBO(255, 156, 0, 1));

@@ -273,3 +273,35 @@ class RecipePost{
     );
   }
 }
+
+class RecipeForProfile{
+
+  final String recipeId;
+  final String recipeName;
+  final Duration preparationTime;
+  final double rating;
+  final String imageUrl;
+
+  RecipeForProfile(this.recipeId, this.recipeName, this.preparationTime,
+      this.rating, this.imageUrl);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'recipeId': recipeId,
+      'recipeName': recipeName,
+      'preparationTime': preparationTime.inMinutes,
+      'rating': rating,
+      'imageUrl': imageUrl,
+    };
+  }
+
+  factory RecipeForProfile.fromJson(Map<String, dynamic> json) {
+    return RecipeForProfile(
+      json['recipeId'] as String,
+      json['recipeName'] as String,
+      Duration(minutes: json['preparationTime'] as int),
+      (json['rating'] as num).toDouble(),
+      json['imageUrl'] as String,
+    );
+  }
+}

@@ -333,7 +333,7 @@ class AddRecipeState extends State<AddRecipe> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(color: Color(0xFF00796B)),
+            borderSide: const BorderSide(color: Color(0xFF00796B)),
           ),
         ),
       ),
