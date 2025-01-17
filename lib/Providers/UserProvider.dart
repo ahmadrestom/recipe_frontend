@@ -201,4 +201,26 @@ class UserProvider extends ChangeNotifier {
       throw Exception("Error getting chef info");
     }
   }
+
+  Future<bool> upGradeToChef(String location, String phone, int ye, String bio) async{
+    try{
+      if(token!=null){
+        final success = await _authService.upgradeToChef(_token!,location,phone,ye,bio);
+        if(success){
+          print("success");
+          return true;
+        }else{
+          print("failure");
+          return false;
+        }
+      }else{
+        return false;
+      }
+    }catch(e){
+      print("Error in provider: $e");
+      return false;
+    }finally{
+      notifyListeners();
+    }
+  }
 }

@@ -190,7 +190,40 @@ class AuthService extends BaseAPI{
       print("Error in the service layer: $e");
       throw Exception("Error getting chef info: $e");
     }
+  }
 
+  Future<bool> upgradeToChef(String token,String location, String phone, int ye, String bio) async{
+    try{
+      final headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      };
+      UpgradeChef chef = UpgradeChef(
+          location: location,
+          phoneNumber: phone,
+          ye: ye,
+          bio: bio
+      );
+
+      final jsonBody = jsonEncode(chef.toJson());
+
+      final response = await http.put(
+        Uri.parse(super.upgradeToChefAPI),
+        headers: headers,
+        body: jsonBody
+      );
+      if(response.statusCode == 200 || response.statusCode ==201){
+        print("User is now a chef");
+        return true;
+      }else{
+        print("Error : ${response.statusCode}");
+        return false;
+      }
+
+    }catch(e){
+      print("Error upgrading to chef: $e");
+      return false;
+    }
   }
 
 }

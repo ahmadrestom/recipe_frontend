@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/Providers/UserProvider.dart';
-import 'package:recipe_app/pages/userProfile.dart';
+import 'package:recipe_app/pages/UserProfilePage.dart';
 import 'chefProfile.dart';
 
 class Profile extends StatefulWidget {

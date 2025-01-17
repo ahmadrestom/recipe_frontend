@@ -8,7 +8,6 @@ import 'package:recipe_app/pages/savedRecipes.dart';
 import 'package:lottie/lottie.dart';
 import 'package:recipe_app/pages/upgradeToChef.dart';
 import '../Providers/UserProvider.dart';
-import '../customerWidgets/UpgradeToChef.dart';
 
 class Userprofile extends StatefulWidget {
   const Userprofile({super.key, this.id, this.email, this.name});
@@ -31,10 +30,16 @@ class _UserprofileState extends State<Userprofile> {
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       await userProvider.fetchFavoriteRecipes();
-      setState(() {
-        favoritesNumber = userProvider.userFavorites!.length;
+      if(userProvider.userFavorites!.isNotEmpty) {
+        setState(() {
         isLoading = false;
+        favoritesNumber = userProvider.userFavorites!.length;
       });
+      }else{
+        setState(() {
+          isLoading = false;
+        });
+      }
     });
   }
 
@@ -416,7 +421,7 @@ class _UserprofileState extends State<Userprofile> {
                   onTap: (){
                     Navigator.push(context,
                         MaterialPageRoute(builder:
-                            (context)=> const Upgradetochef()));
+                            (context)=> Upgradetochef(email: widget.email,)));
                   },
                 ),
                 //UserProfilePage(email: widget.email),

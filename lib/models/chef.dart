@@ -158,3 +158,26 @@ class ChefMinimal {
     };
   }
 }
+
+class UpgradeChef{
+  final String location;
+  final String phoneNumber;
+  final int ye;
+  final String bio;
+
+  UpgradeChef(
+      {required this.location,
+        required this.phoneNumber,
+        required this.ye,
+        required this.bio}
+      );
+
+  Map<String, dynamic> toJson() {
+    return {
+      'location': location,
+      'phone_number': phoneNumber,
+      'years_experience': ye,
+      'bio': bio,
+    };
+  }
+}

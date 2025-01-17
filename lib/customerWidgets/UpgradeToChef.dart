@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:provider/provider.dart';
+import 'package:recipe_app/Providers/UserProvider.dart';
+import 'package:recipe_app/services/UserServices/AuthService.dart';
+
+import '../pages/ThankYouPage.dart';
 
 class UserProfilePage extends StatefulWidget {
   final String? email; // Email passed to the widget
 
-  UserProfilePage({required this.email}); // Constructor to accept email
+  const UserProfilePage({super.key, required this.email}); // Constructor to accept email
 
   @override
   _UserProfilePageState createState() => _UserProfilePageState();
@@ -12,7 +17,11 @@ class UserProfilePage extends StatefulWidget {
 
 class _UserProfilePageState extends State<UserProfilePage>
     with SingleTickerProviderStateMixin {
-  bool isLocked = true; // Initial state of the lock
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _experienceController = TextEditingController();
+  final TextEditingController _bioController = TextEditingController();
+  bool isLocked = true;
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
   late Animation<Color?> _colorAnimation;
@@ -24,6 +33,7 @@ class _UserProfilePageState extends State<UserProfilePage>
 
   @override
   void initState() {
+
     super.initState();
 
     _animationController = AnimationController(
@@ -58,6 +68,9 @@ class _UserProfilePageState extends State<UserProfilePage>
 
   @override
   void dispose() {
+    _locationController.dispose();
+    _experienceController.dispose();
+    _bioController.dispose();
     _animationController.dispose();
     super.dispose();
   }
@@ -72,12 +85,10 @@ class _UserProfilePageState extends State<UserProfilePage>
       }
     });
   }
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
     return SingleChildScrollView(
       child: Center(
         child: AnimatedBuilder(
@@ -88,12 +99,14 @@ class _UserProfilePageState extends State<UserProfilePage>
                 ScaleTransition(
                   scale: _scaleAnimation,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(_borderRadiusAnimation.value),
+                    borderRadius: BorderRadius.circular(
+                        _borderRadiusAnimation.value),
                     child: Container(
                       decoration: BoxDecoration(
                         color: _colorAnimation.value,
-                        borderRadius: BorderRadius.circular(_borderRadiusAnimation.value),
-                        boxShadow: [
+                        borderRadius: BorderRadius.circular(
+                            _borderRadiusAnimation.value),
+                        boxShadow: const [
                           BoxShadow(
                             color: Colors.black26,
                             blurRadius: 8,
@@ -102,7 +115,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                         ],
                       ),
                       width: screenWidth * 0.9,
-                      height: 500,
+                      height: screenHeight * 0.8,
                       child: AbsorbPointer(
                         absorbing: isLocked,
                         child: Padding(
@@ -124,40 +137,7 @@ class _UserProfilePageState extends State<UserProfilePage>
 
                               const SizedBox(height: 20),
                               Center(
-                                child: ElevatedButton(
-                                  onPressed: isLocked
-                                      ? null
-                                      : () {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Form submitted!'),
-                                      ),
-                                    );
-                                  },
-                                  style: ButtonStyle(
-                                    padding: WidgetStateProperty.all(
-                                      const EdgeInsets.symmetric(vertical: 16.0, horizontal: 50.0), // Horizontal padding for balance
-                                    ),
-                                    shape: WidgetStateProperty.all(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30), // Slightly rounded corners
-                                      ),
-                                    ),
-                                    backgroundColor: WidgetStateProperty.all(
-                                      const Color.fromRGBO(18, 149, 117, 1), // Soft green background
-                                    ),
-                                    shadowColor: WidgetStateProperty.all(Colors.greenAccent.withAlpha(1)), // Subtle shadow
-                                    elevation: WidgetStateProperty.all(5), // Elevation for a floating effect
-                                  ),
-                                  child: const Text(
-                                    'Submit',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
+                                child: _buildSubmitButton(),
                               )
 
 
@@ -175,10 +155,11 @@ class _UserProfilePageState extends State<UserProfilePage>
                     onTap: toggleLock,
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
-                      transitionBuilder: (child, animation) => ScaleTransition(
-                        scale: animation,
-                        child: child,
-                      ),
+                      transitionBuilder: (child, animation) =>
+                          ScaleTransition(
+                            scale: animation,
+                            child: child,
+                          ),
                       child: Container(
                         key: ValueKey(isLocked),
                         decoration: BoxDecoration(
@@ -226,10 +207,12 @@ class _UserProfilePageState extends State<UserProfilePage>
         decoration: InputDecoration(
           labelText: 'Email',
           hintText: widget.email,
-          border: InputBorder.none, // Remove the border
+          border: InputBorder.none,
+          // Remove the border
           floatingLabelBehavior: FloatingLabelBehavior.auto,
           filled: true,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          contentPadding: const EdgeInsets.symmetric(
+              horizontal: 20, vertical: 16),
         ),
       ),
     );
@@ -262,17 +245,36 @@ class _UserProfilePageState extends State<UserProfilePage>
 
   Widget _buildFormFields() {
     return Expanded(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildTextField('Location'),
-            const SizedBox(height: 16),
-            _buildPhoneNumberField(),
-            const SizedBox(height: 16),
-            _buildTextField('Years of Experience', keyboardType: TextInputType.number),
-            const SizedBox(height: 16),
-            _buildTextField('Bio', maxLines: 3),
-          ],
+      child: Form(
+        key: _formKey, // Associate form with the key
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _buildTextField(controller: _locationController,'Location', validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Location is required';
+                }
+                return null;
+              }),
+              const SizedBox(height: 16),
+              _buildPhoneNumberField(),
+              const SizedBox(height: 16),
+              _buildTextField(controller: _experienceController,'Years of Experience',
+                  keyboardType: TextInputType.number, validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Years of experience are required';
+                    }
+                    return null;
+                  }),
+              const SizedBox(height: 16),
+              _buildTextField(controller: _bioController,'Bio', maxLines: 5, validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Bio is required';
+                }
+                return null;
+              }),
+            ],
+          ),
         ),
       ),
     );
@@ -296,33 +298,101 @@ class _UserProfilePageState extends State<UserProfilePage>
           selectorType: PhoneInputSelectorType.DIALOG,
           showFlags: true,
         ),
-        inputDecoration: InputDecoration(
+        inputDecoration: const InputDecoration(
           labelText: 'Phone Number',
           border: InputBorder.none, // Remove the border
           filled: true,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          contentPadding: EdgeInsets.symmetric(
+              horizontal: 20, vertical: 16),
         ),
         keyboardType: TextInputType.phone,
       ),
     );
   }
 
-  Widget _buildTextField(String label, {TextInputType? keyboardType, int maxLines = 1}) {
+  Widget _buildTextField(String label,
+      {required TextEditingController controller,TextInputType? keyboardType, int maxLines = 1, String? Function(String?)? validator}) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey[200],
         borderRadius: BorderRadius.circular(30),
       ),
       child: TextFormField(
+        controller: controller,
         decoration: InputDecoration(
           labelText: label,
-          border: InputBorder.none, // Remove the border
+          border: InputBorder.none,
           floatingLabelBehavior: FloatingLabelBehavior.auto,
           filled: true,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          contentPadding:
+          const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         ),
         keyboardType: keyboardType,
         maxLines: maxLines,
+        validator: validator, // Add validator here
+      ),
+    );
+  }
+
+  Widget _buildSubmitButton() {
+    return Center(
+      child: ElevatedButton(
+        onPressed: isLocked
+            ? null
+            : () async{
+          if (_formKey.currentState?.validate() ?? false) {
+            final userProvider = Provider.of<UserProvider>(context,listen:false);
+            final success = await userProvider.upGradeToChef(
+              _locationController.value.text,
+              phoneNumber,
+              int.parse(_experienceController.value.text),
+              _bioController.value.text
+            );
+            if(mounted){
+              if(success){
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Form submitted!'),
+                  ),
+                );
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const ThankYouPage(),
+                  ),
+                );
+              }else{
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('An error occurred during the upgrade'),
+                  ),
+                );
+              }
+            }
+
+
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Please fill all required fields'),
+              ),
+            );
+          }
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: isLocked ? Colors.red : const Color(0xFF129575),
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 50.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        child: const Text(
+          'Submit',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }
