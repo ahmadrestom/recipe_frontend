@@ -102,6 +102,7 @@ class UserProvider extends ChangeNotifier {
       if (token != null) {
         final userInfo = await _authService.getUserInfo(_token!);
         _userDetails = userInfo;
+
         print("User details fetched: $_userDetails");
       }
     } catch (e) {

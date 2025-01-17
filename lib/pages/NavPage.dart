@@ -105,7 +105,7 @@ class _NavPageState extends State<NavPage> {
           final userProvider = Provider.of<UserProvider>(context, listen:false);
           if(userProvider.userDetails?['role'] == "USER"){
             CherryToast.error(
-                description:  const Text("Only a chef can add new recipes", style: TextStyle(color: Colors.black)),
+                description:  const Text("Upgrade to Chef Now!", style: TextStyle(color: Colors.black)),
 
                 animationType:  AnimationType.fromTop,
 

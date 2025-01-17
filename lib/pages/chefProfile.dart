@@ -291,7 +291,7 @@ class _ChefProfileState extends State<ChefProfile> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CircleAvatar(
-                    radius: screenWidth *0.15,
+                    radius: screenWidth *0.13,
                     backgroundImage: const AssetImage('assets/images/img.png'),
                   ),
                   Container(width: screenWidth*0.07,),

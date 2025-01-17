@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/Providers/UserProvider.dart';
-import 'package:recipe_app/pages/landing.dart';
-
+import 'package:recipe_app/pages/userProfile.dart';
 import 'chefProfile.dart';
 
 class Profile extends StatefulWidget {
@@ -16,17 +15,25 @@ class _ProfileState extends State<Profile>{
 
   bool? chef;
   String? id;
+  String? email;
+  String? firstName;
+  String? lastName;
+  String? name;
 
   @override
   void initState() {
     super.initState();
     chef = null;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       id = userProvider.userDetails?['id'];
+      email = userProvider.userDetails?['email'];
+      firstName = userProvider.userDetails?['firstName'];
+      lastName = userProvider.userDetails?['lastName'];
       if (userProvider.userDetails?['role'] == "USER") {
         setState(() {
           chef = false;
+          name = "$firstName $lastName";
         });
       } else {
         setState(() {
@@ -43,7 +50,8 @@ class _ProfileState extends State<Profile>{
     if(chef!){
       return ChefProfile(id: id);
     }else{
-      return const LandingPage();
+      print(email);
+      return Userprofile(id: id, email: email, name: name,);
     }
   }
 }
