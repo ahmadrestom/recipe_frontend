@@ -298,7 +298,7 @@ class _UserprofileState extends State<Userprofile> {
               children: [
                 CircleAvatar(
                   radius: screenWidth *0.13,
-                  backgroundImage: const AssetImage('assets/images/img.png'),
+                  backgroundImage: const AssetImage("assets/icons/defaultProfile.png"),
                 ),
                 SizedBox(height: screenHeight*0.02,),
                 widget.name != null?

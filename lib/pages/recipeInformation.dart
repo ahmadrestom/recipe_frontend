@@ -6,6 +6,7 @@ import '../customerWidgets/RecipeInformationCard.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../models/Recipe.dart';
+import 'ViewChefData.dart';
 
 class RecipeInformation extends StatefulWidget {
   const RecipeInformation({super.key, required this.recipe});
@@ -27,7 +28,12 @@ class _RecipeInformationState extends State<RecipeInformation> {
 
     return Scaffold(
       body: Container(
-        margin: const EdgeInsets.fromLTRB(30, 12, 30, 25),
+        margin:  EdgeInsets.fromLTRB(
+            screenWidth*0.06,
+            screenHeight*0.015,
+            screenWidth*0.06,
+            screenHeight*0.05
+        ),
         child: Column(
           children: [
             Row(
@@ -522,60 +528,68 @@ class _RecipeInformationState extends State<RecipeInformation> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        border: Border.all(color: Colors.transparent),
+                GestureDetector(
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ViewChefData(chefId:widget.recipe.chef.chefId)),
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          border: Border.all(color: Colors.transparent),
+                        ),
+                  
+                        child: Image.asset(
+                          "assets/icons/defaultProfile.png",
+                        ),
+                        /*child: widget.recipe.chef.imageUrl == null?
+                        Image.asset(
+                          "assets/icons/defaultProfile.png",
+                        ):
+                        Image.network(
+                  
+                        ),*/
                       ),
-
-                      child: Image.asset(
-                        "assets/icons/defaultProfile.png",
-                      ),
-                      /*child: widget.recipe.chef.imageUrl == null?
-                      Image.asset(
-                        "assets/icons/defaultProfile.png",
-                      ):
-                      Image.network(
-
-                      ),*/
-                    ),
-                    const SizedBox(width: 8.0,),
-                    Column(
-                      children: [
-                        Text(
-                          "${widget.recipe.chef.firstName} ${widget.recipe.chef.lastName}",
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Color.fromRGBO(18, 18, 18, 1),
+                      const SizedBox(width: 8.0,),
+                      Column(
+                        children: [
+                          Text(
+                            "${widget.recipe.chef.firstName} ${widget.recipe.chef.lastName}",
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Color.fromRGBO(18, 18, 18, 1),
+                            ),
                           ),
-                        ),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.location_on,
-                              color: Color.fromRGBO(113, 177, 161, 1),
-                            ),
-                            Text(
-                              widget.recipe.chef.location,
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 13,
-                                color: Color.fromRGBO(140, 140, 140, 1)
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.location_on,
+                                color: Color.fromRGBO(113, 177, 161, 1),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-
+                              Text(
+                                widget.recipe.chef.location,
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 13,
+                                  color: Color.fromRGBO(140, 140, 140, 1)
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: (){
