@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:recipe_app/Providers/ChefSpecialityProvider.dart';
 import 'package:recipe_app/Providers/UserProvider.dart';
+import 'package:recipe_app/pages/ChooseSpecialities.dart';
 import 'package:recipe_app/pages/NavPage.dart';
 import 'package:recipe_app/pages/ThankYouPage.dart';
 import 'package:recipe_app/pages/landing.dart';
@@ -26,7 +28,8 @@ void main() async{
         providers: [
           ChangeNotifierProvider(create: (_) => UserProvider()),
           ChangeNotifierProvider(create: (_) => RecipeProvider()),
-          ChangeNotifierProvider(create: (_) => ReviewProvider())
+          ChangeNotifierProvider(create: (_) => ReviewProvider()),
+          ChangeNotifierProvider(create: (_) => ChefSpecialityProvider())
         ],
           child: const MyApp()
       )
@@ -47,7 +50,7 @@ class MyApp extends StatelessWidget {
         //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LandingPage(),
+      home: ChooseSpecialities(),
 
       /*routes: {
 

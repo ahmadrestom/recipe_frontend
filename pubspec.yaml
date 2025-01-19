@@ -48,9 +48,6 @@ dependencies:
   http: ^1.2.0
   standard_searchbar: ^2.0.0
   ionicons: ^0.2.2
-  firebase_core: ^3.9.0
-  firebase_storage: ^12.3.7
-  firebase_app_check: ^0.3.1+7
   path: ^1.9.0
   supabase_flutter: ^2.8.2
   animated_text_kit: ^4.2.2
@@ -60,6 +57,7 @@ dependencies:
   flutter_spinkit: ^5.2.1
   animated_flip_counter: ^0.3.4
   google_fonts: ^6.2.1
+  flutter_multi_select_items: ^0.4.3
   #win32: ^5.3.0
   flutter:
     sdk: flutter

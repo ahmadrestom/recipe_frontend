@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:recipe_app/Providers/UserProvider.dart';
 import 'package:recipe_app/pages/home.dart';
 import 'package:recipe_app/pages/login.dart';
+import 'package:recipe_app/services/ChefSpecialityService.dart';
 import 'package:recipe_app/services/UserServices/AuthService.dart';
 
 class LandingPage extends StatelessWidget {

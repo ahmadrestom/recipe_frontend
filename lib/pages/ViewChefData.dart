@@ -54,7 +54,7 @@ class _ViewChefDataState extends State<ViewChefData> {
       body: Stack(
         children:[
           ///////////////////////
-          CurvedDesignScreen(),
+          const CurvedDesignScreen(),
           /////////////////////////
         Padding(
             padding: EdgeInsets.symmetric(vertical: screenHeight *0.03, horizontal: screenWidth*0.05),
