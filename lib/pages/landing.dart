@@ -105,10 +105,10 @@ class LandingPage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text(
+                                  Text(
                                     'Start Cooking',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
@@ -118,11 +118,11 @@ class LandingPage extends StatelessWidget {
                                       color: Color(0xFFFFFFFF)
                                     ),
                                   ),
-                                  const SizedBox(width: 10,),
-                                  Image.asset(
-                                    'assets/icons/arrow-right.png',
-                                    width: 20,
-                                    height: 20,
+                                  SizedBox(width: 10,),
+                                  Icon(
+                                    Icons.double_arrow,
+                                    size: 33,
+                                    color: Colors.white,
                                   ),
                                 ],
                               ),

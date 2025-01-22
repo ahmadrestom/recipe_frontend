@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:radio_grouped_buttons/custom_buttons/custom_radio_buttons_group.dart';
+import 'package:recipe_app/services/FollowingService.dart';
 import '../customerWidgets/RecipeInformationCard.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -593,7 +594,7 @@ class _RecipeInformationState extends State<RecipeInformation> {
                 ),
                 ElevatedButton(
                   onPressed: (){
-                    /////////////////
+
                   },
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all<Color>(

@@ -1,13 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:recipe_app/Providers/ChefSpecialityProvider.dart';
+import 'package:recipe_app/pages/ViewChefSpecialities.dart';
 import 'package:recipe_app/pages/recipeInformation.dart';
 import '../Providers/RecipeProvider.dart';
 import '../Providers/UserProvider.dart';
 import '../customerWidgets/RecipeForProfile.dart';
 import '../customerWidgets/curvedDesignScreen.dart';
 import '../models/Recipe.dart';
+import '../models/chef_speciality.dart';
 
 class ViewChefData extends StatefulWidget {
   const ViewChefData({super.key, this.chefId});
@@ -21,6 +23,8 @@ class _ViewChefDataState extends State<ViewChefData> {
 
   Map<String, dynamic>? chefDetails;
   List<RecipeForProfile>? recipes;
+  List<ChefSpeciality>? specialities;
+  bool flag = false;
 
   @override
   void initState() {
@@ -28,9 +32,15 @@ class _ViewChefDataState extends State<ViewChefData> {
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
+      final chefSpecialityProvider = Provider.of<ChefSpecialityProvider>(context, listen: false);
       await userProvider.getChefInfo(widget.chefId!);
+      await chefSpecialityProvider.getSpecialitiesForChef(widget.chefId!);
       setState(() {
         chefDetails = userProvider.chefDetails;
+        specialities = chefSpecialityProvider.specialitiesForChef;
+        if(specialities!.isNotEmpty){
+          flag = true;
+        }
       });
       await recipeProvider.fetchRecipesForProfile(widget.chefId!);
       setState(() {
@@ -47,7 +57,7 @@ class _ViewChefDataState extends State<ViewChefData> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     if(chefDetails==null){
-      return const CircularProgressIndicator();
+      return const Center(child: CircularProgressIndicator());
     }
 
     return Scaffold(
@@ -61,16 +71,63 @@ class _ViewChefDataState extends State<ViewChefData> {
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         Navigator.pop(context);
                       },
                       child: const Icon(
                         Icons.arrow_back,
                         size: 27,
                         color: Color.fromRGBO(41, 45, 50, 1),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        // Navigate to the Specialties page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ViewChefSpecialities(chefId: widget.chefId!, name: chefDetails?['firstName'])),
+                        );
+                      },
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 300),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Color(0xFF14B89B), Color(0xFF6DFFBB)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color.fromRGBO(0, 0, 0, 0.2),
+                              offset: Offset(4, 4),
+                              blurRadius: 10,
+                            ),
+                          ],
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.star, // You can change the icon based on your design
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              "View Specialties",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],

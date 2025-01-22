@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
+import 'package:recipe_app/Providers/ChefSpecialityProvider.dart';
 import 'package:recipe_app/Providers/RecipeProvider.dart';
 import 'package:recipe_app/Providers/UserProvider.dart';
 import 'package:recipe_app/customerWidgets/CategoryItem.dart';
@@ -37,6 +38,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     userProvider.fetchFavoriteRecipes();
+
   }
 
 

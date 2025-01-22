@@ -8,6 +8,7 @@ import 'package:recipe_app/pages/savedRecipes.dart';
 import 'package:lottie/lottie.dart';
 import 'package:recipe_app/pages/upgradeToChef.dart';
 import '../Providers/UserProvider.dart';
+import 'landing.dart';
 
 class Userprofile extends StatefulWidget {
   const Userprofile({super.key, this.id, this.email, this.name});
@@ -30,11 +31,11 @@ class _UserprofileState extends State<Userprofile> {
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       await userProvider.fetchFavoriteRecipes();
-      if(userProvider.userFavorites!.isNotEmpty) {
+      if(userProvider.userFavorites != null && userProvider.userFavorites!.isNotEmpty) {
         setState(() {
-        isLoading = false;
-        favoritesNumber = userProvider.userFavorites!.length;
-      });
+          isLoading = false;
+          favoritesNumber = userProvider.userFavorites!.length;
+        });
       }else{
         setState(() {
           isLoading = false;
@@ -96,190 +97,97 @@ class _UserprofileState extends State<Userprofile> {
                     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                     child: const Row(
                       children: [
-                        Icon(Icons.share, size: 20,),
-                        SizedBox(width: 30,),
+                        Icon(Icons.logout, size: 20),
+                        SizedBox(width: 30),
                         Text(
-                          "Share",
+                          "Sign out",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                             fontFamily: 'Poppins',
                             color: Color.fromRGBO(18, 18, 18, 1),
-          
                           ),
                         ),
                       ],
                     ),
                     onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context){
-                            return Center(
-                              child: SingleChildScrollView(
-                                child: Container(
-                                  constraints: BoxConstraints(
-                                    minHeight:  MediaQuery.of(context).size.height * 0.38,
-                                  ),
-                                  child: AlertDialog(
-                                    backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
-                                    title: const Text(
-                                      "Recipe Link",
-                                      style: TextStyle(
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 20,
-                                        color: Color.fromRGBO(0, 0, 0, 1),
-                                      ),
-                                    ),
-                                    content: Column(
-                                      children: [
-                                        const Text(
-                                          "Copy recipe link and share your recipe link with friends and family.",
-                                          style: TextStyle(
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 11,
-                                            color: Color.fromRGBO(121, 121, 121, 1),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 10,),
-                                        CupertinoTextField(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          readOnly: true,
-                                          enabled: false,
-          
-                                          suffix: ElevatedButton(
-                                            style: ButtonStyle(
-                                              shape: WidgetStateProperty.all(
-                                                RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                              ),
-                                              backgroundColor: WidgetStateProperty.all(
-                                                const Color.fromRGBO(18, 149, 117, 1),
-                                              ),
-          
-                                            ),
-                                            onPressed: (){
-                                              /////////////////////////////////
-                                            },
-                                            child: const Text(
-                                              "Copy Link",
-                                              style: TextStyle(
-                                                fontFamily: "Poppins",
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 11,
-                                                color: Color.fromRGBO(255, 255, 255, 1),
-                                              ),
-                                            ),
-                                          ),
-          
-                                        ),
-                                      ],
-                                    ),
-          
-          
-                                  ),
-                                ),
-                              ),
-                            );
-                          }
-                      );
-                    },
-                  ),
-                  PopupMenuItem(
-                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.star, size: 20,),
-                        SizedBox(width: 30,),
-                        Text(
-                          "Rate Recipe",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Poppins',
-                            color: Color.fromRGBO(18, 18, 18, 1),
-          
-                          ),
-                        ),
-                      ],
-                    ),
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context){
-                            return Center(
-                              child: Container(
-                                decoration: BoxDecoration(
+                      Future.delayed(
+                        const Duration(milliseconds: 100), // Delay to ensure menu dismisses
+                            () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white,
                                 ),
-                                height: MediaQuery.of(context).size.height * 0.16,
-                                width: MediaQuery.of(context).size.width * 0.54,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      "Rate Recipe",
+                                title: const Text(
+                                  "Log Out",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                    color: Color.fromRGBO(18, 18, 18, 1),
+                                  ),
+                                ),
+                                content: const Text(
+                                  "Are you sure you want to log out?",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14,
+                                    color: Color.fromRGBO(100, 100, 100, 1),
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop(); // Close the dialog
+                                    },
+                                    child: const Text(
+                                      "Cancel",
                                       style: TextStyle(
                                         fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 13,
-                                        color: Color.fromRGBO(18, 18, 18, 1),
+                                        color: Color.fromRGBO(100, 100, 100, 1),
                                       ),
                                     ),
-                                    const SizedBox(height: 5.0,),
-                                    RatingBar.builder(
-                                        itemPadding: const EdgeInsets.only(right: 3),
-                                        glowColor: Colors.amberAccent,
-                                        unratedColor: const Color.fromRGBO(100,100,100,1),
-                                        minRating: 1,
-                                        maxRating: 5,
-                                        itemSize: 25.0,
-                                        allowHalfRating: true,
-                                        initialRating: 0,
-                                        itemBuilder: (context, index)=>const Icon(
-                                          Ionicons.star,
-                                          color: Colors.amber,
-                                        ),
-                                        onRatingUpdate: (rating){
-                                          print(rating);
-                                        }
+                                  ),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color.fromRGBO(18, 149, 117, 1),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
                                     ),
-                                    const SizedBox(height: 10.0,),
-                                    ElevatedButton(
-                                      style: ButtonStyle(
-                                          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(10),
-                                            ),
+                                    onPressed: () async {
+                                      final userProvider = Provider.of<UserProvider>(context, listen: false);
+                                      await userProvider.logout();
+                                      if(mounted){
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => const LandingPage(),
                                           ),
-                                          backgroundColor: WidgetStateProperty.all<Color>(
-                                            const Color.fromRGBO(18, 149, 117, 1),
-                                          )
+                                              (route) => false,
+                                        );
+                                      }
+
+
+                                    },
+                                    child: const Text(
+                                      "Log Out",
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        color: Colors.white,
+                                        fontSize: 13,
                                       ),
-                                      onPressed: (){
-                                        ///////////////////////////////////////
-                                      },
-                                      child: const Text(
-                                        "Rate",
-                                        style: TextStyle(
-                                          color: Color.fromRGBO(255, 255, 255, 1),
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 11,
-                                        ),
-          
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
-                          }
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                       );
                     },
                   ),
@@ -303,12 +211,12 @@ class _UserprofileState extends State<Userprofile> {
                 SizedBox(height: screenHeight*0.02,),
                 widget.name != null?
                 Text(
-                    widget.name!,
+                    widget.name!.replaceFirst(widget.name![0], widget.name![0].toUpperCase()),
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: screenWidth*0.04,
-                    color: const Color.fromRGBO(18, 149, 117, 1),
-                    fontStyle: FontStyle.italic
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600
                   ),
                 )
                     : Text(""),

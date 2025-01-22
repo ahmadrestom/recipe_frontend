@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:recipe_app/models/Review.dart';
-import 'package:recipe_app/models/chef.dart';
 import 'package:recipe_app/services/BaseAPI.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

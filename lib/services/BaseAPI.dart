@@ -19,6 +19,10 @@ class BaseAPI {
   var getRecipesByChefIdAPI = "$secureAPI/recipe/getRecipeByChefId";
   var upgradeToChefAPI = "$secureAPI/user/upgradeToChef";
   var getSpecialitiesAPI = "$publicAPI/chefSpeciality/getAllSpecialities";
+  var addSpecialityLinkAPI = "$secureAPI/user/specificChefSpeciality/addLink";
+  var getSpecialitiesForChef = "$secureAPI/user/specificChefSpeciality/getAllLinks";
+  var followChefAPI = "$secureAPI/user/followChef";
+  var unfollowChefAPI = "$secureAPI/user/unfollowChef";
   Map<String, String> headers = {
      "Content-Type": "application/json; charset=UTF-8"
    };
