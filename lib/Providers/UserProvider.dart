@@ -20,6 +20,7 @@ class UserProvider extends ChangeNotifier {
   Map<String, dynamic>? _userDetails;
   Map<String, dynamic>? _chefDetails;
   List<dynamic>? _userFavorites;
+  String? _userId;
 
   String? get token => _token;
 
@@ -30,6 +31,8 @@ class UserProvider extends ChangeNotifier {
   Map<String, dynamic>? get chefDetails => _chefDetails;
 
   List<dynamic>? get userFavorites => _userFavorites;
+
+  String? get userId => _userId;
 
   UserProvider(){
     _loadToken();
@@ -54,6 +57,7 @@ class UserProvider extends ChangeNotifier {
       print(_token);
       _isAuthenticated = true;
       await _fetchUserDetails();
+      _userId = _userDetails?['id'];
       notifyListeners();
     }
   }
@@ -65,6 +69,7 @@ class UserProvider extends ChangeNotifier {
     _userDetails = null;
     _userFavorites = null;
     _secureStorage.delete(key: 'authToken');
+    _userId = null;
     notifyListeners();
   }
 

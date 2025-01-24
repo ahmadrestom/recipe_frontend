@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:provider/provider.dart';
 import 'package:radio_grouped_buttons/custom_buttons/custom_radio_buttons_group.dart';
-import 'package:recipe_app/services/FollowingService.dart';
+import 'package:recipe_app/Providers/FollowingProvider.dart';
+import 'package:recipe_app/Providers/UserProvider.dart';
 import '../customerWidgets/RecipeInformationCard.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-
 import '../models/Recipe.dart';
 import 'ViewChefData.dart';
 
@@ -19,10 +20,25 @@ class RecipeInformation extends StatefulWidget {
 }
 
 class _RecipeInformationState extends State<RecipeInformation> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+
   String selectedOption = "Ingredients";
   final TextEditingController _controller = TextEditingController(text: "https://google.com");
+  bool clicked = false;
+  String? userId;
+
   @override
   Widget build(BuildContext context) {
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    userId = userProvider.userId;
+    final followProvider = Provider.of<FollowingProvider>(context, listen: false);
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -592,31 +608,76 @@ class _RecipeInformationState extends State<RecipeInformation> {
                   
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: (){
+      FutureBuilder<bool>(
+        future: followProvider.isFollowing(userId!, widget.recipe.chef.chefId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator(); // Show loading indicator while fetching data
+          }
 
+          if (userId! == widget.recipe.chef.chefId) {
+            return Container(); // Hide the button if the user is the chef
+          }
+
+          if (snapshot.hasData) {
+            bool isFollowing = snapshot.data!;
+
+            return StatefulBuilder(
+              builder: (context, setState) {
+                return ElevatedButton(
+                  onPressed: () async {
+                    if (isFollowing) {
+                      await followProvider.unfollowChef(widget.recipe.chef.chefId);
+                      setState(() {
+                        isFollowing = false;
+                      });
+                    } else {
+                      await followProvider.followChef(widget.recipe.chef.chefId);
+                      setState(() {
+                        isFollowing = true;
+                      });
+                    }
                   },
                   style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(
-                      const Color.fromRGBO(18, 149, 117, 1),
-                    ),
+                    backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+                      // Determine button color based on following state
+                      return isFollowing
+                          ? Colors.white // White if following
+                          : const Color.fromRGBO(18, 149, 117, 1); // Green if not following
+                    }),
+                    foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+                      // Determine text color
+                      return isFollowing
+                          ? const Color.fromRGBO(18, 149, 117, 1) // Green text if following
+                          : Colors.white; // White text if not following
+                    }),
                     shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
-                  child: const Text(
-                    "Follow",
+                  child: Text(
+                    isFollowing ? "Following" : "Follow",
                     style: TextStyle(
+                      color: isFollowing
+                          ? const Color.fromRGBO(18, 149, 117, 1) // Green text if following
+                          : Colors.white, // White text if not following
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
                       fontSize: 12,
-                      color: Color.fromRGBO(255, 255, 255, 1),
                     ),
                   ),
-                ),
-              ],
+                );
+              },
+            );
+          } else {
+            return Text("Error"); // Handle errors
+          }
+        },
+      )
+
+      ],
             ),
             const SizedBox(height: 24,),
             Row(

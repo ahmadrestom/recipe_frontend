@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:recipe_app/Providers/ChefSpecialityProvider.dart';
+import 'package:recipe_app/Providers/FollowingProvider.dart';
 import 'package:recipe_app/Providers/UserProvider.dart';
 import 'package:recipe_app/pages/ChooseSpecialities.dart';
+import 'package:recipe_app/pages/Followers.dart';
 import 'package:recipe_app/pages/NavPage.dart';
 import 'package:recipe_app/pages/ThankYouPage.dart';
 import 'package:recipe_app/pages/landing.dart';
@@ -27,6 +29,7 @@ void main() async{
       MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => UserProvider()),
+          ChangeNotifierProvider(create: (_) => FollowingProvider()),
           ChangeNotifierProvider(create: (_) => RecipeProvider()),
           ChangeNotifierProvider(create: (_) => ReviewProvider()),
           ChangeNotifierProvider(create: (_) => ChefSpecialityProvider())

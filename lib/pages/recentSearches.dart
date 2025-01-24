@@ -304,7 +304,7 @@ class _RecentSearchesState extends State<RecentSearches> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => RecipeInformation(recipe: recipes[index]),
+                              builder: (context) => RecipeInformation(recipe: recipes[index],),
                             ),
                           );
                         },

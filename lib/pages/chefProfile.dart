@@ -5,7 +5,9 @@ import 'package:recipe_app/customerWidgets/RecipeForProfile.dart';
 import 'package:recipe_app/models/Recipe.dart';
 import 'package:recipe_app/pages/ViewChefSpecialities.dart';
 import 'package:recipe_app/pages/recipeInformation.dart';
+import '../Providers/FollowingProvider.dart';
 import '../Providers/UserProvider.dart';
+import '../models/FollowerStats.dart';
 import 'landing.dart';
 
 
@@ -22,6 +24,7 @@ class _ChefProfileState extends State<ChefProfile> {
   Map<String, dynamic>? chefDetails;
   List<RecipeForProfile>? recipes;
   int nbRecipes = 0;
+  FollowerStats? followerStats;
 
   @override
   void initState() {
@@ -29,8 +32,13 @@ class _ChefProfileState extends State<ChefProfile> {
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
+      final followProvider = Provider.of<FollowingProvider>(context, listen: false);
+      await followProvider.getStats(widget.id);
       await userProvider.getChefInfo(widget.id);
       setState(() {
+        if(followProvider.followerStats != null){
+          followerStats = followProvider.followerStats;
+        }
         chefDetails = userProvider.chefDetails;
       });
       await recipeProvider.fetchRecipesForProfile(widget.id);
@@ -268,7 +276,7 @@ class _ChefProfileState extends State<ChefProfile> {
                         ),
                       ),
                       Text(
-                          "2.5M",
+                        followerStats != null ? followerStats!.followerCount.toString() : '0',
                         style: TextStyle(
                             color: const Color.fromRGBO(18, 18, 18, 1),
                             fontWeight: FontWeight.w600,
@@ -282,7 +290,7 @@ class _ChefProfileState extends State<ChefProfile> {
                   Column(
                     children: [
                       Text(
-                          "Following",
+                        "Following",
                         style: TextStyle(
                             color: const Color.fromRGBO(169, 169, 169, 1),
                             fontSize: screenWidth * 0.033,
@@ -291,7 +299,7 @@ class _ChefProfileState extends State<ChefProfile> {
                         ),
                       ),
                       Text(
-                          "259",
+                        followerStats !=null ? followerStats!.followingCount.toString():'0',
                         style: TextStyle(
                             color: const Color.fromRGBO(18, 18, 18, 1),
                             fontWeight: FontWeight.w600,

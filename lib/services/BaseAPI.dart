@@ -23,6 +23,10 @@ class BaseAPI {
   var getSpecialitiesForChef = "$secureAPI/user/specificChefSpeciality/getAllLinks";
   var followChefAPI = "$secureAPI/user/followChef";
   var unfollowChefAPI = "$secureAPI/user/unfollowChef";
+  var getAllFollowersAPI = "$secureAPI/user/getAllFollowers";
+  var getFollowStatsAPI = "$secureAPI/user/getFollowStats";
+  var isFollowingAPI = "$secureAPI/follow/isFollowing";
+  var getAllFollowingsAPI = "$secureAPI/user/getAllFollowing";
   Map<String, String> headers = {
      "Content-Type": "application/json; charset=UTF-8"
    };

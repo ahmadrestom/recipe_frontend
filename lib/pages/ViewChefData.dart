@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recipe_app/Providers/ChefSpecialityProvider.dart';
+import 'package:recipe_app/Providers/FollowingProvider.dart';
+import 'package:recipe_app/models/FollowerStats.dart';
 import 'package:recipe_app/pages/ViewChefSpecialities.dart';
 import 'package:recipe_app/pages/recipeInformation.dart';
 import '../Providers/RecipeProvider.dart';
@@ -10,10 +12,11 @@ import '../customerWidgets/RecipeForProfile.dart';
 import '../customerWidgets/curvedDesignScreen.dart';
 import '../models/Recipe.dart';
 import '../models/chef_speciality.dart';
+import 'Followers.dart';
 
 class ViewChefData extends StatefulWidget {
-  const ViewChefData({super.key, this.chefId});
-  final String? chefId;
+  const ViewChefData({super.key,required this.chefId});
+  final String chefId;
 
   @override
   State<ViewChefData> createState() => _ViewChefDataState();
@@ -25,6 +28,7 @@ class _ViewChefDataState extends State<ViewChefData> {
   List<RecipeForProfile>? recipes;
   List<ChefSpeciality>? specialities;
   bool flag = false;
+  FollowerStats? followerStats;
 
   @override
   void initState() {
@@ -33,16 +37,19 @@ class _ViewChefDataState extends State<ViewChefData> {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
       final chefSpecialityProvider = Provider.of<ChefSpecialityProvider>(context, listen: false);
-      await userProvider.getChefInfo(widget.chefId!);
-      await chefSpecialityProvider.getSpecialitiesForChef(widget.chefId!);
+      final followProvider = Provider.of<FollowingProvider>(context, listen: false);
+      await userProvider.getChefInfo(widget.chefId);
+      await chefSpecialityProvider.getSpecialitiesForChef(widget.chefId);
+      await followProvider.getStats(widget.chefId);
       setState(() {
+        followerStats = followProvider.followerStats;
         chefDetails = userProvider.chefDetails;
         specialities = chefSpecialityProvider.specialitiesForChef;
         if(specialities!.isNotEmpty){
           flag = true;
         }
       });
-      await recipeProvider.fetchRecipesForProfile(widget.chefId!);
+      await recipeProvider.fetchRecipesForProfile(widget.chefId);
       setState(() {
         print("XXXXX ${widget.chefId}");
         recipes = recipeProvider.recipesForProfile;
@@ -88,19 +95,19 @@ class _ViewChefDataState extends State<ViewChefData> {
                         // Navigate to the Specialties page
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ViewChefSpecialities(chefId: widget.chefId!, name: chefDetails?['firstName'])),
+                          MaterialPageRoute(builder: (context) => ViewChefSpecialities(chefId: widget.chefId, name: chefDetails?['firstName'])),
                         );
                       },
                       child: AnimatedContainer(
-                        duration: Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 300),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
+                          gradient: const LinearGradient(
                             colors: [Color(0xFF14B89B), Color(0xFF6DFFBB)],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
                           borderRadius: BorderRadius.circular(30),
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                               color: Color.fromRGBO(0, 0, 0, 0.2),
                               offset: Offset(4, 4),
@@ -108,8 +115,8 @@ class _ViewChefDataState extends State<ViewChefData> {
                             ),
                           ],
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-                        child: Row(
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
@@ -206,7 +213,7 @@ class _ViewChefDataState extends State<ViewChefData> {
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.3),
                                   blurRadius: 15,
-                                  offset: Offset(0, 5),
+                                  offset: const Offset(0, 5),
                                 ),
                               ],
                             ),
@@ -237,6 +244,71 @@ class _ViewChefDataState extends State<ViewChefData> {
                   ],
                 ),
                 SizedBox(height: screenHeight*0.02,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    GestureDetector(
+                      child: Column(
+                        children: [
+                          Text(
+                            "Followers",
+                            style: TextStyle(
+                                color: const Color.fromRGBO(169, 169, 169, 1),
+                                fontSize: screenWidth * 0.033,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w400
+                            ),
+                          ),
+                          Text(
+                            followerStats!.followerCount.toString(),
+                            style: TextStyle(
+                                color: const Color.fromRGBO(18, 18, 18, 1),
+                                fontWeight: FontWeight.w600,
+                                fontSize: screenWidth*0.045,
+                                fontFamily: 'Poppins'
+                            ),
+                          )
+                        ],
+                      ),
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder:
+                                (context)=>Followers(chefId: chefDetails?['chefId'], name: "${chefDetails?['firstName']} ${chefDetails?['lastName']}", follower: true,)));
+                      },
+                    ),
+                    SizedBox(width: screenWidth*0.02,),
+                    GestureDetector(
+                      child: Column(
+                        children: [
+                          Text(
+                            "Following",
+                            style: TextStyle(
+                                color: const Color.fromRGBO(169, 169, 169, 1),
+                                fontSize: screenWidth * 0.033,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w400
+                            ),
+                          ),
+                          Text(
+                            followerStats!.followingCount.toString(),
+                            style: TextStyle(
+                                color: const Color.fromRGBO(18, 18, 18, 1),
+                                fontWeight: FontWeight.w600,
+                                fontSize: screenWidth*0.045,
+                                fontFamily: 'Poppins'
+                            ),
+                          ),
+                        ],
+                      ),
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder:
+                                (context)=>Followers(chefId: chefDetails?['chefId'], name: "${chefDetails?['firstName']} ${chefDetails?['lastName']}", follower: false,)));
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(height: screenHeight*0.02,),
                 Text(
                   chefDetails?['bio'],
                   style: GoogleFonts.aleo(
@@ -246,6 +318,23 @@ class _ViewChefDataState extends State<ViewChefData> {
                       letterSpacing: screenWidth*0.005
                   ),
                 ),
+          SizedBox(height: screenHeight*0.02,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Icon(
+                Icons.location_on,
+                color: Color.fromRGBO(18, 149, 117, 1),
+              ),
+              Text(
+                chefDetails?['location'],
+                style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontStyle: FontStyle.italic
+                ),
+              ),
+            ],
+          ),
                 SizedBox(height: screenHeight*0.02,),
                 Expanded(
                   child: (recipes==null || recipes!.isEmpty)?

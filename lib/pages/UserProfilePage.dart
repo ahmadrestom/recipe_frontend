@@ -1,13 +1,12 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/pages/savedRecipes.dart';
 import 'package:lottie/lottie.dart';
 import 'package:recipe_app/pages/upgradeToChef.dart';
+import '../Providers/FollowingProvider.dart';
 import '../Providers/UserProvider.dart';
+import '../models/FollowerStats.dart';
 import 'landing.dart';
 
 class Userprofile extends StatefulWidget {
@@ -24,17 +23,21 @@ class _UserprofileState extends State<Userprofile> {
 
   int favoritesNumber = 0;
   bool isLoading = true;
+  FollowerStats? followerStats;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async{
+      final followProvider = Provider.of<FollowingProvider>(context, listen: false);
+      await followProvider.getStats(widget.id!);
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       await userProvider.fetchFavoriteRecipes();
-      if(userProvider.userFavorites != null && userProvider.userFavorites!.isNotEmpty) {
-        setState(() {
+      if(userProvider.userFavorites != null && userProvider.userFavorites!.isNotEmpty && followProvider.followerStats!=null) {
+        setState((){
           isLoading = false;
           favoritesNumber = userProvider.userFavorites!.length;
+          followerStats = followProvider.followerStats;
         });
       }else{
         setState(() {
@@ -266,7 +269,7 @@ class _UserprofileState extends State<Userprofile> {
                   ),
                 ),
                 Text(
-                  "259",
+                  followerStats?.followingCount.toString() ?? "0",
                   style: TextStyle(
                       color: const Color.fromRGBO(18, 18, 18, 1),
                       fontWeight: FontWeight.w600,

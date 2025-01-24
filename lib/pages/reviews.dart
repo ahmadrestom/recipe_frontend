@@ -1,9 +1,10 @@
+import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/Providers/ReviewProvider.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
-
+import 'package:cherry_toast/cherry_toast.dart';
 import '../models/Review.dart';
 
 class Reviews extends StatefulWidget{
@@ -330,13 +331,24 @@ class _ReviewsState extends State<Reviews> {
     );
   }
   void showResultSnackBar(bool success) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          success ? 'Review added successfully!' : 'You already added a review',
-        ),
-      ),
-    );
+    if(success == true){
+      CherryToast.success(
+          description:  const Text("Review added successfully", style: TextStyle(color: Colors.black)),
+          animationType:  AnimationType.fromRight,
+          animationDuration:  const Duration(milliseconds:  1000),
+          autoDismiss:  true,
+          toastPosition: Position.bottom,
+      ).show(context);
+    }else{
+      CherryToast.error(
+          description:  const Text("You already added a review", style: TextStyle(color: Colors.black)),
+          animationType:  AnimationType.fromLeft,
+          animationDuration:  const Duration(milliseconds:  600),
+          autoDismiss:  true,
+        toastPosition: Position.bottom,
+      ).show(context);
+    }
+
   }
 }
 

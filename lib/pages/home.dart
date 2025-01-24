@@ -10,6 +10,7 @@ import 'package:recipe_app/pages/recentSearches.dart';
 import 'package:recipe_app/pages/recipeInformation.dart';
 import 'package:rate_in_stars/rate_in_stars.dart';
 import '../models/category.dart' as category;
+import 'Followers.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -135,11 +136,11 @@ class _HomePageState extends State<HomePage> {
                       width: screenWidth * 0.85,
                       height: screenHeight * 0.05,
                       child: CupertinoTextField(
-                        onTap: (){
-                          Navigator.push(context,
-                              MaterialPageRoute(builder:
-                                  (context)=>const RecentSearches()));
-                        },
+                        // onTap: (){
+                        //   Navigator.push(context,
+                        //       MaterialPageRoute(builder:
+                        //           (context)=>const Followers(chefId: "0e13d27d-da8d-4f9b-abf3-3d226a30805b")));
+                        // },
                         placeholder: "Search",
                         readOnly: true,
                         prefix: Padding(
