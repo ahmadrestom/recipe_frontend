@@ -6,6 +6,7 @@ import 'package:recipe_app/Providers/RecipeProvider.dart';
 import 'package:recipe_app/Providers/UserProvider.dart';
 import 'package:recipe_app/customerWidgets/CategoryItem.dart';
 import 'package:flutter/material.dart';
+import 'package:recipe_app/pages/SearchRecipes.dart';
 import 'package:recipe_app/pages/recentSearches.dart';
 import 'package:recipe_app/pages/recipeInformation.dart';
 import 'package:rate_in_stars/rate_in_stars.dart';
@@ -136,11 +137,11 @@ class _HomePageState extends State<HomePage> {
                       width: screenWidth * 0.85,
                       height: screenHeight * 0.05,
                       child: CupertinoTextField(
-                        // onTap: (){
-                        //   Navigator.push(context,
-                        //       MaterialPageRoute(builder:
-                        //           (context)=>const Followers(chefId: "0e13d27d-da8d-4f9b-abf3-3d226a30805b")));
-                        // },
+                        onTap: (){
+                          Navigator.push(context,
+                              MaterialPageRoute(builder:
+                                  (context)=>SearchRecipes(recipes: recipeDetails)));
+                        },
                         placeholder: "Search",
                         readOnly: true,
                         prefix: Padding(

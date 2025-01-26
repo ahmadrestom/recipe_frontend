@@ -38,6 +38,7 @@ dependencies:
   keyboard_dismisser: ^3.0.0
   cherry_toast: ^1.11.0
   image_picker: ^1.0.8
+  image_cropper: ^8.1.0
   dropdown_button2: ^2.3.9
   dialog_alert_transition: ^1.0.6
   flutter_rating_bar: ^4.0.1
@@ -58,6 +59,7 @@ dependencies:
   animated_flip_counter: ^0.3.4
   google_fonts: ^6.2.1
   flutter_multi_select_items: ^0.4.3
+  firebase_messaging: ^15.2.1
   #win32: ^5.3.0
   flutter:
     sdk: flutter

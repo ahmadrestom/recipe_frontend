@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/Providers/RecipeProvider.dart';
 import 'package:recipe_app/customerWidgets/RecipeForProfile.dart';
@@ -8,7 +10,9 @@ import 'package:recipe_app/pages/recipeInformation.dart';
 import '../Providers/FollowingProvider.dart';
 import '../Providers/UserProvider.dart';
 import '../models/FollowerStats.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'landing.dart';
+import 'package:path/path.dart' as path;
 
 
 class ChefProfile extends StatefulWidget {
@@ -25,6 +29,8 @@ class _ChefProfileState extends State<ChefProfile> {
   List<RecipeForProfile>? recipes;
   int nbRecipes = 0;
   FollowerStats? followerStats;
+  File? _image;
+  String? _profileImageUrl;
 
   @override
   void initState() {
@@ -40,6 +46,7 @@ class _ChefProfileState extends State<ChefProfile> {
           followerStats = followProvider.followerStats;
         }
         chefDetails = userProvider.chefDetails;
+        chefDetails?['image_url'];
       });
       await recipeProvider.fetchRecipesForProfile(widget.id);
       setState(() {
@@ -233,83 +240,95 @@ class _ChefProfileState extends State<ChefProfile> {
                 ],
               ),
               SizedBox(height: screenHeight*0.02,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  CircleAvatar(
-                    radius: screenWidth *0.13,
-                    backgroundImage: const AssetImage('assets/images/img.png'),
-                  ),
-                  Container(width: screenWidth*0.07,),
-                  Column(
-                    children: [
-                      Text(
-                          "Recipes",
-                        style: TextStyle(
-                          color: const Color.fromRGBO(169, 169, 169, 1),
-                          fontSize: screenWidth * 0.033,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w400
+              Consumer<UserProvider>(
+                  builder: (context, userProvider, child){
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        GestureDetector(
+                          child: CircleAvatar(
+                            key: UniqueKey(),
+                            radius: screenWidth *0.13,
+                            backgroundImage: userProvider.imageUrl!.isEmpty
+                                ? const AssetImage('assets/images/img.png') as ImageProvider
+                                : NetworkImage(userProvider.imageUrl!),
+                          ),
+                          onTap: (){
+                            _showChangeProfileDialog();
+                          },
                         ),
-                      ),
-                      Text(
-                          nbRecipes.toString(),
-                        style: TextStyle(
-                          color: const Color.fromRGBO(18, 18, 18, 1),
-                          fontWeight: FontWeight.w600,
-                          fontSize: screenWidth*0.045,
-                          fontFamily: 'Poppins'
+                        Container(width: screenWidth*0.07,),
+                        Column(
+                          children: [
+                            Text(
+                              "Recipes",
+                              style: TextStyle(
+                                  color: const Color.fromRGBO(169, 169, 169, 1),
+                                  fontSize: screenWidth * 0.033,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400
+                              ),
+                            ),
+                            Text(
+                              nbRecipes.toString(),
+                              style: TextStyle(
+                                  color: const Color.fromRGBO(18, 18, 18, 1),
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: screenWidth*0.045,
+                                  fontFamily: 'Poppins'
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(width: screenWidth*0.02,),
-                  Column(
-                    children: [
-                      Text(
-                          "Followers",
-                        style: TextStyle(
-                            color: const Color.fromRGBO(169, 169, 169, 1),
-                            fontSize: screenWidth * 0.033,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400
+                        SizedBox(width: screenWidth*0.02,),
+                        Column(
+                          children: [
+                            Text(
+                              "Followers",
+                              style: TextStyle(
+                                  color: const Color.fromRGBO(169, 169, 169, 1),
+                                  fontSize: screenWidth * 0.033,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400
+                              ),
+                            ),
+                            Text(
+                              followerStats != null ? followerStats!.followerCount.toString() : '0',
+                              style: TextStyle(
+                                  color: const Color.fromRGBO(18, 18, 18, 1),
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: screenWidth*0.045,
+                                  fontFamily: 'Poppins'
+                              ),
+                            )
+                          ],
                         ),
-                      ),
-                      Text(
-                        followerStats != null ? followerStats!.followerCount.toString() : '0',
-                        style: TextStyle(
-                            color: const Color.fromRGBO(18, 18, 18, 1),
-                            fontWeight: FontWeight.w600,
-                            fontSize: screenWidth*0.045,
-                            fontFamily: 'Poppins'
+                        SizedBox(width: screenWidth*0.02,),
+                        Column(
+                          children: [
+                            Text(
+                              "Following",
+                              style: TextStyle(
+                                  color: const Color.fromRGBO(169, 169, 169, 1),
+                                  fontSize: screenWidth * 0.033,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400
+                              ),
+                            ),
+                            Text(
+                              followerStats !=null ? followerStats!.followingCount.toString():'0',
+                              style: TextStyle(
+                                  color: const Color.fromRGBO(18, 18, 18, 1),
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: screenWidth*0.045,
+                                  fontFamily: 'Poppins'
+                              ),
+                            ),
+                          ],
                         ),
-                      )
-                    ],
-                  ),
-                  SizedBox(width: screenWidth*0.02,),
-                  Column(
-                    children: [
-                      Text(
-                        "Following",
-                        style: TextStyle(
-                            color: const Color.fromRGBO(169, 169, 169, 1),
-                            fontSize: screenWidth * 0.033,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400
-                        ),
-                      ),
-                      Text(
-                        followerStats !=null ? followerStats!.followingCount.toString():'0',
-                        style: TextStyle(
-                            color: const Color.fromRGBO(18, 18, 18, 1),
-                            fontWeight: FontWeight.w600,
-                            fontSize: screenWidth*0.045,
-                            fontFamily: 'Poppins'
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    );
+                  }
               ),
               SizedBox(height: screenHeight*0.03,),
               Column(
@@ -454,5 +473,94 @@ class _ChefProfileState extends State<ChefProfile> {
           ),
       )
     );
+  }
+  void _showChangeProfileDialog() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: const Icon(Icons.camera),
+              title: const Text("Change Profile Picture"),
+              onTap: () {
+                _pickImage();
+                Navigator.pop(context);
+              },
+            ),
+            Provider.of<UserProvider>(context,listen: false).imageUrl!.isNotEmpty?ListTile(
+              leading: const Icon(Icons.delete),
+              title: const Text("Remove Profile Picture"),
+              onTap: () {
+                Provider.of<UserProvider>(context, listen:false).updateProfileImage("");
+                setState(() {
+                  _profileImageUrl = null;
+                });
+                Navigator.pop(context);
+              },
+            ):Container(height: 0.00001,)
+          ],
+        );
+      },
+    );
+  }
+  void _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      _cropImage(pickedFile.path);
+    }
+  }
+  void _cropImage(String imagePath) async {
+    final croppedFile = await ImageCropper().cropImage(
+      sourcePath: imagePath,
+      uiSettings: [
+        AndroidUiSettings(
+            cropStyle: CropStyle.circle,
+            statusBarColor: const Color.fromRGBO(18, 149, 117, 1),
+            hideBottomControls: true,
+            showCropGrid: false,
+            toolbarTitle: 'Edit Profile Picture',
+            toolbarColor: const Color.fromRGBO(18, 149, 117, 1),
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.square,
+            lockAspectRatio: false,
+
+        ),
+        IOSUiSettings(
+          minimumAspectRatio: 1.0,
+          aspectRatioLockEnabled: true,
+          rotateClockwiseButtonHidden: true,
+          aspectRatioPresets: [
+            CropAspectRatioPreset.original,
+            CropAspectRatioPreset.square,
+          ],
+        ),
+      ],
+
+    );
+    if (croppedFile != null) {
+      setState(() {
+        _image = File(croppedFile.path);
+        _profileImageUrl = _image?.path;
+      });
+      if(mounted){
+        final userProvider = Provider.of<UserProvider>(context,listen: false);
+        final url = await userProvider.uploadImage(_image!, 'ProfilePicture', path.basename(_image!.path),);
+        if(url !=null){
+          userProvider.updateProfileImage(url);
+          await userProvider.updateImage(widget.id, url);
+          print("Profile picture updated successfully");
+        }else{
+          print("Error: Image not uploaded");
+        }
+      }
+
+
+    } else {
+      print("Image cropping cancelled");
+    }
   }
 }

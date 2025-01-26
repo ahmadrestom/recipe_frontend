@@ -27,6 +27,7 @@ class BaseAPI {
   var getFollowStatsAPI = "$secureAPI/user/getFollowStats";
   var isFollowingAPI = "$secureAPI/follow/isFollowing";
   var getAllFollowingsAPI = "$secureAPI/user/getAllFollowing";
+  var updateProfileImageAPI = "$secureAPI/user/updateImage";
   Map<String, String> headers = {
      "Content-Type": "application/json; charset=UTF-8"
    };

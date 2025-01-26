@@ -1,3 +1,5 @@
+import 'package:cherry_toast/cherry_toast.dart';
+import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
@@ -368,14 +370,14 @@ class _UserProfilePageState extends State<UserProfilePage>
                 );
               }
             }
-
-
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Please fill all required fields'),
-              ),
-            );
+            CherryToast.warning(
+              description:  const Text("Please fill all the fields", style: TextStyle(color: Colors.black)),
+              animationType:  AnimationType.fromBottom,
+              animationDuration:  const Duration(milliseconds:  1000),
+              autoDismiss:  true,
+              toastPosition: Position.bottom,
+            ).show(context);
           }
         },
         style: ElevatedButton.styleFrom(

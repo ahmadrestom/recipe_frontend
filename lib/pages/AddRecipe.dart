@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/Providers/UserProvider.dart';
@@ -45,13 +44,11 @@ class AddRecipeState extends State<AddRecipe> {
   Future<void> _submitRecipe()async{
     try{
       if(_recipeImage==null || _plateImage==null){
-        print("SSSSSSSSSSSSSSSSSSSSSSERROR IMages are null");
-        throw Exception("SSSSSSSSSSSSSSSSSSSSSSERROR IMages are null");
+        throw Exception("Images are null");
       }else{
         print("Images picked successfully:  Recipe Image - $_recipeImage, Plate Image - $_plateImage");
       }
       if (_selectedCategory == null || _selectedDifficulty == null) {
-        print("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSss");
         throw Exception("Category or difficulty level is not selected");
       }
       String? recipeImageUrl = await recipeService.uploadImage(
@@ -67,7 +64,6 @@ class AddRecipeState extends State<AddRecipe> {
       );
       print("Uploading Plate Image...");
       if(recipeImageUrl==null || plateImageUrl==null) {
-        print("RECIPEIMAGE IS NULL XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         throw Exception("ERROR: Image URLs are null");
       }
         if(!mounted) return;
@@ -103,8 +99,6 @@ class AddRecipeState extends State<AddRecipe> {
         _ingredients,
         _instructions,
       );
-
-
       print("Recipe Object: ${recipe.toJson()}");
       final x = await RecipeService().uploadRecipe(recipe);
       print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxx $x");

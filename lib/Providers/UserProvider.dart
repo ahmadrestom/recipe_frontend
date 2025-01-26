@@ -1,7 +1,7 @@
+import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:recipe_app/models/UserManagement/userAuthentication.dart';
-import 'package:recipe_app/models/chef.dart';
 import 'package:recipe_app/services/Recipe%20Service.dart';
 import '../models/Recipe.dart';
 import '../models/UserManagement/userRegistration.dart';
@@ -21,6 +21,7 @@ class UserProvider extends ChangeNotifier {
   Map<String, dynamic>? _chefDetails;
   List<dynamic>? _userFavorites;
   String? _userId;
+  String _imageUrl = "";
 
   String? get token => _token;
 
@@ -34,8 +35,15 @@ class UserProvider extends ChangeNotifier {
 
   String? get userId => _userId;
 
+  String? get imageUrl => _imageUrl;
+
   UserProvider(){
     _loadToken();
+  }
+
+  void updateProfileImage(String newUrl) {
+    _imageUrl = newUrl;
+    notifyListeners();
   }
 
   Future<void> _loadToken() async {
@@ -102,12 +110,22 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> updateImage(String userId, String url) async{
+    final res = await _authService.updateImage(userId, url);
+  }
+
+  Future<String?> uploadImage(File imageFile, String bucketName, String path) async{
+    final url = await _authService.uploadImage(imageFile, bucketName, path);
+    return url;
+  }
+
   Future<void> _fetchUserDetails() async {
     try {
+      _imageUrl = "";
       if (token != null) {
         final userInfo = await _authService.getUserInfo(_token!);
         _userDetails = userInfo;
-
+        _imageUrl = _userDetails?['image_url'];
         print("User details fetched: $_userDetails");
       }
     } catch (e) {
@@ -199,6 +217,7 @@ class UserProvider extends ChangeNotifier {
       if(token!=null){
         final data = await _authService.getChefInfo(chefId, _token!);
         _chefDetails = data;
+        _imageUrl = _chefDetails?['image_url'];
         notifyListeners();
       }
     }catch(e){

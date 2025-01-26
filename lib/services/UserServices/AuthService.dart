@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:recipe_app/models/UserManagement/userAuthentication.dart';
 import 'package:http/http.dart' as http;
 import 'package:recipe_app/services/BaseAPI.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../models/Recipe.dart';
 import '../../models/chef.dart';
@@ -90,6 +92,57 @@ class AuthService extends BaseAPI{
     }
 
 }
+
+  Future<String?> uploadImage(File imageFile, String bucketName, String path) async {
+    final supabase = Supabase.instance.client;
+    try {
+      print("Starting upload for $path");
+
+      // Perform the upload
+      final response = await supabase.storage.from(bucketName).upload(path, imageFile);
+      print("Upload Response: $response");
+
+      // Check if the response indicates an error (Supabase might throw exceptions on failure)
+      if (response.isEmpty) {
+        throw Exception("Upload failed: Empty response");
+      }
+
+      // If no error, get the public URL
+      final publicUrl = supabase.storage.from(bucketName).getPublicUrl(path);
+      print("Public URL: $publicUrl");
+
+      return publicUrl;
+    } catch (e) {
+      print("Error uploading image: $e");
+      throw Exception("Error uploading image: $e");
+    }
+  }
+
+  Future<bool> updateImage(String userId, String url) async{
+    try{
+      final token = await secureStorage.read(key: 'authToken');
+      if(token == null){
+        return false;
+      }
+      final response = await http.put(
+        Uri.parse("${super.updateProfileImageAPI}/$userId"),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $token',
+          },
+        body: '"$url"'
+      );
+      if(response.statusCode == 200){
+        return true;
+      }else{
+        print(response.body);
+        return false;
+      }
+    }catch(e){
+      print("Error: $e");
+      return false;
+    }
+  }
 
   Future<List<RecipeFavorites>> fetchUserFavorites(String token) async{
     try{
