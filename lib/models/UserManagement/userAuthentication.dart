@@ -4,13 +4,13 @@ class UserAuthentication{
 
   UserAuthentication({
     required this.email,
-    required this.password
+    required this.password,
   });
 
   Map<String, dynamic> toJson(){
     return {
       'email': email,
-      'password': password
+      'password': password,
     };
 }
 }

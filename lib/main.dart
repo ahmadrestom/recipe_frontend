@@ -1,13 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:recipe_app/pages/notifications.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:recipe_app/Providers/ChefSpecialityProvider.dart';
 import 'package:recipe_app/Providers/FollowingProvider.dart';
 import 'package:recipe_app/Providers/UserProvider.dart';
-import 'package:recipe_app/pages/ChooseSpecialities.dart';
-import 'package:recipe_app/pages/Followers.dart';
 import 'package:recipe_app/pages/NavPage.dart';
-import 'package:recipe_app/pages/ThankYouPage.dart';
 import 'package:recipe_app/pages/landing.dart';
 import 'package:recipe_app/pages/login.dart';
 import 'package:recipe_app/pages/recentSearches.dart';
@@ -16,8 +17,11 @@ import 'package:recipe_app/pages/signup.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/services/UserServices/AuthService.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'Notification/push_notification_handler.dart';
 import 'Providers/RecipeProvider.dart';
 import 'Providers/ReviewProvider.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +29,14 @@ void main() async{
       url: "https://sxpalpizikeaddvwyecg.supabase.co",
       anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4cGFscGl6aWtlYWRkdnd5ZWNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU5NDI5NzEsImV4cCI6MjA1MTUxODk3MX0.p_LKb68dZSwG2cwmeWb8s9NWOFS2IxJ9C28hSguJkpA"
   );
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    print('Message clicked! ${message.notification?.title}');
+    navigatorKey.currentState?.pushNamed('/notifications');
+  });
   runApp(
       MultiProvider(
         providers: [
@@ -37,15 +49,17 @@ void main() async{
           child: const MyApp()
       )
   );
+
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
+    PushNotificationHandler().initialize(context);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky); //to hide upper and lower bars
     return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'Recipe App',
       theme: ThemeData(
@@ -70,6 +84,15 @@ class MyApp extends StatelessWidget {
               reverseDuration: const Duration(milliseconds: 200),
               settings: settings,
             );
+          case '/notifications':
+            return PageTransition(
+              child:  const Notifications(),
+              type: PageTransitionType.fade,
+              duration: const Duration(milliseconds: 350),
+              reverseDuration: const Duration(milliseconds: 200),
+              settings: settings,
+            );
+
           case '/signup':
             return PageTransition(
               child:  const SignUpPage(),

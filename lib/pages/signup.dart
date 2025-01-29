@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:provider/provider.dart';
@@ -299,6 +300,11 @@ class _SignUpPageState extends State<SignUpPage> {
                               print(firstName);
                               print(lastName);
                               final userProvider = Provider.of<UserProvider>(context, listen: false);
+                              final String? token = await FirebaseMessaging.instance.getToken();
+                              if(mounted && token == null){
+                                showToast('Failed to retrieve the device token.', context: context);
+                                return;
+                              }
                               final userRegistration = UserRegistration(
                                   firstName: firstName,
                                   lastName: lastName,

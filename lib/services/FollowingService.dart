@@ -29,6 +29,7 @@ class FollowingService extends BaseAPI{
         return true;
       }else{
         print("Error: couldn't follow chef: ${response.statusCode}");
+        print("BODY: ${response.body}");
         return false;
       }
     }catch(e){

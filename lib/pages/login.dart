@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
@@ -32,6 +33,7 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = true;
     });
 
+    String? firebaseToken = await FirebaseMessaging.instance.getToken();
     UserAuthentication userAuth = UserAuthentication(
         email: _emailController.text, password: _password.text
     );
@@ -190,6 +192,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: ElevatedButton(
                       onPressed: () async{
                         final userProvider = Provider.of<UserProvider>(context, listen: false);
+                        String? firebaseToken = await FirebaseMessaging.instance.getToken();
                         final userAuth = UserAuthentication(
                             email: _emailController.text,
                             password: _password.text

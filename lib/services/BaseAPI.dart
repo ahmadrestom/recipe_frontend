@@ -28,6 +28,8 @@ class BaseAPI {
   var isFollowingAPI = "$secureAPI/follow/isFollowing";
   var getAllFollowingsAPI = "$secureAPI/user/getAllFollowing";
   var updateProfileImageAPI = "$secureAPI/user/updateImage";
+  var saveFirebaseTokenAPI = "$secureAPI/deviceToken/save";
+  var deleteFirebaseTokenAPI = "$secureAPI/deviceToken/deleteToken";
   Map<String, String> headers = {
      "Content-Type": "application/json; charset=UTF-8"
    };

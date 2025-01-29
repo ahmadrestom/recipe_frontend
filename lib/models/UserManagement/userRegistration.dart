@@ -8,7 +8,7 @@ class UserRegistration{
     required this.firstName,
     required this.lastName,
     required this.email,
-    required this.password
+    required this.password,
   });
 
   Map<String, dynamic> toJson() {

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:recipe_app/models/UserManagement/userAuthentication.dart';
@@ -13,22 +14,50 @@ class AuthService extends BaseAPI{
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
   Future<http.Response> login(UserAuthentication userAuth) async{
-    final response = await http.post(
-      Uri.parse(super.authAPI),
-      headers: super.headers,
-      body: jsonEncode(userAuth.toJson()),
-    );
-    if(response.statusCode == 200){
-      final data = jsonDecode(response.body);
-      final token = data['token'];
+    try {
+      String? firebaseToken = await FirebaseMessaging.instance.getToken();
+      if (firebaseToken == null) {
+        throw Exception('Failed to retrieve Firebase token.');
+      }
+      final Map<String, dynamic> requestBody = userAuth.toJson();
+      final response = await http.post(
+        Uri.parse(super.authAPI),
+        headers: super.headers,
+        body: jsonEncode(requestBody),
+      );
+      if (response.statusCode == 200) {
 
-      await secureStorage.write(key: 'authToken', value: token);
-      //print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX $token");
-      return response;
-    }else{
-      throw Exception('Failed to log in: ${response.statusCode} ${response.body}');
+        final data = jsonDecode(response.body);
+        final token = data['token'];
+        await secureStorage.write(key: 'authToken', value: token);
+        if(data['id'] != null){
+          String uri = "${super.saveFirebaseTokenAPI}/${data['id']}/$firebaseToken";
+          print("URI : $uri");
+          final r2 = await http.post(
+            Uri.parse(uri),
+              headers : {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+          }
+          );
+          if(r2.statusCode == 200){
+            print("YESSSS: ${r2.statusCode}::::${r2.body}");
+          }else{
+            print("NOOOOO: ${r2.statusCode}");
+          }
+        }else{
+          print("DATAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
+        }
+        print("Login successful. Auth token: $token");
+        return response;
+      } else {
+        throw Exception('Failed to log in: ${response.statusCode} ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('An error occurred during login: $e');
     }
   }
+
 
   Future<String?> getToken() async{
     String? token = await secureStorage.read(key: 'authToken');
@@ -50,7 +79,21 @@ class AuthService extends BaseAPI{
   }
 
   Future<void> logout() async{
+    final token = await getToken();
+    if(token == null){
+      throw Exception('No valid token available');
+    }
     await secureStorage.delete(key: 'authToken');
+    String? firebaseToken = await FirebaseMessaging.instance.getToken();
+    final response = await http.delete(
+        Uri.parse("${super.deleteFirebaseTokenAPI}/$firebaseToken"),
+        headers : {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        }
+    );
+
+    print("RESPONSE CODE: ${response.statusCode}");
   }
 
   Future<http.Response> get(String url) async{

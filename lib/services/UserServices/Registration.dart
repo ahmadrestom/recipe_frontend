@@ -1,22 +1,19 @@
 import 'dart:convert';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:recipe_app/services/BaseAPI.dart';
 import '../../models/UserManagement/userRegistration.dart';
 
 class RegistrationService extends BaseAPI{
-  Future<http.Response> register(
-      String firstName,
-      String lastName,
-      String email,
-      String password
-      ) async{
+
+
+  Future<http.Response> register(String firstName, String lastName, String email, String password) async{
     UserRegistration newUser = UserRegistration(
         firstName: firstName,
         lastName: lastName,
         email: email,
-        password: password
+        password: password,
     );
-
     var body = jsonEncode(newUser.toJson());
 
     try{
