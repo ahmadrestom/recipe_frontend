@@ -1,5 +1,6 @@
 class BaseAPI {
   static String base = "http://10.0.2.2:8080";
+
   static var secureAPI = "$base/api/v2";
   static var publicAPI = "$base/api/v1";
   var authAPI = "$publicAPI/auth/authenticate";
@@ -30,6 +31,10 @@ class BaseAPI {
   var updateProfileImageAPI = "$secureAPI/user/updateImage";
   var saveFirebaseTokenAPI = "$secureAPI/deviceToken/save";
   var deleteFirebaseTokenAPI = "$secureAPI/deviceToken/deleteToken";
+  //var createNotificationAPI = "$secureAPI/notification/createNotification";
+  var getAllNotificationsAPI = "$secureAPI/notification/getAllNotifications";
+  var markAsReadAPI = "$secureAPI/notification/markAsRead";
+  var deleteNotificationAPI = "$secureAPI/notification/deleteNotification";
   Map<String, String> headers = {
      "Content-Type": "application/json; charset=UTF-8"
    };

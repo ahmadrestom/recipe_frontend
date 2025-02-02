@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/Providers/RecipeProvider.dart';
@@ -11,6 +12,8 @@ import '../Providers/FollowingProvider.dart';
 import '../Providers/UserProvider.dart';
 import '../models/FollowerStats.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'AddRecipe.dart';
+import 'Followers.dart';
 import 'landing.dart';
 import 'package:path/path.dart' as path;
 
@@ -281,50 +284,64 @@ class _ChefProfileState extends State<ChefProfile> {
                           ],
                         ),
                         SizedBox(width: screenWidth*0.02,),
-                        Column(
-                          children: [
-                            Text(
-                              "Followers",
-                              style: TextStyle(
-                                  color: const Color.fromRGBO(169, 169, 169, 1),
-                                  fontSize: screenWidth * 0.033,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400
+                        GestureDetector(
+                          child: Column(
+                            children: [
+                              Text(
+                                "Followers",
+                                style: TextStyle(
+                                    color: const Color.fromRGBO(169, 169, 169, 1),
+                                    fontSize: screenWidth * 0.033,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400
+                                ),
                               ),
-                            ),
-                            Text(
-                              followerStats != null ? followerStats!.followerCount.toString() : '0',
-                              style: TextStyle(
-                                  color: const Color.fromRGBO(18, 18, 18, 1),
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: screenWidth*0.045,
-                                  fontFamily: 'Poppins'
-                              ),
-                            )
-                          ],
+                              Text(
+                                followerStats != null ? followerStats!.followerCount.toString() : '0',
+                                style: TextStyle(
+                                    color: const Color.fromRGBO(18, 18, 18, 1),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: screenWidth*0.045,
+                                    fontFamily: 'Poppins'
+                                ),
+                              )
+                            ],
+                          ),
+                          onTap: (){
+                            Navigator.push(context,
+                                MaterialPageRoute(builder:
+                                    (context)=>Followers(chefId: chefDetails?['chefId'], name: "${chefDetails?['firstName']} ${chefDetails?['lastName']}", follower: true,)));
+                          },
                         ),
                         SizedBox(width: screenWidth*0.02,),
-                        Column(
-                          children: [
-                            Text(
-                              "Following",
-                              style: TextStyle(
-                                  color: const Color.fromRGBO(169, 169, 169, 1),
-                                  fontSize: screenWidth * 0.033,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400
+                        GestureDetector(
+                          child: Column(
+                            children: [
+                              Text(
+                                "Following",
+                                style: TextStyle(
+                                    color: const Color.fromRGBO(169, 169, 169, 1),
+                                    fontSize: screenWidth * 0.033,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400
+                                ),
                               ),
-                            ),
-                            Text(
-                              followerStats !=null ? followerStats!.followingCount.toString():'0',
-                              style: TextStyle(
-                                  color: const Color.fromRGBO(18, 18, 18, 1),
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: screenWidth*0.045,
-                                  fontFamily: 'Poppins'
+                              Text(
+                                followerStats !=null ? followerStats!.followingCount.toString():'0',
+                                style: TextStyle(
+                                    color: const Color.fromRGBO(18, 18, 18, 1),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: screenWidth*0.045,
+                                    fontFamily: 'Poppins'
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
+                          onTap: (){
+                            Navigator.push(context,
+                                MaterialPageRoute(builder:
+                                    (context)=>Followers(chefId: chefDetails?['chefId'], name: "${chefDetails?['firstName']} ${chefDetails?['lastName']}", follower: false,)));
+                          },
                         ),
                       ],
                     );
@@ -435,7 +452,34 @@ class _ChefProfileState extends State<ChefProfile> {
 
               Expanded(
                 child: (recipes==null || recipes!.isEmpty)?
-                    const Center(child: Text("No Recipes"),)
+                    Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                              "Start posting your recipe right now!",
+                            style: GoogleFonts.poppins(
+                              fontSize: screenWidth*0.04,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: screenHeight*0.07,),
+                          GestureDetector(
+                            child: Image.asset(
+                                'assets/icons/noRecipesIcon.png'
+                            ),
+                            onTap: (){
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder:(context)=>const AddRecipe()
+                                  )
+                              );
+                            },
+                          )
+                        ],
+                      ),
+                    )
                 :ListView.builder(
                   itemCount: recipes!.length,
                   itemBuilder: (context, index){

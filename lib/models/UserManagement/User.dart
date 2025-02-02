@@ -90,3 +90,45 @@ class User{
     return users.map((user) => user.toJson()).toList();
   }
 }
+
+class UserDTO{
+  final String userId;
+  final String firstName;
+  final String lastName;
+  final String email;
+  final String imageUrl;
+  final String role;
+
+  UserDTO(
+      {required this.userId,
+       required this.firstName,
+       required this.lastName,
+       required this.email,
+       required this.imageUrl,
+       required this.role}
+         );
+
+  factory UserDTO.fromJson(Map<String, dynamic> json) {
+    return UserDTO(
+      userId: json['userId'] as String,
+      firstName: json['firstName'] as String,
+      lastName: json['lastName'] as String,
+      email: json['email'] as String,
+      imageUrl: json['imageUrl'] as String,
+      role: json['role'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'userId': userId,
+      'firstName': firstName,
+      'lastName': lastName,
+      'email': email,
+      'imageUrl': imageUrl,
+      'role': role,
+    };
+  }
+
+
+}

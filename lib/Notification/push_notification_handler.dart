@@ -1,11 +1,12 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 import '../main.dart';
+import '../services/NotificationService.dart';
 
 class PushNotificationHandler {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  final NotificationService _notificationService = NotificationService();
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   Future<void> initialize(BuildContext context) async {
 
@@ -49,6 +50,7 @@ class PushNotificationHandler {
 
     // Listen for incoming messages
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+
       print('Received message: ${message.notification?.body}');
       _showNotification(message);
     });
@@ -69,6 +71,8 @@ class PushNotificationHandler {
   }
 
   Future<void> _showNotification(RemoteMessage message) async {
+    String? title = message.notification?.title;
+    String? body = message.notification?.body;
     const AndroidNotificationDetails androidNotificationDetails =
     AndroidNotificationDetails(
       'Recipe Notification',

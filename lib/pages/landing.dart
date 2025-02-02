@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:recipe_app/Providers/UserProvider.dart';
 import 'package:recipe_app/pages/home.dart';
 import 'package:recipe_app/pages/login.dart';
-import 'package:recipe_app/services/ChefSpecialityService.dart';
 import 'package:recipe_app/services/UserServices/AuthService.dart';
 
 class LandingPage extends StatelessWidget {
@@ -11,6 +10,8 @@ class LandingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     //final authService = Provider.of<UserProvider>(context, listen: false);
     final authService = AuthService();
     return Scaffold(
@@ -19,26 +20,24 @@ class LandingPage extends StatelessWidget {
         children: [
           Image.asset(
             'assets/images/landing.png',
-            height: 79,
-            width: 79,
+
             fit: BoxFit.cover,
           ),
           Column(
             children: [
               Container(
                 child:Padding(
-                  padding: const EdgeInsets.only(top: 100),
+                  padding: EdgeInsets.only(top: screenHeight*0.08),
                   child: Column(
                     children: [
                       Image.asset(
                         'assets/icons/chef.png',
-                        width: 110,
-                        height: 110,
-
+                        width: screenWidth*0.4,
+                        height: screenHeight*0.24,
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 16),
-                        child: Text(
+                      Padding(
+                        padding: EdgeInsets.only(top: screenHeight*0.02),
+                        child: const Text(
                           '100k+ Premium Recipe',
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
@@ -54,7 +53,7 @@ class LandingPage extends StatelessWidget {
               ),
               Container(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 170),
+                  padding: EdgeInsets.only(top: screenHeight*0.13 ),
                   child: Column(
                     children: [
                       const Text(

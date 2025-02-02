@@ -217,7 +217,7 @@ class UserProvider extends ChangeNotifier {
       if(token!=null){
         final data = await _authService.getChefInfo(chefId, _token!);
         _chefDetails = data;
-        _imageUrl = _chefDetails?['image_url'];
+        _imageUrl = _chefDetails?['image_url'] ?? "";
         notifyListeners();
       }
     }catch(e){

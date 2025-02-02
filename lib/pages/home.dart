@@ -1,17 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
-import 'package:recipe_app/Providers/ChefSpecialityProvider.dart';
 import 'package:recipe_app/Providers/RecipeProvider.dart';
 import 'package:recipe_app/Providers/UserProvider.dart';
 import 'package:recipe_app/customerWidgets/CategoryItem.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_app/pages/SearchRecipes.dart';
-import 'package:recipe_app/pages/recentSearches.dart';
 import 'package:recipe_app/pages/recipeInformation.dart';
 import 'package:rate_in_stars/rate_in_stars.dart';
 import '../models/category.dart' as category;
-import 'Followers.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,11 +27,6 @@ class _HomePageState extends State<HomePage> {
   final List<String> time = ["All", "New", "Old"];
   final List<String> rating = ["1","2","3","4","5"];*/
 
-  /*final List<String> categories = recipe.Category.values
-      .map((e) => e.toString().split('.').last)
-      .map((category) => category.substring(0, 1).toUpperCase() + category.substring(1))
-      .toList();*/
-
   @override
   void initState() {
     super.initState();
@@ -43,20 +35,6 @@ class _HomePageState extends State<HomePage> {
 
   }
 
-
-  /*Future<void> _fetchRecipes() async{
-    try{
-      final fetchedRecipes = await RecipeService().fetchRecipes();
-      final fetchedNewRecipes = await RecipeService().fetchRecentRecipes();
-
-      setState(() {
-        recipes = fetchedRecipes;
-        newRecipes = fetchedNewRecipes;
-      });
-    }catch(error){
-      print("Error fetching recipes in home page: $error");
-    }
-  }*/
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);

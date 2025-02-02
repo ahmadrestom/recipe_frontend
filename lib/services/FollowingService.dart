@@ -1,9 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:recipe_app/services/BaseAPI.dart';
 import 'package:http/http.dart' as http;
-
 import '../models/Follower.dart';
 import '../models/FollowerStats.dart';
 

@@ -114,8 +114,6 @@ class AddRecipeState extends State<AddRecipe> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _prepTimeController = TextEditingController();
   final TextEditingController _cookTimeController = TextEditingController();
-  //final TextEditingController _imageUrlController = TextEditingController();
-  //final TextEditingController _plateImageUrlController = TextEditingController();
   final Set<Ingredients> _ingredients = {};
   final List<Instruction> _instructions = [];
   final TextEditingController _caloriesController = TextEditingController();

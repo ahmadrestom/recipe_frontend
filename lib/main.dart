@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:recipe_app/pages/notifications.dart';
+import 'Providers/NotificationProvider.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,6 +45,7 @@ void main() async{
           ChangeNotifierProvider(create: (_) => FollowingProvider()),
           ChangeNotifierProvider(create: (_) => RecipeProvider()),
           ChangeNotifierProvider(create: (_) => ReviewProvider()),
+          ChangeNotifierProvider(create: (_) => NotificationProvider()),
           ChangeNotifierProvider(create: (_) => ChefSpecialityProvider())
         ],
           child: const MyApp()
@@ -130,19 +132,6 @@ class MyApp extends StatelessWidget {
             }else{
               return null;
             }
-          /*case '/recipeInformation':
-            final args = settings.arguments;
-            if(args is Recipe) {
-              return PageTransition(
-                child: RecipeInformation(recipe: args),
-                type: PageTransitionType.fade,
-                duration: const Duration(milliseconds: 350),
-                reverseDuration: const Duration(milliseconds: 200),
-                settings: settings,
-              );
-            }else{
-              return null;
-            }*/
           default:
             return null;
         }
