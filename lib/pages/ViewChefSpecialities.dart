@@ -101,10 +101,10 @@ class ViewChefSpecialities extends StatelessWidget {
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 300),
                               padding: const EdgeInsets.all(16.0),
-                              height: 100.0, // You can adjust this height as needed
+                              height: screenHeight*0.1,
                               child: Text(
-                                'Here are more details about ${list[index].speciality}. This can include description, image, or any other related content.',
-                                style: TextStyle(color: Color.fromRGBO(18, 149, 117, 0.7)),
+                                list[index].description,
+                                style: const TextStyle(color: Color.fromRGBO(18, 149, 117, 0.7)),
                               ),
                             ),
                           ],

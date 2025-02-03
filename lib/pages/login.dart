@@ -1,5 +1,6 @@
+import 'package:cherry_toast/cherry_toast.dart';
+import 'package:cherry_toast/resources/arrays.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:provider/provider.dart';
@@ -190,35 +191,75 @@ class _LoginPageState extends State<LoginPage> {
                     width: 315,
                     height: 60,
                     child: ElevatedButton(
-                      onPressed: () async{
-                        final userProvider = Provider.of<UserProvider>(context, listen: false);
-                        String? firebaseToken = await FirebaseMessaging.instance.getToken();
-                        final userAuth = UserAuthentication(
+                      onPressed: () async {
+                        if (_emailController.text.isEmpty) {
+                          CherryToast.error(
+                            toastPosition: Position.bottom,
+                            title: const Text("Enter your email"),
+                            animationType: AnimationType.fromBottom,
+                            animationDuration: const Duration(milliseconds: 500),
+                            autoDismiss: true,
+                          ).show(context);
+                          return;
+                        }
+                        if (_password.text.isEmpty) {
+                          CherryToast.error(
+                            toastPosition: Position.bottom,
+                            title: const Text("Enter your password"),
+                            animationType: AnimationType.fromBottom,
+                            animationDuration: const Duration(milliseconds: 500),
+                            autoDismiss: true,
+                          ).show(context);
+                          return;
+                        }
+                        try {
+                          final userProvider = Provider.of<UserProvider>(context, listen: false);
+                          final userAuth = UserAuthentication(
                             email: _emailController.text,
-                            password: _password.text
-                        );
-                        await userProvider.login(userAuth);
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (userProvider.isAuthenticated){
-                        print("XXX");
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const NavPage(),
-                          ),
-                        );
-                      } else {
-                        print("CCC");
-                        _emailController.text = '';
-                        _password.text = '';
-                        showToast('This is normal toast with animation',
-                          context: context,
-                          animation: StyledToastAnimation.scale,
-                        );
-
-                      }
-                        });
-                    },
+                            password: _password.text,
+                          );
+                          final response = await userProvider.login(userAuth);
+                          if (!response) {
+                            CherryToast.error(
+                              toastPosition: Position.bottom,
+                              title: const Text("Invalid email or password"),
+                              animationType: AnimationType.fromBottom,
+                              animationDuration: const Duration(milliseconds: 500),
+                              autoDismiss: true,
+                            ).show(context);
+                            return;
+                          } else {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              if (userProvider.isAuthenticated) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const NavPage(),
+                                  ),
+                                );
+                              } else {
+                                _emailController.text = '';
+                                _password.text = '';
+                                CherryToast.error(
+                                  toastPosition: Position.bottom,
+                                  title: const Text("Unable to login"),
+                                  animationType: AnimationType.fromBottom,
+                                  animationDuration: const Duration(milliseconds: 500),
+                                  autoDismiss: true,
+                                ).show(context);
+                              }
+                            });
+                          }
+                        } catch (e) {
+                          CherryToast.error(
+                            toastPosition: Position.bottom,
+                            title: const Text("An error occurred. Please try again."),
+                            animationType: AnimationType.fromBottom,
+                            animationDuration: const Duration(milliseconds: 500),
+                            autoDismiss: true,
+                          ).show(context);
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromRGBO(18, 149, 117, 1),
                         shape: RoundedRectangleBorder(

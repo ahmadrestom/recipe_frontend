@@ -98,9 +98,11 @@ class _HomePageState extends State<HomePage> {
 
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                          color: Colors.amber
+                          //color: Colors.amber
                       ),
-                      child: Image.asset('assets/images/avatar.png'),
+                      child: userDetails?['role'] == "CHEF"?
+                      Image.asset('assets/icons/homeAvatarChef.png')
+                      :Image.asset('assets/icons/homeAvatarUser.png')
                       //child: userDetails?['imageUrl'] == null? Image.asset('assets/icons/profile.png'):Image.network(userDetails?['imageUrl']),
                     ),
                   ],
@@ -116,6 +118,7 @@ class _HomePageState extends State<HomePage> {
                       height: screenHeight * 0.05,
                       child: CupertinoTextField(
                         onTap: (){
+                          print(userDetails?['role']);
                           Navigator.push(context,
                               MaterialPageRoute(builder:
                                   (context)=>SearchRecipes(recipes: recipeDetails)));

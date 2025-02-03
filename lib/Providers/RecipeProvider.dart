@@ -42,8 +42,9 @@ class RecipeProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> _fetchRecentRecipesDetails() async {
+  Future<void> _fetchRecentRecipesDetails()async{
     try {
+      _newRecipeDetails = [];
       final fetchedRecipes = await RecipeService().fetchRecentRecipes();
       _newRecipeDetails = fetchedRecipes;
     } catch (e) {

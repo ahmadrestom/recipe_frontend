@@ -1,3 +1,5 @@
+import 'package:cherry_toast/cherry_toast.dart';
+import 'package:cherry_toast/resources/arrays.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -53,7 +55,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       SizedBox(height: 8,),
                       Text(
-                        'Let’s help you set up your account,\n it won’t take long.',
+                        'Let’s help you set up your account,\nIt won’t take long.',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,
@@ -269,22 +271,83 @@ class _SignUpPageState extends State<SignUpPage> {
                           height: 60,
                           child: ElevatedButton(
                             onPressed: () async{
+                              if(_nameController.text.isEmpty){
+                                CherryToast.error(
+                                    toastPosition: Position.bottom,
+                                    title: const Text("Enter your name"),
+                                    animationType:  AnimationType.fromBottom,
+                                    animationDuration:  const Duration(milliseconds:  500),
+                                    autoDismiss:  true
+                                ).show(context);
+                                return;
+                              }
+                              if (!RegExp(r'^[A-Za-z]+ [A-Za-z]+$').hasMatch(_nameController.text)) {
+                                CherryToast.error(
+                                  toastPosition: Position.bottom,
+                                  title: const Text("Invalid name format"),
+                                  description: const Text("Your name must contain exactly two partsA"),
+                                  animationType: AnimationType.fromBottom,
+                                  animationDuration: const Duration(milliseconds: 500),
+                                  autoDismiss: true,
+                                ).show(context);
+                                return;
+                              }
+
+                              if(!_emailController.text.contains('@') || _emailController.text.isEmpty){
+                                CherryToast.error(
+                                  toastPosition: Position.bottom,
+                                  title: const Text("Invalid email format"),
+                                    description: const Text("Please enter a valid email format"),
+                                    animationType:  AnimationType.fromBottom,
+                                    animationDuration:  const Duration(milliseconds:  500),
+                                    autoDismiss:  true
+                                ).show(context);
+                                return;
+                              }
                               if(_passwordController.text.compareTo(_confirmPasswordController.text) != 0){
-                                showToast(
-                                  'Password mismatch. Please ensure both passwords are identical',
-                                  context: context,
-                                  animation: StyledToastAnimation.fade,
-                                  duration: const Duration(seconds: 3),
-                                );
+                                CherryToast.error(
+                                    toastPosition: Position.bottom,
+                                    title: const Text("Passwords did not match"),
+                                    description: const Text("Confirm your password"),
+                                    animationType:  AnimationType.fromBottom,
+                                    animationDuration:  const Duration(milliseconds:  500),
+                                    autoDismiss:  true
+                                ).show(context);
+                                return;
+                              }
+                              if(_passwordController.text.isEmpty){
+                                CherryToast.error(
+                                    toastPosition: Position.bottom,
+                                    title: const Text("Enter your password"),
+                                    //description: const Text("Confirm your password"),
+                                    animationType:  AnimationType.fromBottom,
+                                    animationDuration:  const Duration(milliseconds:  500),
+                                    autoDismiss:  true
+                                ).show(context);
+                                return;
+                              }
+                              if (_passwordController.text.length < 8 ||
+                                  !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])').hasMatch(_passwordController.text)) {
+                                CherryToast.error(
+                                  toastPosition: Position.bottom,
+                                  title: const Text("Error"),
+                                  description: const Text(
+                                      "Password must be at least 8 characters long, contain a number, a capital letter, a small letter, and a symbol."),
+                                  animationType: AnimationType.fromBottom,
+                                  animationDuration: const Duration(milliseconds: 500),
+                                  autoDismiss: true,
+                                ).show(context);
                                 return;
                               }
                               if(isChecked == false){
-                                showToast(
-                                  'Please accept terms and conditions',
-                                  context: context,
-                                  animation: StyledToastAnimation.fade,
-                                  duration: const Duration(seconds: 3),
-                                );
+                                CherryToast.error(
+                                    toastPosition: Position.bottom,
+                                    title: const Text("Accept terms and conditions"),
+                                    //description: const Text("Accept terms and conditions"),
+                                    animationType:  AnimationType.fromBottom,
+                                    animationDuration:  const Duration(milliseconds:  500),
+                                    autoDismiss:  true
+                                ).show(context);
                                 return;
                               }
                               String fullName = _nameController.text.trim();

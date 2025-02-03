@@ -58,15 +58,17 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> login(UserAuthentication userAuth) async {
+  Future<bool> login(UserAuthentication userAuth) async {
     final response = await _authService.login(userAuth);
-    if (response.statusCode == 200) {
+    if (response) {
       _token = await _secureStorage.read(key: 'authToken');
-      print(_token);
       _isAuthenticated = true;
       await _fetchUserDetails();
       _userId = _userDetails?['id'];
       notifyListeners();
+      return true; // Success
+    } else {
+      return false; // Invalid credentials
     }
   }
 

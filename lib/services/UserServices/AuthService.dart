@@ -13,7 +13,7 @@ import '../../models/chef.dart';
 class AuthService extends BaseAPI{
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
-  Future<http.Response> login(UserAuthentication userAuth) async{
+  Future<bool> login(UserAuthentication userAuth) async {
     try {
       String? firebaseToken = await FirebaseMessaging.instance.getToken();
       if (firebaseToken == null) {
@@ -26,30 +26,28 @@ class AuthService extends BaseAPI{
         body: jsonEncode(requestBody),
       );
       if (response.statusCode == 200) {
-
         final data = jsonDecode(response.body);
         final token = data['token'];
         await secureStorage.write(key: 'authToken', value: token);
-        if(data['id'] != null){
+        if (data['id'] != null) {
           String uri = "${super.saveFirebaseTokenAPI}/${data['id']}/$firebaseToken";
-          print("URI : $uri");
           final r2 = await http.post(
             Uri.parse(uri),
-              headers : {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-          }
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
           );
-          if(r2.statusCode == 200){
-            print("YESSSS: ${r2.statusCode}::::${r2.body}");
-          }else{
-            print("NOOOOO: ${r2.statusCode}");
+          if (r2.statusCode == 200) {
+            print("Firebase token saved successfully.");
+          } else {
+            print("Failed to save Firebase token: ${r2.statusCode}");
           }
-        }else{
-          print("DATAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
         }
         print("Login successful. Auth token: $token");
-        return response;
+        return true; // Success
+      } else if (response.statusCode == 403) {
+        return false; // Invalid credentials
       } else {
         throw Exception('Failed to log in: ${response.statusCode} ${response.body}');
       }
