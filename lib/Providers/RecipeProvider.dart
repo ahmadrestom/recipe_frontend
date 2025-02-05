@@ -33,6 +33,9 @@ class RecipeProvider extends ChangeNotifier {
   Future<void> _fetchRecipeDetails() async {
     try {
       final fetchedRecipes = await RecipeService().fetchRecipes();
+      //remove delay
+      await Future.delayed(const Duration(seconds: 2));
+      //remove delay
       _recipeDetails = fetchedRecipes;
       _recipeDetails?.forEach((element) {print("RecipeCategoryName: ${element.category.categoryName}");});
     } catch (e) {

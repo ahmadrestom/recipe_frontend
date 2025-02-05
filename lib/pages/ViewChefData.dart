@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recipe_app/Providers/ChefSpecialityProvider.dart';
@@ -64,7 +65,9 @@ class _ViewChefDataState extends State<ViewChefData> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     if(chefDetails==null){
-      return const Center(child: CircularProgressIndicator());
+      return Center(child: Lottie.asset(
+          'assets/loader.json'
+      ));
     }
 
     return Scaffold(

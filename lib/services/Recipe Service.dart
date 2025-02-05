@@ -257,8 +257,11 @@ class RecipeService extends BaseAPI{
             return RecipeForProfile.fromJson(item);
           }).toList();
           return recipes;
-        }else{
-          print("XX ${response.statusCode}");
+        }else if(response.statusCode == 404){
+          return [];
+        }
+        else{
+          print("XX ${response.statusCode}XXXX");
           throw Exception("Failed to load recipes: ${response.statusCode}");
         }
       }catch(e){

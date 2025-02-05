@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/Providers/ChefSpecialityProvider.dart';
 import 'package:recipe_app/models/chef_speciality.dart';
@@ -8,7 +9,6 @@ class ViewChefSpecialities extends StatelessWidget {
   const ViewChefSpecialities({super.key, required this.chefId, required this.name});
   final String chefId;
   final String name;
-
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +21,12 @@ class ViewChefSpecialities extends StatelessWidget {
     final ChefSpecialityProvider provider = Provider.of<ChefSpecialityProvider>(context, listen:false);
     provider.getSpecialitiesForChef(chefId);
     list = provider.specialitiesForChef;
+
+    if(list == null){
+      return Center(child: Lottie.asset(
+          'assets/loader.json'
+      ));
+    }
 
 
 
@@ -55,9 +61,11 @@ class ViewChefSpecialities extends StatelessWidget {
             SizedBox(height: screenHeight*0.03,),
             Consumer<ChefSpecialityProvider>(
               builder: (context, provider, child) {
-                if (provider.specialitiesForChef == null || provider.specialitiesForChef!.isEmpty) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+                // if (provider.specialitiesForChef == null || provider.specialitiesForChef!.isEmpty) {
+                //   return Center(child: Lottie.asset(
+                //       'assets/loader.json'
+                //   ));
+                // }
 
                 List<ChefSpeciality> list = provider.specialitiesForChef!;
 

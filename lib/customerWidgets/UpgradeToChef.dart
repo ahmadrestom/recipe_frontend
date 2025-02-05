@@ -352,11 +352,7 @@ class _UserProfilePageState extends State<UserProfilePage>
             );
             if(mounted){
               if(success){
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Form submitted!'),
-                  ),
-                );
+
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => const ThankYouPage(),

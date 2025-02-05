@@ -26,7 +26,10 @@ class NotificationService extends BaseAPI{
         List<dynamic> data = jsonDecode(response.body);
         List<Notification> notifications = data.map((json) => Notification.fromJson(json)).toList();
         return notifications;
-      }else{
+      }else if(response.statusCode == 204){
+        return [];
+      }
+      else{
         print("Error fetching notifications: ${response.body}");
         throw Exception("Error fetching notifications: ${response.statusCode}");
       }

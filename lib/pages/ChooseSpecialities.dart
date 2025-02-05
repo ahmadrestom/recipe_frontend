@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/Providers/ChefSpecialityProvider.dart';
 import 'package:recipe_app/models/chef_speciality.dart';
@@ -59,7 +60,9 @@ class _ChooseSpecialitiesState extends State<ChooseSpecialities> {
 
 
     if(chefSpecialities==null){
-      return const Center(child: CircularProgressIndicator());
+      return Center(child: Lottie.asset(
+          'assets/loader.json'
+      ));
     }
 
     return Scaffold(

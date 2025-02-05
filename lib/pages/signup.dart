@@ -379,12 +379,15 @@ class _SignUpPageState extends State<SignUpPage> {
                                 WidgetsBinding.instance.addPostFrameCallback((_) {
                                   // Ensure that the context is still valid
                                   if (context.mounted) {
-                                    showToast(
-                                      'Registration successful. Please log in to continue',
-                                      context: context,
-                                      animation: StyledToastAnimation.scale,
-                                      duration: const Duration(seconds: 3),
-                                    );
+                                    CherryToast.success(
+                                      toastPosition: Position.bottom,
+                                      title: const Text("Registration successful"),
+                                      description: const Text('Please log in to continue'),
+                                      animationType: AnimationType.fromBottom,
+                                      animationDuration: const Duration(milliseconds: 500),
+                                      autoDismiss: true,
+                                    ).show(context);
+
                             Future.delayed(const Duration(seconds: 2), ()
                                     {
                                       Navigator.pushReplacementNamed(

@@ -3,6 +3,7 @@ import 'package:cherry_toast/resources/arrays.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/Providers/UserProvider.dart';
 import 'package:recipe_app/models/UserManagement/userAuthentication.dart';
@@ -41,9 +42,6 @@ class _LoginPageState extends State<LoginPage> {
 
     try{
       widget.authService.login(userAuth);
-      print('Login successful');
-    }catch(e){
-      print('error: $e');
     }finally{
       setState(() {
         _isLoading = false;
@@ -53,12 +51,18 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context){
+
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return KeyboardDismisser(
       gestures: const [GestureType.onPanUpdateAnyDirection, GestureType.onTap],
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         body: _isLoading
-            ? const CircularProgressIndicator()
+            ? Lottie.asset(
+            'assets/loader.json'
+        )
             : SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _emailController,
                       decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.grey, width: 1.5, style: BorderStyle.solid, strokeAlign: BorderSide.strokeAlignInside), // Customize border color and width
+                            borderSide: const BorderSide(color: Colors.grey, width: 1.5, style: BorderStyle.solid, strokeAlign: BorderSide.strokeAlignInside),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                         hintText: "Enter email",
@@ -150,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _password,
                       decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.grey, width: 1.5, style: BorderStyle.solid, strokeAlign: BorderSide.strokeAlignInside), // Customize border color and width
+                            borderSide: const BorderSide(color: Colors.grey, width: 1.5, style: BorderStyle.solid, strokeAlign: BorderSide.strokeAlignInside),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           hintText: "Enter password",
@@ -185,11 +189,11 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 38.0),
+                padding: EdgeInsets.only(top: screenHeight*0.05),
                 child: Center(
                   child: SizedBox(
-                    width: 315,
-                    height: 60,
+                    width: screenWidth*0.8,
+                    height: screenHeight*0.06,
                     child: ElevatedButton(
                       onPressed: () async {
                         if (_emailController.text.isEmpty) {
@@ -279,7 +283,7 @@ class _LoginPageState extends State<LoginPage> {
                                 color: Color(0xFFFFFFFF)
                             ),
                           ),
-                          const SizedBox(width: 10,),
+                          SizedBox(width: screenWidth*0.03,),
                           Image.asset(
                             'assets/icons/arrow-right.png',
                             width: 20,
@@ -291,37 +295,36 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20,),
-              const Padding(
-                padding: EdgeInsets.only(left: 90, right: 90),
+              SizedBox(height: screenHeight*0.05,),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: screenWidth*0.2),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
+                    const Expanded(
                         child: Divider(
-                          thickness: 1,color: Color.fromRGBO(200, 200, 200, 1),
+                          thickness: 2,color: Color.fromRGBO(200, 200, 200, 1),
                         ),
                     ),
-                    SizedBox(width: 10,),
+                    //SizedBox(width: ,),
                     Text(
-                        "Or Sign in With",
+                        "    Or Sign in With    ",
                       style: TextStyle(
-                        color: Color.fromRGBO(200, 200, 200, 1),
-                        fontWeight: FontWeight.w500,
+                        color: const Color.fromRGBO(200, 200, 200, 1),
+                        fontWeight: FontWeight.w900,
                         fontFamily: 'Poppins',
-                        fontSize: 11
+                        fontSize: screenWidth*0.03
                       ),
                     ),
-                    SizedBox(width: 10,),
-                    Expanded(
+                    const Expanded(
                       child: Divider(
-                        thickness: 1,color: Color.fromRGBO(200, 200, 200, 1),
+                        thickness: 2,color: Color.fromRGBO(200, 200, 200, 1),
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 20,),
+              SizedBox(height: screenHeight*0.05,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -331,7 +334,7 @@ class _LoginPageState extends State<LoginPage> {
                       ///////////////////////////////////////
                     },
                   ),
-                  const SizedBox(width: 30,),
+                  SizedBox(width: screenWidth*0.1,),
                   SquareTile(
                     imagePath: 'assets/icons/facebook.png',
                     onTap: (){
@@ -340,6 +343,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ],
               ),
+              SizedBox(height: screenHeight*0.04,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/Providers/RecipeProvider.dart';
 import 'package:recipe_app/customerWidgets/RecipeForProfile.dart';
@@ -70,7 +71,9 @@ class _ChefProfileState extends State<ChefProfile> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     if(chefDetails == null){
-      return const Center(child: CircularProgressIndicator());
+      return Center(child: Lottie.asset(
+          'assets/loader.json'
+      ));
     }
     // if(recipes!.isNotEmpty && nbRecipes == 0){
     //   return const Center(child: CircularProgressIndicator());
@@ -353,11 +356,12 @@ class _ChefProfileState extends State<ChefProfile> {
                 children: [
                   Text(
                       "${chefDetails?['firstName']} ${chefDetails?['lastName']}",
-                    style: const TextStyle(
-                      color: Color.fromRGBO(18, 18, 18, 1),
+                    style:  TextStyle(
+                      color: const Color.fromRGBO(18, 18, 18, 1),
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
-                      fontSize: 16
+                      fontSize: screenWidth*0.04,
+                      letterSpacing: 1
                     ),
                   ),
                   const Text(
@@ -451,35 +455,39 @@ class _ChefProfileState extends State<ChefProfile> {
               SizedBox(height: screenHeight*0.03,),
 
               Expanded(
-                child: (recipes==null || recipes!.isEmpty)?
-                    Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                              "Start posting your recipe right now!",
-                            style: GoogleFonts.poppins(
-                              fontSize: screenWidth*0.04,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: screenHeight*0.07,),
-                          GestureDetector(
-                            child: Image.asset(
-                                'assets/icons/noRecipesIcon.png'
-                            ),
-                            onTap: (){
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder:(context)=>const AddRecipe()
-                                  )
-                              );
-                            },
-                          )
-                        ],
+                child: (recipes == null)?
+                Center(child: Lottie.asset(
+                    'assets/loader.json'
+                ),)
+                :(recipes!.isEmpty)?
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Start posting your recipes right now!",
+                        style: GoogleFonts.poppins(
+                          fontSize: screenWidth*0.04,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                    )
+                      SizedBox(height: screenHeight*0.07,),
+                      GestureDetector(
+                        child: Image.asset(
+                            'assets/icons/noRecipesIcon.png'
+                        ),
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder:(context)=>const AddRecipe()
+                              )
+                          );
+                        },
+                      )
+                    ],
+                  ),
+                )
                 :ListView.builder(
                   itemCount: recipes!.length,
                   itemBuilder: (context, index){

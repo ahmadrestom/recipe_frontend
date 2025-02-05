@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/Providers/FollowingProvider.dart';
 import 'package:recipe_app/models/Follower.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../customerWidgets/FollowUser.dart';
 
@@ -33,6 +34,9 @@ class _FollowersState extends State<Followers>{
 
   void _getFollowers() async{
     final followerProvider = Provider.of<FollowingProvider>(context, listen: false);
+    //remove delay
+    await Future.delayed(const Duration(seconds: 1));
+    //remove delay
     if(widget.follower == true){
       await followerProvider.getAllFollowers(widget.chefId);
       setState(() {
@@ -55,14 +59,6 @@ class _FollowersState extends State<Followers>{
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
-    if(widget.follower &&  _followers == null){
-      return const Center(child: CircularProgressIndicator(),);
-    }
-
-    if(!widget.follower &&  _followings == null){
-      return const Center(child: CircularProgressIndicator(),);
-    }
 
     return Scaffold(
       body: Padding(
@@ -142,32 +138,120 @@ class _FollowersState extends State<Followers>{
             ),
             SizedBox(height: screenHeight * 0.02,),
             Expanded(
-              child: widget.follower?
-                  (_followers == null || _followers!.isEmpty)?
-                  const Center(child: Text("No data"),)
-               :ListView.builder(
-                itemCount: _followers?.length,
-                itemBuilder: (context, index){
-                  final list = _followers?.toList();
-                  return FollowUser(name: "${list?[index].firstName} ${list?[index].lastName}", imageUrl: list![index].imageUrl, role:list[index].role, id: list[index].id,);
-                },
-              )
-                  :(_followings == null || _followings!.isEmpty)
-                  ?const Center(child: Text("No data"),)
-                  :ListView.builder(
-                itemCount: _followings?.length,
-                itemBuilder: (context, index){
-                  final list = _followings?.toList();
-                  return FollowUser(name: "${list?[index].firstName} ${list?[index].lastName}", imageUrl: list![index].imageUrl, role:list[index].role, id:list[index].id);
-                },
-              )
+              child: Skeletonizer(
+                enableSwitchAnimation: true,
+                enabled: (widget.follower && _followers == null) || (!widget.follower && _followings == null),
+                child: widget.follower
+                    ? (_followers == null
+                    ? ListView.builder(
+                  itemCount: 10, // Show 10 skeleton items
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      leading: const CircleAvatar(
+                        backgroundColor: Color.fromRGBO(18, 149, 117, 0.1),
+                      ),
+                      title: Container(
+                        height: 15,
+                        width: 100,
+                        decoration: const BoxDecoration(
+                          color: Color.fromRGBO(18, 149, 117, 0.1),
+                          borderRadius: BorderRadius.all(Radius.circular(30)),
+                        ),
+                      ),
+                      subtitle: Container(
+                        height: 12,
+                        width: 50,
+                        decoration: const BoxDecoration(
+                          color: Color.fromRGBO(18, 149, 117, 0.1),
+                          borderRadius: BorderRadius.all(Radius.circular(30)),
+                        ),
+                      ),
+                    );
+                  },
+                )
+                    : _followers!.isEmpty
+                    ? Center(
+                  child: Text(
+                    "No followers yet",
+                    style: GoogleFonts.poppins(
+                      fontSize: MediaQuery.of(context).size.width * 0.06,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey,
+                    ),
+                  ),
+                )
+                    : ListView.builder(
+                  itemCount: _followers!.length,
+                  itemBuilder: (context, index) {
+                    final list = _followers!.toList();
+                    return FollowUser(
+                      name: "${list[index].firstName} ${list[index].lastName}",
+                      imageUrl: list[index].imageUrl,
+                      role: list[index].role,
+                      id: list[index].id,
+                    );
+                  },
+                ))
+                    : (_followings == null
+                    ? ListView.builder(
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      leading: const CircleAvatar(
+                        backgroundColor: Color.fromRGBO(18, 149, 117, 0.1),
+                      ),
+                      title: Container(
+                        height: 15,
+                        width: 100,
+                        decoration: const BoxDecoration(
+                          color: Color.fromRGBO(18, 149, 117, 0.1),
+                          borderRadius: BorderRadius.all(Radius.circular(30)),
+                        ),
+                      ),
+                      subtitle: Container(
+                        height: 12,
+                        width: 50,
+                        decoration: const BoxDecoration(
+                          color: Color.fromRGBO(18, 149, 117, 0.1),
+                          borderRadius: BorderRadius.all(Radius.circular(30)),
+                        ),
+                      ),
+                    );
+                  },
+                )
+                    : _followings!.isEmpty
+                    ? Center(
+                  child: Text(
+                    "You haven't followed any chef yet",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                      fontSize: MediaQuery.of(context).size.width * 0.06,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey,
+                    ),
+                  ),
+                )
+                    : ListView.builder(
+                  itemCount: _followings!.length,
+                  itemBuilder: (context, index) {
+                    final list = _followings!.toList();
+                    return Column(
+                      children: [
+                        FollowUser(
+                          name: "${list[index].firstName} ${list[index].lastName}",
+                          imageUrl: list[index].imageUrl,
+                          role: list[index].role,
+                          id: list[index].id,
+                        ),
+                      ],
+                    );
+                  },
+                )),
+              ),
             ),
-
-
           ],
         ),
       ),
-
     );
   }
 }

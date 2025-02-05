@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/Providers/RecipeProvider.dart';
 import 'package:recipe_app/Providers/UserProvider.dart';
@@ -45,9 +46,12 @@ class _HomePageState extends State<HomePage> {
     //categories.forEach((element) {print(element.categoryName);});
     category.Category selectedCategory = recipeProvider.selectedCategory;
     final recentRecipeDetails = recipeProvider.recentRecipeDetails;
+
     if(recipeDetails == null || recentRecipeDetails==null){
-      return const Center(
-        child: CircularProgressIndicator(),
+      return Center(
+        child: Lottie.asset(
+          'assets/loader.json'
+        )
       );
     }
 
@@ -188,8 +192,10 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               recipeDetails.isEmpty?
-              const Center(
-                child: CircularProgressIndicator(),
+              Center(
+                child: Lottie.asset(
+                    'assets/loader.json'
+                ),
               )
                   :Container(
                 margin: const EdgeInsets.fromLTRB(0, 12, 0, 0),
@@ -500,39 +506,11 @@ class _HomePageState extends State<HomePage> {
 
                                           ],
                                         ),
-
-                                        /*Transform.scale(
-                                          alignment: Alignment.topLeft,
-                                          scale: 0.45,
-                                          child: RatingBar.builder(
-                                            initialRating: newRecipes[index].rating,
-                                            direction: Axis.horizontal,
-                                            allowHalfRating: true,
-                                            itemCount: 5,
-                                            itemBuilder: (context, _) => const Icon(
-                                              Icons.star,
-                                              color: Colors.amber,
-                                            ), onRatingUpdate: (double value) {  },
-                                          ),
-                                        )*/
                                       ],
                                     ),
                                   ),
                                 ),
                               ),
-                              /*Align(
-                                heightFactor: 2,
-                                alignment: Alignment.topRight,
-                                child: ClipOval(
-
-                                  child: Image.network(
-                                      width: screenWidth * 0.17,
-                                      height: screenWidth * 0.17,
-                                    recipeDetails[index].plateImageUrl,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),*/
                             ],
                           ),
                         ),

@@ -63,6 +63,7 @@ dependencies:
   firebase_core: ^3.10.1
   flutter_local_notifications: ^18.0.1
   flutter_launcher_icons: ^0.14.3
+  skeletonizer: ^1.4.3
   #win32: ^5.3.0
   flutter:
     sdk: flutter
@@ -99,6 +100,8 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/chef.json
+    - assets/noNotification.json
+    - assets/loader.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

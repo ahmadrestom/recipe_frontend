@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/Providers/ChefSpecialityProvider.dart';
 import 'package:recipe_app/Providers/UserProvider.dart';
@@ -71,13 +72,15 @@ class _ProfileState extends State<Profile>{
   @override
   Widget build(BuildContext context){
     if(chef == null){
-      return const Center(child: CircularProgressIndicator(),);
+      return Center(child: Lottie.asset(
+          'assets/loader.json'
+      ),);
     }
     if(chef! && specialities!.isNotEmpty){
       return ChefProfile(id: id!);
     }
     else{
-      return Userprofile(id: id, email: email, name: name,);
+      return UserProfile(id: id, email: email, name: name,);
     }
   }
 }

@@ -3,6 +3,7 @@ import 'package:cherry_toast/cherry_toast.dart';
 import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../models/notification.dart' as n;
 import '../Providers/NotificationProvider.dart';
@@ -19,8 +20,8 @@ class Notifications extends StatefulWidget {
 class _NotificationsState extends State<Notifications> {
   Timer? _timer;
   List<n.Notification>? allNotifications;
-  List<n.Notification>? readNotifications;
-  List<n.Notification>? unreadNotifications;
+  List<n.Notification>? readNotifications = [];
+  List<n.Notification>? unreadNotifications = [];
 
   @override
   void initState() {
@@ -65,7 +66,19 @@ class _NotificationsState extends State<Notifications> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     if(allNotifications == null){
-      return const Center(child: CircularProgressIndicator(),);
+      return Center(
+        child: Lottie.asset(
+            'assets/loader.json'
+        )
+      );
+    }
+
+    if(allNotifications!.isEmpty){
+      return Center(
+        child: Lottie.asset(
+          'assets/noNotification.json',
+        ),
+      );
     }
 
     return DefaultTabController(
