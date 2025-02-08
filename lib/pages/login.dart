@@ -28,6 +28,8 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
   final AuthService authService = AuthService();
 
+  bool _isPasswordVisible = false;
+
 
 
   Future<void> _login() async{
@@ -149,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 8.0),
                     TextField(
-                      obscureText: true,
+                      obscureText: !_isPasswordVisible,
                       obscuringCharacter: '*',
                       controller: _password,
                       decoration: InputDecoration(
@@ -168,7 +170,18 @@ class _LoginPageState extends State<LoginPage> {
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
                             borderSide: const BorderSide(color: Color.fromRGBO(200, 200, 200, 1)),
-                          )
+                          ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                        ),
                       ),
                     ),
                   ],

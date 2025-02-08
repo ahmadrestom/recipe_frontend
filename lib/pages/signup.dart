@@ -27,9 +27,13 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _confirmPasswordController = TextEditingController();
 
   bool isChecked = false;
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return KeyboardDismisser(
       gestures: const [GestureType.onTap, GestureType.onPanUpdateAnyDirection],
       child: Scaffold(
@@ -166,6 +170,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                           const SizedBox(height: 8.0),
                           TextField(
+                            obscureText: !_isPasswordVisible,
                             controller: _passwordController,
                             decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
@@ -183,8 +188,20 @@ class _SignUpPageState extends State<SignUpPage> {
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15),
                                   borderSide: const BorderSide(color: Color.fromRGBO(200, 200, 200, 1)),
-                                )
+                                ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                                  color: Colors.grey,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _isPasswordVisible = !_isPasswordVisible;
+                                  });
+                                },
+                              ),
                             ),
+
                           ),
                         ],
                       ),
@@ -205,6 +222,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                           const SizedBox(height: 8.0),
                           TextField(
+                            obscureText: !_isConfirmPasswordVisible,
                             controller: _confirmPasswordController,
                             decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
@@ -222,12 +240,24 @@ class _SignUpPageState extends State<SignUpPage> {
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15),
                                   borderSide: const BorderSide(color: Color.fromRGBO(200, 200, 200, 1)),
-                                )
+                                ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isConfirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                                  color: Colors.grey,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                                  });
+                                },
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
+                    SizedBox(height: screenHeight*0.01,),
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
                       child: Row(
@@ -263,187 +293,186 @@ class _SignUpPageState extends State<SignUpPage> {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Center(
-                        child: SizedBox(
-                          width: 315,
-                          height: 60,
-                          child: ElevatedButton(
-                            onPressed: () async{
-                              if(_nameController.text.isEmpty){
-                                CherryToast.error(
-                                    toastPosition: Position.bottom,
-                                    title: const Text("Enter your name"),
-                                    animationType:  AnimationType.fromBottom,
-                                    animationDuration:  const Duration(milliseconds:  500),
-                                    autoDismiss:  true
-                                ).show(context);
-                                return;
-                              }
-                              if (!RegExp(r'^[A-Za-z]+ [A-Za-z]+$').hasMatch(_nameController.text)) {
-                                CherryToast.error(
+                    SizedBox(height: screenHeight*0.02),
+                    Center(
+                      child: SizedBox(
+                        width: screenWidth*0.8,
+                        height: screenHeight*0.065,
+                        child: ElevatedButton(
+                          onPressed: () async{
+                            if(_nameController.text.isEmpty){
+                              CherryToast.error(
                                   toastPosition: Position.bottom,
-                                  title: const Text("Invalid name format"),
-                                  description: const Text("Your name must contain exactly two partsA"),
-                                  animationType: AnimationType.fromBottom,
-                                  animationDuration: const Duration(milliseconds: 500),
-                                  autoDismiss: true,
-                                ).show(context);
-                                return;
-                              }
+                                  title: const Text("Enter your name"),
+                                  animationType:  AnimationType.fromBottom,
+                                  animationDuration:  const Duration(milliseconds:  500),
+                                  autoDismiss:  true
+                              ).show(context);
+                              return;
+                            }
+                            if (!RegExp(r'^[A-Za-z]+ [A-Za-z]+$').hasMatch(_nameController.text)) {
+                              CherryToast.error(
+                                toastPosition: Position.bottom,
+                                title: const Text("Invalid name format"),
+                                description: const Text("Your name must contain exactly two partsA"),
+                                animationType: AnimationType.fromBottom,
+                                animationDuration: const Duration(milliseconds: 500),
+                                autoDismiss: true,
+                              ).show(context);
+                              return;
+                            }
 
-                              if(!_emailController.text.contains('@') || _emailController.text.isEmpty){
-                                CherryToast.error(
+                            if(!_emailController.text.contains('@') || _emailController.text.isEmpty){
+                              CherryToast.error(
+                                toastPosition: Position.bottom,
+                                title: const Text("Invalid email format"),
+                                  description: const Text("Please enter a valid email format"),
+                                  animationType:  AnimationType.fromBottom,
+                                  animationDuration:  const Duration(milliseconds:  500),
+                                  autoDismiss:  true
+                              ).show(context);
+                              return;
+                            }
+                            if(_passwordController.text.compareTo(_confirmPasswordController.text) != 0){
+                              CherryToast.error(
                                   toastPosition: Position.bottom,
-                                  title: const Text("Invalid email format"),
-                                    description: const Text("Please enter a valid email format"),
-                                    animationType:  AnimationType.fromBottom,
-                                    animationDuration:  const Duration(milliseconds:  500),
-                                    autoDismiss:  true
-                                ).show(context);
-                                return;
-                              }
-                              if(_passwordController.text.compareTo(_confirmPasswordController.text) != 0){
-                                CherryToast.error(
-                                    toastPosition: Position.bottom,
-                                    title: const Text("Passwords did not match"),
-                                    description: const Text("Confirm your password"),
-                                    animationType:  AnimationType.fromBottom,
-                                    animationDuration:  const Duration(milliseconds:  500),
-                                    autoDismiss:  true
-                                ).show(context);
-                                return;
-                              }
-                              if(_passwordController.text.isEmpty){
-                                CherryToast.error(
-                                    toastPosition: Position.bottom,
-                                    title: const Text("Enter your password"),
-                                    //description: const Text("Confirm your password"),
-                                    animationType:  AnimationType.fromBottom,
-                                    animationDuration:  const Duration(milliseconds:  500),
-                                    autoDismiss:  true
-                                ).show(context);
-                                return;
-                              }
-                              if (_passwordController.text.length < 8 ||
-                                  !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])').hasMatch(_passwordController.text)) {
-                                CherryToast.error(
+                                  title: const Text("Passwords did not match"),
+                                  description: const Text("Confirm your password"),
+                                  animationType:  AnimationType.fromBottom,
+                                  animationDuration:  const Duration(milliseconds:  500),
+                                  autoDismiss:  true
+                              ).show(context);
+                              return;
+                            }
+                            if(_passwordController.text.isEmpty){
+                              CherryToast.error(
                                   toastPosition: Position.bottom,
-                                  title: const Text("Error"),
-                                  description: const Text(
-                                      "Password must be at least 8 characters long, contain a number, a capital letter, a small letter, and a symbol."),
-                                  animationType: AnimationType.fromBottom,
-                                  animationDuration: const Duration(milliseconds: 500),
-                                  autoDismiss: true,
-                                ).show(context);
-                                return;
+                                  title: const Text("Enter your password"),
+                                  //description: const Text("Confirm your password"),
+                                  animationType:  AnimationType.fromBottom,
+                                  animationDuration:  const Duration(milliseconds:  500),
+                                  autoDismiss:  true
+                              ).show(context);
+                              return;
+                            }
+                            if (_passwordController.text.length < 8 ||
+                                !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])').hasMatch(_passwordController.text)) {
+                              CherryToast.error(
+                                toastPosition: Position.bottom,
+                                title: const Text("Error"),
+                                description: const Text(
+                                    "Password must be at least 8 characters long, contain a number, a capital letter, a small letter, and a symbol."),
+                                animationType: AnimationType.fromBottom,
+                                animationDuration: const Duration(milliseconds: 500),
+                                autoDismiss: true,
+                              ).show(context);
+                              return;
+                            }
+                            if(isChecked == false){
+                              CherryToast.error(
+                                  toastPosition: Position.bottom,
+                                  title: const Text("Accept terms and conditions"),
+                                  //description: const Text("Accept terms and conditions"),
+                                  animationType:  AnimationType.fromBottom,
+                                  animationDuration:  const Duration(milliseconds:  500),
+                                  autoDismiss:  true
+                              ).show(context);
+                              return;
+                            }
+                            String fullName = _nameController.text.trim();
+                            List<String> nameParts = fullName.split(' ');
+                            String firstName = '';
+                            String lastName = '';
+                            if(nameParts.isNotEmpty){
+                              firstName = nameParts[0];
+                              if(nameParts.length>1){
+                                lastName = nameParts.sublist(1).join(' ');
                               }
-                              if(isChecked == false){
-                                CherryToast.error(
-                                    toastPosition: Position.bottom,
-                                    title: const Text("Accept terms and conditions"),
-                                    //description: const Text("Accept terms and conditions"),
-                                    animationType:  AnimationType.fromBottom,
-                                    animationDuration:  const Duration(milliseconds:  500),
-                                    autoDismiss:  true
-                                ).show(context);
-                                return;
-                              }
-                              String fullName = _nameController.text.trim();
-                              List<String> nameParts = fullName.split(' ');
-                              String firstName = '';
-                              String lastName = '';
-                              if(nameParts.isNotEmpty){
-                                firstName = nameParts[0];
-                                if(nameParts.length>1){
-                                  lastName = nameParts.sublist(1).join(' ');
-                                }
-                              }
-                              print(firstName);
-                              print(lastName);
-                              final userProvider = Provider.of<UserProvider>(context, listen: false);
-                              final String? token = await FirebaseMessaging.instance.getToken();
-                              if(mounted && token == null){
-                                showToast('Failed to retrieve the device token.', context: context);
-                                return;
-                              }
-                              final userRegistration = UserRegistration(
-                                  firstName: firstName,
-                                  lastName: lastName,
-                                  email: _emailController.text,
-                                  password: _passwordController.text
-                              );
-                              bool isSuccess = await userProvider.signUp(userRegistration, context);
-                              if (isSuccess) {
-                                WidgetsBinding.instance.addPostFrameCallback((_) {
-                                  // Ensure that the context is still valid
-                                  if (context.mounted) {
-                                    CherryToast.success(
-                                      toastPosition: Position.bottom,
-                                      title: const Text("Registration successful"),
-                                      description: const Text('Please log in to continue'),
-                                      animationType: AnimationType.fromBottom,
-                                      animationDuration: const Duration(milliseconds: 500),
-                                      autoDismiss: true,
-                                    ).show(context);
-
-                            Future.delayed(const Duration(seconds: 2), ()
-                                    {
-                                      Navigator.pushReplacementNamed(
-                                          context,
-                                          '/login',
-                                          arguments: AuthService()
-                                      );
-                                    });
-                                  }
-                                });
-                              } else {
-                                // Handle the case where the sign-up was not successful
+                            }
+                            print(firstName);
+                            print(lastName);
+                            final userProvider = Provider.of<UserProvider>(context, listen: false);
+                            final String? token = await FirebaseMessaging.instance.getToken();
+                            if(mounted && token == null){
+                              showToast('Failed to retrieve the device token.', context: context);
+                              return;
+                            }
+                            final userRegistration = UserRegistration(
+                                firstName: firstName,
+                                lastName: lastName,
+                                email: _emailController.text,
+                                password: _passwordController.text
+                            );
+                            bool isSuccess = await userProvider.signUp(userRegistration, context);
+                            if (isSuccess) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                // Ensure that the context is still valid
                                 if (context.mounted) {
-                                  showToast(
-                                    'An error occurred during registration',
-                                    context: context,
-                                    animation: StyledToastAnimation.fade,
-                                    duration: const Duration(seconds: 3),
-                                  );
+                                  CherryToast.success(
+                                    toastPosition: Position.bottom,
+                                    title: const Text("Registration successful"),
+                                    description: const Text('Please log in to continue'),
+                                    animationType: AnimationType.fromBottom,
+                                    animationDuration: const Duration(milliseconds: 500),
+                                    autoDismiss: true,
+                                  ).show(context);
+
+                          Future.delayed(const Duration(seconds: 2), ()
+                                  {
+                                    Navigator.pushReplacementNamed(
+                                        context,
+                                        '/login',
+                                        arguments: AuthService()
+                                    );
+                                  });
                                 }
+                              });
+                            } else {
+                              // Handle the case where the sign-up was not successful
+                              if (context.mounted) {
+                                showToast(
+                                  'An error occurred during registration',
+                                  context: context,
+                                  animation: StyledToastAnimation.fade,
+                                  duration: const Duration(seconds: 3),
+                                );
                               }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color.fromRGBO(18, 149, 117, 1),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromRGBO(18, 149, 117, 1),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Sign Up',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                    color: Color(0xFFFFFFFF)
+                                ),
                               ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  'Sign Up',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
-                                      color: Color(0xFFFFFFFF)
-                                  ),
-                                ),
-                                const SizedBox(width: 10,),
-                                Image.asset(
-                                  'assets/icons/arrow-right.png',
-                                  width: 20,
-                                  height: 20,
-                                ),
-                              ],
-                            ),
+                              const SizedBox(width: 10,),
+                              Image.asset(
+                                'assets/icons/arrow-right.png',
+                                width: 20,
+                                height: 20,
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 90, right: 90, top: 5),
-                      child: Row(
+                    SizedBox(height: screenHeight*0.04,),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 0, horizontal: screenWidth*0.2),
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
@@ -470,6 +499,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         ],
                       ),
                     ),
+                    SizedBox(height: screenHeight*0.03,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -479,7 +509,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             ///////////////////////////////////////
                           },
                         ),
-                        const SizedBox(width: 30,),
+                        SizedBox(width: screenWidth*0.1,),
                         SquareTile(
                           imagePath: 'assets/icons/facebook.png',
                           onTap: (){
@@ -488,6 +518,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ],
                     ),
+                    SizedBox(height: screenHeight*0.02,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
