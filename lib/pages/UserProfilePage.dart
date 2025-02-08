@@ -1,5 +1,8 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
+import 'dart:io';
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/pages/savedRecipes.dart';
 import 'package:lottie/lottie.dart';
@@ -7,7 +10,9 @@ import 'package:recipe_app/pages/upgradeToChef.dart';
 import '../Providers/FollowingProvider.dart';
 import '../Providers/UserProvider.dart';
 import '../models/FollowerStats.dart';
+import 'Followers.dart';
 import 'landing.dart';
+import 'package:path/path.dart' as path;
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key, this.id, this.email, this.name});
@@ -24,6 +29,8 @@ class _UserprofileState extends State<UserProfile> {
   int favoritesNumber = 0;
   bool isLoading = true;
   FollowerStats? followerStats;
+  File? _image;
+  String? _profileImageUrl;
 
   @override
   void initState() {
@@ -174,8 +181,6 @@ class _UserprofileState extends State<UserProfile> {
                                                       (route) => false,
                                                 );
                                               }
-
-
                                             },
                                             child: const Text(
                                               "Log Out",
@@ -207,9 +212,28 @@ class _UserprofileState extends State<UserProfile> {
                   children: [
                     Column(
                       children: [
-                        CircleAvatar(
-                          radius: screenWidth *0.13,
-                          backgroundImage: const AssetImage("assets/icons/defaultProfile.png"),
+                        Consumer<UserProvider>(
+                          builder: (context, userProvider, child){
+                            return Row(
+                              children: [
+                                GestureDetector(
+                                  child: CircleAvatar(
+                                    key: UniqueKey(),
+                                    radius: screenWidth *0.13,
+                                    backgroundImage: userProvider.userDetails?['image_url'] == null
+                                        ? const AssetImage('assets/images/img.png') as ImageProvider
+                                        : NetworkImage(userProvider.userDetails?['image_url']),
+                                  ),
+                                  onTap: (){
+                                    _showChangeProfileDialog();
+                                  },
+                                  onLongPress: (){
+                                    _showFullSizeImageDialog(context);
+                                  },
+                                ),
+                              ],
+                            );
+                          },
                         ),
                         SizedBox(height: screenHeight*0.02,),
                         widget.name != null?
@@ -227,11 +251,11 @@ class _UserprofileState extends State<UserProfile> {
                     ),
                     Container(width: screenWidth*0.07,),
                     GestureDetector(
-                      onTap: (){
+                      onTap: favoritesNumber!=0?(){
                         Navigator.push(context,
                             MaterialPageRoute(builder:
                                 (context)=> const SavedRecipes()));
-                      },
+                      }:null,
                       child: Column(
                         children: [
                           Text(
@@ -257,27 +281,34 @@ class _UserprofileState extends State<UserProfile> {
                     ),
                     SizedBox(width: screenWidth*0.02,),
 
-                    Column(
-                      children: [
-                        Text(
-                          "Following",
-                          style: TextStyle(
-                              color: const Color.fromRGBO(169, 169, 169, 1),
-                              fontSize: screenWidth * 0.033,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w400
+                    GestureDetector(
+                      child: Column(
+                        children: [
+                          Text(
+                            "Following",
+                            style: TextStyle(
+                                color: const Color.fromRGBO(169, 169, 169, 1),
+                                fontSize: screenWidth * 0.033,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w400
+                            ),
                           ),
-                        ),
-                        Text(
-                          followerStats?.followingCount.toString() ?? "0",
-                          style: TextStyle(
-                              color: const Color.fromRGBO(18, 18, 18, 1),
-                              fontWeight: FontWeight.w600,
-                              fontSize: screenWidth*0.045,
-                              fontFamily: 'Poppins'
+                          Text(
+                            followerStats?.followingCount.toString() ?? "0",
+                            style: TextStyle(
+                                color: const Color.fromRGBO(18, 18, 18, 1),
+                                fontWeight: FontWeight.w600,
+                                fontSize: screenWidth*0.045,
+                                fontFamily: 'Poppins'
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder:
+                                (context)=>Followers(chefId: widget.id!, name: widget.name!, follower: false,)));
+                      },
                     ),
                   ],
                 ),
@@ -355,6 +386,147 @@ class _UserprofileState extends State<UserProfile> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showChangeProfileDialog() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: const Icon(Icons.camera),
+              title: const Text("Change Profile Picture"),
+              onTap: () {
+                _pickImage();
+                Navigator.pop(context);
+              },
+            ),
+            Provider.of<UserProvider>(context,listen: false).imageUrl!.isNotEmpty?ListTile(
+              leading: const Icon(Icons.delete),
+              title: const Text("Remove Profile Picture"),
+              onTap: () async{
+                final userProvider = Provider.of<UserProvider>(context, listen: false);
+                userProvider.updateProfileImage(null);
+                await userProvider.deleteImage(widget.id!);
+                setState(() {
+                  _profileImageUrl = null;
+                });
+                Navigator.pop(context);
+              },
+            ):Container(height: 0.00001,)
+          ],
+        );
+      },
+    );
+  }
+
+  void _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      _cropImage(pickedFile.path);
+    }
+  }
+  void _cropImage(String imagePath) async {
+    final croppedFile = await ImageCropper().cropImage(
+      sourcePath: imagePath,
+      uiSettings: [
+        AndroidUiSettings(
+          cropStyle: CropStyle.circle,
+          statusBarColor: const Color.fromRGBO(18, 149, 117, 1),
+          hideBottomControls: true,
+          showCropGrid: false,
+          toolbarTitle: 'Edit Profile Picture',
+          toolbarColor: const Color.fromRGBO(18, 149, 117, 1),
+          toolbarWidgetColor: Colors.white,
+          initAspectRatio: CropAspectRatioPreset.square,
+          lockAspectRatio: false,
+
+        ),
+        IOSUiSettings(
+          minimumAspectRatio: 1.0,
+          aspectRatioLockEnabled: true,
+          rotateClockwiseButtonHidden: true,
+          aspectRatioPresets: [
+            CropAspectRatioPreset.original,
+            CropAspectRatioPreset.square,
+          ],
+        ),
+      ],
+
+    );
+    if (croppedFile != null) {
+      setState(() {
+        _image = File(croppedFile.path);
+        _profileImageUrl = _image?.path;
+      });
+      if(mounted){
+        final userProvider = Provider.of<UserProvider>(context,listen: false);
+        final url = await userProvider.uploadImage(_image!, 'ProfilePicture', path.basename(_image!.path),);
+        if(url !=null){
+          userProvider.updateProfileImage(url);
+          await userProvider.updateImage(widget.id!, url);
+          print("Profile picture updated successfully");
+        }else{
+          print("Error: Image not uploaded");
+        }
+      }
+
+
+    } else {
+      print("Image cropping cancelled");
+    }
+  }
+
+  void _showFullSizeImageDialog(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent, // Transparent background for the dialog
+          child: Container(
+            width: screenWidth*0.4,
+            height: screenHeight*0.4,
+            decoration: BoxDecoration(
+              color: Colors.transparent, // Keep the container background transparent
+              borderRadius: BorderRadius.circular(20), // Rounded corners for the dialog
+            ),
+            child: Stack(
+              children: [
+                // Apply blur to the background
+                Positioned.fill(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                    child: Container(
+                        color: Colors.transparent
+                    ),
+                  ),
+                ),
+                Center(
+                  child: ClipOval(
+                    child: userProvider.chefDetails?['image_url'] == null
+                        ? const Image(
+                      image: AssetImage('assets/images/img.png'),
+                      fit: BoxFit.cover,
+                    )
+                        : Image.network(
+                      userProvider.chefDetails?['image_url'] ?? '',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

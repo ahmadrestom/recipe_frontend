@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -201,25 +203,30 @@ class _ViewChefDataState extends State<ViewChefData> {
                             ),
                           ),
                           // Avatar image
-                          Container(
-                            width: screenWidth * 0.45,
-                            height: screenWidth * 0.45,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: chefDetails?['image_url'] == null
-                                    ? const AssetImage("assets/icons/defaultProfile.png") as ImageProvider
-                                    : NetworkImage(chefDetails!['image_url']) as ImageProvider,
-                                fit: BoxFit.cover,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.3),
-                                  blurRadius: 15,
-                                  offset: const Offset(0, 5),
+                          GestureDetector(
+                            child: Container(
+                              width: screenWidth * 0.45,
+                              height: screenWidth * 0.45,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: chefDetails?['image_url'] == null
+                                      ? const AssetImage("assets/icons/defaultProfile.png") as ImageProvider
+                                      : NetworkImage(chefDetails!['image_url']) as ImageProvider,
+                                  fit: BoxFit.cover,
                                 ),
-                              ],
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.3),
+                                    blurRadius: 15,
+                                    offset: const Offset(0, 5),
+                                  ),
+                                ],
+                              ),
                             ),
+                            onTap: (){
+                              _showFullSizeImageDialog(context);
+                            },
                           ),
                         ],
                       ),
@@ -234,13 +241,19 @@ class _ViewChefDataState extends State<ViewChefData> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(width: screenWidth*0.01,),
-                    Text(
-                        "${chefDetails?['firstName']} ${chefDetails?['lastName']}",
-                      style: GoogleFonts.anton(
-                        textStyle: TextStyle(color: const Color.fromRGBO(18, 149, 117, 1), fontSize: screenWidth*0.1),
-                        fontWeight: FontWeight.w500,
-                        fontStyle: FontStyle.normal,
-                        letterSpacing: screenWidth*0.011
+                    Container(
+                      width: screenWidth*0.88,
+                      child: Text(
+                          "${chefDetails?['firstName']} ${chefDetails?['lastName']}",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.anton(
+                          textStyle: TextStyle(color: const Color.fromRGBO(18, 149, 117, 1), fontSize: screenWidth*0.1),
+                          fontWeight: FontWeight.w500,
+                          fontStyle: FontStyle.normal,
+                          letterSpacing: screenWidth*0.009,
+                          fontSize: screenWidth*0.09
+                        ),
                       ),
                     ),
                     Container(width: screenWidth*0.01,),
@@ -382,6 +395,53 @@ class _ViewChefDataState extends State<ViewChefData> {
         ),
     ]
       ),
+    );
+  }
+  void _showFullSizeImageDialog(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent, // Transparent background for the dialog
+          child: Container(
+            width: screenWidth*0.4,
+            height: screenHeight*0.4,
+            decoration: BoxDecoration(
+              color: Colors.transparent, // Keep the container background transparent
+              borderRadius: BorderRadius.circular(20), // Rounded corners for the dialog
+            ),
+            child: Stack(
+              children: [
+                // Apply blur to the background
+                Positioned.fill(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                    child: Container(
+                        color: Colors.transparent
+                    ),
+                  ),
+                ),
+                Center(
+                  child: ClipOval(
+                    child: userProvider.chefDetails?['image_url'] == null
+                        ? const Image(
+                      image: AssetImage('assets/images/img.png'),
+                      fit: BoxFit.cover,
+                    )
+                        : Image.network(
+                      userProvider.chefDetails?['image_url'] ?? '',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

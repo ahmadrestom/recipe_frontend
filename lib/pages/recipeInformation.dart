@@ -1,3 +1,5 @@
+import 'package:cherry_toast/cherry_toast.dart';
+import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,7 +18,6 @@ class RecipeInformation extends StatefulWidget {
   const RecipeInformation({super.key, required this.recipe});
   final Recipe recipe;
 
-
   @override
   State<RecipeInformation> createState() => _RecipeInformationState();
 }
@@ -25,13 +26,12 @@ class _RecipeInformationState extends State<RecipeInformation> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
 
   String selectedOption = "Ingredients";
-  late TextEditingController _controller;
+  //late TextEditingController _controller;
   bool clicked = false;
   String? userId;
 
@@ -142,7 +142,7 @@ class _RecipeInformationState extends State<RecipeInformation> {
                                             borderRadius: BorderRadius.circular(10),
                                           ),
                                           readOnly: true,
-                                          enabled: false,
+                                          enabled: true,
                                           controller: TextEditingController(text: "https://recipeApp/${widget.recipe.recipeId}"),
                                           suffix: ElevatedButton(
                                             style: ButtonStyle(
@@ -154,10 +154,17 @@ class _RecipeInformationState extends State<RecipeInformation> {
                                               backgroundColor: WidgetStateProperty.all(
                                                 const Color.fromRGBO(18, 149, 117, 1),
                                               ),
-
                                             ),
                                             onPressed: (){
-                                              /////////////////////////////////
+                                              print("XXXXXXXXXXXXXXXXx");
+                                              CherryToast.success(
+                                                title:  const Text("Link copied to clipboard", style: TextStyle(color: Colors.black)),
+                                                animationType:  AnimationType.fromBottom,
+                                                animationDuration:  const Duration(milliseconds:  500),
+                                                autoDismiss:  true,
+                                                toastPosition: Position.bottom,
+                                              ).show(context);
+                                              Navigator.pop(context);
                                             },
                                             child: const Text(
                                               "Copy Link",
@@ -256,7 +263,14 @@ class _RecipeInformationState extends State<RecipeInformation> {
                                           )
                                         ),
                                           onPressed: (){
-                                            ///////////////////////////////////////
+                                            CherryToast.success(
+                                                title:  const Text("Thanks for rating!", style: TextStyle(color: Colors.black)),
+                                                animationType:  AnimationType.fromBottom,
+                                                animationDuration:  const Duration(milliseconds:  500),
+                                                autoDismiss:  true,
+                                              toastPosition: Position.bottom,
+                                            ).show(context);
+                                            Navigator.pop(context);
                                           },
                                           child: const Text(
                                             "Rate",
@@ -324,20 +338,20 @@ class _RecipeInformationState extends State<RecipeInformation> {
                           showModalBottomSheet(
                             context: context,
                             isScrollControlled: true,
-                            shape: RoundedRectangleBorder(
+                            shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                             ),
                             backgroundColor: Colors.white,
                             builder: (BuildContext context) {
                               return Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Container(
                                       width: 50,
                                       height: 5,
-                                      margin: EdgeInsets.only(bottom: 10),
+                                      margin: const EdgeInsets.only(bottom: 10),
                                       decoration: BoxDecoration(
                                         color: Colors.grey[400],
                                         borderRadius: BorderRadius.circular(10),
@@ -348,10 +362,10 @@ class _RecipeInformationState extends State<RecipeInformation> {
                                       style: GoogleFonts.akshar(
                                         fontWeight: FontWeight.w900,
                                         fontSize: 22,
-                                        color: Color.fromRGBO(18, 149, 117, 1),
+                                        color: const Color.fromRGBO(18, 149, 117, 1),
                                       ),
                                     ),
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     ConstrainedBox(
                                       constraints: BoxConstraints(
                                         maxHeight: MediaQuery.of(context).size.height * 0.6,
@@ -364,49 +378,49 @@ class _RecipeInformationState extends State<RecipeInformation> {
                                           elevation: 3,
                                           color: Colors.grey[100],
                                           child: Padding(
-                                            padding: EdgeInsets.all(12),
+                                            padding: const EdgeInsets.all(12),
                                             child: Column(
                                               children: [
-                                                Divider(),
+                                                const Divider(),
                                                 _buildNutritionItem("Calories", widget.recipe.nutritionalInformation!.calories.toString()),
-                                                Divider(),
+                                                const Divider(),
                                                 _buildNutritionItem("Total Fat", widget.recipe.nutritionalInformation!.totalFat.toString()),
-                                                Divider(),
+                                                const Divider(),
                                                 _buildNutritionItem("Cholesterol", widget.recipe.nutritionalInformation!.cholesterol.toString()),
-                                                Divider(),
+                                                const Divider(),
                                                 _buildNutritionItem("Carbohydrates", widget.recipe.nutritionalInformation!.carbohydrates.toString()),
-                                                Divider(),
+                                                const Divider(),
                                                 _buildNutritionItem("Protein", widget.recipe.nutritionalInformation!.protein.toString()),
-                                                Divider(),
+                                                const Divider(),
                                                 _buildNutritionItem("Sugar", widget.recipe.nutritionalInformation!.sugar.toString()),
-                                                Divider(),
+                                                const Divider(),
                                                 _buildNutritionItem("Sodium", widget.recipe.nutritionalInformation!.sodium.toString()),
-                                                Divider(),
+                                                const Divider(),
                                                 _buildNutritionItem("Fiber", widget.recipe.nutritionalInformation!.fiber.toString()),
-                                                Divider(),
+                                                const Divider(),
                                                 _buildNutritionItem("Zinc", widget.recipe.nutritionalInformation!.zinc.toString()),
-                                                Divider(),
+                                                const Divider(),
                                                 _buildNutritionItem("Magnesium", widget.recipe.nutritionalInformation!.magnesium.toString()),
-                                                Divider(),
+                                                const Divider(),
                                                 _buildNutritionItem("Potassium", widget.recipe.nutritionalInformation!.potassium.toString()),
-                                                Divider(),
+                                                const Divider(),
                                               ],
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: 15),
+                                    const SizedBox(height: 15),
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: Color.fromRGBO(18, 149, 117, 1),
+                                        backgroundColor: const Color.fromRGBO(18, 149, 117, 1),
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(10),
                                         ),
                                       ),
                                       child: Padding(
-                                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                                         child: Text(
                                           "Close",
                                           style: GoogleFonts.poppins(
@@ -417,7 +431,7 @@ class _RecipeInformationState extends State<RecipeInformation> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                   ],
                                 ),
                               );
@@ -485,9 +499,19 @@ class _RecipeInformationState extends State<RecipeInformation> {
                           border: Border.all(color: Colors.transparent),
                         ),
                   
-                        child: Image.asset(
+                        child:widget.recipe.chef.imageUrl ==null?
+                        Image.asset(
                           "assets/icons/defaultProfile.png",
-                        ),
+                        )
+                        :Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: NetworkImage(widget.recipe.chef.imageUrl!),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        )
                         /*child: widget.recipe.chef.imageUrl == null?
                         Image.asset(
                           "assets/icons/defaultProfile.png",
@@ -535,9 +559,11 @@ class _RecipeInformationState extends State<RecipeInformation> {
         future: followProvider.isFollowing(userId!, widget.recipe.chef.chefId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Lottie.asset(
-                'assets/loader.json'
-            ); // Show loading indicator while fetching data
+            return  Container();
+            // return Lottie.asset(
+            //     'assets/loader.json',
+            //   width: screenWidth*0.1,
+            // );
           }
 
           if (userId! == widget.recipe.chef.chefId) {
@@ -772,7 +798,7 @@ class _RecipeInformationState extends State<RecipeInformation> {
 
 Widget _buildNutritionItem(String title, String value) {
   return Padding(
-    padding: EdgeInsets.symmetric(vertical: 5),
+    padding: const EdgeInsets.symmetric(vertical: 5),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -781,7 +807,7 @@ Widget _buildNutritionItem(String title, String value) {
           style: GoogleFonts.akshar(
             fontWeight: FontWeight.w600,
             fontSize: 16,
-            color: Color.fromRGBO(18, 149, 117, 1),
+            color: const Color.fromRGBO(18, 149, 117, 1),
           ),
         ),
         Text(

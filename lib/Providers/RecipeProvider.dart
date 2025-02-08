@@ -25,19 +25,17 @@ class RecipeProvider extends ChangeNotifier {
   List<RecipeForProfile>? get recipesForProfile => _recipesForProfile;
 
   RecipeProvider() {
-    _fetchRecipeDetails();
-    _fetchRecentRecipesDetails();
     _getCategories();
   }
 
-  Future<void> _fetchRecipeDetails() async {
+  Future<void> fetchRecipeDetails() async {
     try {
       final fetchedRecipes = await RecipeService().fetchRecipes();
       //remove delay
       await Future.delayed(const Duration(seconds: 2));
       //remove delay
       _recipeDetails = fetchedRecipes;
-      _recipeDetails?.forEach((element) {print("RecipeCategoryName: ${element.category.categoryName}");});
+      _filterRecipes = _recipeDetails;
     } catch (e) {
       print("Error fetching recipes to home: $e");
     } finally {
@@ -45,7 +43,17 @@ class RecipeProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> _fetchRecentRecipesDetails()async{
+  Future<void> uploadRecipe(RecipePost recipe) async{
+    try{
+      await _recipeService.uploadRecipe(recipe);
+      //await fetchRecipeDetails();
+      //await fetchRecentRecipesDetails();
+    }catch(e){
+      throw Exception("Error uploading recipe in the provider");
+    }
+  }
+
+  Future<void> fetchRecentRecipesDetails()async{
     try {
       _newRecipeDetails = [];
       final fetchedRecipes = await RecipeService().fetchRecentRecipes();

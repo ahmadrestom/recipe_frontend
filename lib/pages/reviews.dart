@@ -20,7 +20,6 @@ class Reviews extends StatefulWidget{
 
 
 class _ReviewsState extends State<Reviews> {
-
   final TextEditingController _commentController = TextEditingController();
 
   @override
@@ -31,6 +30,10 @@ class _ReviewsState extends State<Reviews> {
 
   @override
   Widget build(BuildContext context) {
+
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     final reviewProvider = Provider.of<ReviewProvider>(context, listen: true);
     Set<Review>? reviews = reviewProvider.reviews;
     return KeyboardDismisser(
@@ -131,9 +134,13 @@ class _ReviewsState extends State<Reviews> {
                       ),
                       onPressed: () async{
                         if (_commentController.text.trim().isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Review cannot be empty!')),
-                          );
+                          CherryToast.warning(
+                            description:  const Text("Review cannot be empty", style: TextStyle(color: Colors.black)),
+                            animationType:  AnimationType.fromRight,
+                            animationDuration:  const Duration(milliseconds:  500),
+                            autoDismiss:  true,
+                            toastPosition: Position.bottom,
+                          ).show(context);
                           return;
                         }
                         final res = await reviewProvider.addReview(_commentController.text, widget.recipeId);
@@ -180,8 +187,27 @@ class _ReviewsState extends State<Reviews> {
                                 children: [
                                   Row(
                                     children: [
-                                      const CircleAvatar(
-                                        child: Icon(Icons.account_circle_rounded),
+                                      review!.user.imageUrl.isEmpty? Container(
+                                        width: screenWidth * 0.07,
+                                        height: screenHeight * 0.07,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: const Icon(
+                                          Icons.account_circle,
+                                          color: Color.fromRGBO(18, 149, 117, 1),
+                                        ),
+                                      )
+                                      :Container(
+                                        width: screenWidth * 0.07,
+                                        height: screenHeight * 0.07,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                            image: NetworkImage(review!.user.imageUrl),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
                                       ),
                                       const SizedBox(width: 5.0,),
                                       Column(
@@ -205,13 +231,11 @@ class _ReviewsState extends State<Reviews> {
                                               color: Color.fromRGBO(169, 169, 169, 1),
                                             ),
                                           ),
-
                                         ],
                                       ),
-
                                     ],
                                   ),
-                                  const SizedBox(height: 10.0,),
+                                  //const SizedBox(height: 10.0,),
                                   Text(
                                     review.text,
                                     style: const TextStyle(
@@ -221,7 +245,7 @@ class _ReviewsState extends State<Reviews> {
                                       color: Color.fromRGBO(128, 128, 128, 1),
                                     ),
                                   ),
-                                  const SizedBox(height: 3.0,),
+                                  //const SizedBox(height: 3.0,),
                                   /*Row(
                               children: [
                                 Container(
@@ -335,7 +359,7 @@ class _ReviewsState extends State<Reviews> {
       CherryToast.success(
           description:  const Text("Review added successfully", style: TextStyle(color: Colors.black)),
           animationType:  AnimationType.fromRight,
-          animationDuration:  const Duration(milliseconds:  1000),
+          animationDuration:  const Duration(milliseconds:  500),
           autoDismiss:  true,
           toastPosition: Position.bottom,
       ).show(context);

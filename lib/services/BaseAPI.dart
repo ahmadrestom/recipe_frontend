@@ -29,6 +29,7 @@ class BaseAPI {
   var isFollowingAPI = "$secureAPI/follow/isFollowing";
   var getAllFollowingsAPI = "$secureAPI/user/getAllFollowing";
   var updateProfileImageAPI = "$secureAPI/user/updateImage";
+  var deleteImageAPI = "$secureAPI/user/deleteImage";
   var saveFirebaseTokenAPI = "$secureAPI/deviceToken/save";
   var deleteFirebaseTokenAPI = "$secureAPI/deviceToken/deleteToken";
   //var createNotificationAPI = "$secureAPI/notification/createNotification";

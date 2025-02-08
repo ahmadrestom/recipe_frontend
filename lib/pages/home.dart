@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:recipe_app/pages/SearchRecipes.dart';
 import 'package:recipe_app/pages/recipeInformation.dart';
 import 'package:rate_in_stars/rate_in_stars.dart';
-import '../models/category.dart' as category;
+import '../models/Recipe.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,6 +22,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   int? currentSelection = 0;
+  List<Recipe>? recentRecipeDetails;
+  bool _isFetched = false;
 
   /*late List<Recipe> recipes = [];
   late List<Recipe> newRecipes = [];
@@ -29,11 +31,25 @@ class _HomePageState extends State<HomePage> {
   final List<String> rating = ["1","2","3","4","5"];*/
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     userProvider.fetchFavoriteRecipes();
+    Provider.of<RecipeProvider>(context, listen: false);
+  }
 
+  @override
+  void didChangeDependencies() async{
+    super.didChangeDependencies();
+    if (!_isFetched){
+      final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
+      await recipeProvider.fetchRecipeDetails();
+      await recipeProvider.fetchRecentRecipesDetails();
+      setState(() {
+        recentRecipeDetails = recipeProvider.recentRecipeDetails;
+        _isFetched = true;
+      });
+    }
   }
 
   @override
@@ -44,8 +60,8 @@ class _HomePageState extends State<HomePage> {
     final recipeDetails = recipeProvider.filteredRecipes?? recipeProvider.recipeDetails;
     final categories = recipeProvider.categoryList??[];
     //categories.forEach((element) {print(element.categoryName);});
-    category.Category selectedCategory = recipeProvider.selectedCategory;
-    final recentRecipeDetails = recipeProvider.recentRecipeDetails;
+    //category.Category selectedCategory = recipeProvider.selectedCategory;
+    //final recentRecipeDetails = recipeProvider.recentRecipeDetails;
 
     if(recipeDetails == null || recentRecipeDetails==null){
       return Center(
@@ -122,7 +138,6 @@ class _HomePageState extends State<HomePage> {
                       height: screenHeight * 0.05,
                       child: CupertinoTextField(
                         onTap: (){
-                          print(userDetails?['role']);
                           Navigator.push(context,
                               MaterialPageRoute(builder:
                                   (context)=>SearchRecipes(recipes: recipeDetails)));
@@ -132,13 +147,11 @@ class _HomePageState extends State<HomePage> {
                         prefix: Padding(
                           padding: EdgeInsets.all(screenWidth * 0.02),
                           child: Image.asset('assets/icons/search.png'),
-
                         ),
                         decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
                             borderRadius: BorderRadius.circular(10)
                         ),
-
                       ),
                     ),
                     /*GestureDetector(
@@ -156,15 +169,12 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-
               const SizedBox(height: 25,),
-
               Row(
                 children: [
                   Expanded(
                     child: SizedBox(
                       height: 50,
-
                       child:  ListView.builder(
                           itemCount: categories.length,
                           scrollDirection: Axis.horizontal,
@@ -175,7 +185,6 @@ class _HomePageState extends State<HomePage> {
                                 left: isFirst ? screenWidth * 0.05 : screenWidth * 0.02,
                                 right: isLast ? screenWidth * 0.05 : screenWidth * 0.02);
                             return Container(
-
                               margin: itemMargin,
                               child: CategoryItem(
                                 category: categories[index],
@@ -274,7 +283,6 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-
                               Positioned(
                                 top: screenHeight * 0.05,
                                 right: screenWidth * 0.03,
@@ -284,7 +292,6 @@ class _HomePageState extends State<HomePage> {
                                   decoration: BoxDecoration(
                                     color: const Color.fromRGBO(255, 225, 179, 1),
                                     borderRadius: BorderRadius.circular(20),
-
                                   ),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -385,16 +392,14 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              ///////////////////////////////////////////////////////////
               SizedBox(
                 height: screenHeight * 0.25,
-
                 child: ListView.builder(
-                    itemCount: recentRecipeDetails.length,
+                    itemCount: recentRecipeDetails?.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       bool isFirst = index == 0;
-                      bool isLast = index == recentRecipeDetails.length - 1;
+                      bool isLast = index == recentRecipeDetails!.length - 1;
                       EdgeInsets itemMargin = EdgeInsets.only(
                           left: isFirst ? screenWidth * 0.08 : 10,
                           right: isLast ? screenWidth * 0.08 : 10);
@@ -403,7 +408,7 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => RecipeInformation(recipe: recentRecipeDetails[index]),
+                              builder: (context) => RecipeInformation(recipe: recentRecipeDetails![index]),
                             ),
                           );
                         },
@@ -417,7 +422,6 @@ class _HomePageState extends State<HomePage> {
                                 child: Container(
                                   width: screenWidth * 0.6,
                                   height: screenHeight * 0.15,
-
                                   decoration: BoxDecoration(
                                       color: const Color.fromRGBO(255, 255, 255, 1),
                                       borderRadius: BorderRadius.circular(12),
@@ -440,10 +444,10 @@ class _HomePageState extends State<HomePage> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         SizedBox(
-                                          width: screenWidth * 0.4,
+                                          width: screenWidth * 0.7,
                                           child: Text(
-                                            recentRecipeDetails[index].recipeName,
-                                            maxLines: 2,
+                                            recentRecipeDetails![index].recipeName,
+                                            maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                               fontFamily: 'Poppins',
@@ -453,7 +457,6 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                           ),
                                         ),
-
                                         Container(
                                           margin: EdgeInsets.only(top: screenHeight* 0.01),
                                           child: Row(
@@ -461,7 +464,7 @@ class _HomePageState extends State<HomePage> {
                                             children: [
                                               RatingStars(
                                                 editable: false,
-                                                rating: recentRecipeDetails[index].rating,
+                                                rating: recentRecipeDetails![index].rating,
                                                 color: Colors.amber,
                                                 iconSize: screenWidth * 0.04,
                                               ),
@@ -474,7 +477,7 @@ class _HomePageState extends State<HomePage> {
                                           children: [
                                             Expanded(
                                               child: Text(
-                                                "By Chef ${recentRecipeDetails[index].chef.firstName} ${recentRecipeDetails[index].chef.lastName}",
+                                                "By Chef ${recentRecipeDetails?[index].chef.firstName} ${recentRecipeDetails?[index].chef.lastName}",
                                                 style: TextStyle(
                                                   fontSize: screenWidth * 0.03,
                                                   fontFamily: 'Poppins',
@@ -488,11 +491,10 @@ class _HomePageState extends State<HomePage> {
                                                    Icon(
                                                     Icons.timer_outlined, color: const Color.fromRGBO(145, 145, 145, 1),
                                                     size: screenWidth * 0.045,
-
                                                   ),
                                                   SizedBox(width: screenWidth * 0.01),
                                                   Text(
-                                                    "${(recentRecipeDetails[index].preparationTime.inMinutes.toString())} Mins",
+                                                    "${(recentRecipeDetails?[index].preparationTime.inMinutes.toString())} Mins",
                                                     style: TextStyle(
                                                       fontFamily: 'Poppins',
                                                       fontWeight: FontWeight.w400,
@@ -503,7 +505,6 @@ class _HomePageState extends State<HomePage> {
                                                 ],
                                               ),
                                             ),
-
                                           ],
                                         ),
                                       ],

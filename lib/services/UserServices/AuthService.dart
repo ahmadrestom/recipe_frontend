@@ -159,7 +159,7 @@ class AuthService extends BaseAPI{
     }
   }
 
-  Future<bool> updateImage(String userId, String url) async{
+  Future<bool> updateImage(String userId, String? url) async{
     try{
       final token = await secureStorage.read(key: 'authToken');
       if(token == null){
@@ -177,6 +177,30 @@ class AuthService extends BaseAPI{
         return true;
       }else{
         print(response.body);
+        return false;
+      }
+    }catch(e){
+      print("Error: $e");
+      return false;
+    }
+  }
+
+  Future<bool> deleteImage(String userId) async{
+    try{
+      final token = await secureStorage.read(key: 'authToken');
+      if(token == null){
+        return false;
+      }
+      final response = await http.delete(
+          Uri.parse("${super.deleteImageAPI}/$userId"),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $token',
+          },
+      );
+      if(response.statusCode == 200){
+        return true;
+      }else{
         return false;
       }
     }catch(e){

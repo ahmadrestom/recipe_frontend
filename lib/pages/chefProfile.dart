@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -50,7 +51,7 @@ class _ChefProfileState extends State<ChefProfile> {
           followerStats = followProvider.followerStats;
         }
         chefDetails = userProvider.chefDetails;
-        chefDetails?['image_url'];
+        _profileImageUrl = chefDetails?['image_url'];
       });
       await recipeProvider.fetchRecipesForProfile(widget.id);
       setState(() {
@@ -255,12 +256,15 @@ class _ChefProfileState extends State<ChefProfile> {
                           child: CircleAvatar(
                             key: UniqueKey(),
                             radius: screenWidth *0.13,
-                            backgroundImage: userProvider.imageUrl!.isEmpty
+                            backgroundImage: userProvider.chefDetails?['image_url'] == null
                                 ? const AssetImage('assets/images/img.png') as ImageProvider
-                                : NetworkImage(userProvider.imageUrl!),
+                                : NetworkImage(chefDetails?['image_url']),
                           ),
                           onTap: (){
                             _showChangeProfileDialog();
+                          },
+                          onLongPress: (){
+                            _showFullSizeImageDialog(context);
                           },
                         ),
                         Container(width: screenWidth*0.07,),
@@ -494,13 +498,14 @@ class _ChefProfileState extends State<ChefProfile> {
                     bool isFirst = index == 0;
                     bool isLast = index == recipes!.length - 1;
                     EdgeInsets itemMargin = EdgeInsets.only(
-                       top: isFirst ? 2 : 10, bottom: isLast ? 0 : 10);
+                       top: isFirst ? 2 : 10, bottom: isLast ? 0 : 10
+                    );
                     return GestureDetector(
                       onTap: () {
                         final ide = recipes![index].recipeId;
                         print("Recipe ID: $ide");
                         final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
-                        recipeProvider.fetchRecipeById(ide).then((_) {
+                        recipeProvider.fetchRecipeById(ide).then((_){
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -541,14 +546,14 @@ class _ChefProfileState extends State<ChefProfile> {
                 Navigator.pop(context);
               },
             ),
-            Provider.of<UserProvider>(context,listen: false).imageUrl!.isNotEmpty?ListTile(
+            Provider.of<UserProvider>(context,listen: false).chefDetails?['image_url']!=null?ListTile(
               leading: const Icon(Icons.delete),
               title: const Text("Remove Profile Picture"),
-              onTap: () {
-                Provider.of<UserProvider>(context, listen:false).updateProfileImage("");
-                setState(() {
-                  _profileImageUrl = null;
-                });
+              onTap: () async{
+                final userProvider = Provider.of<UserProvider>(context, listen:false);
+                userProvider.updateProfileImage(null);
+                await userProvider.deleteImage(widget.id);
+
                 Navigator.pop(context);
               },
             ):Container(height: 0.00001,)
@@ -609,10 +614,56 @@ class _ChefProfileState extends State<ChefProfile> {
           print("Error: Image not uploaded");
         }
       }
-
-
     } else {
       print("Image cropping cancelled");
     }
   }
+  void _showFullSizeImageDialog(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent, // Transparent background for the dialog
+          child: Container(
+            width: screenWidth*0.4,
+            height: screenHeight*0.4,
+            decoration: BoxDecoration(
+              color: Colors.transparent, // Keep the container background transparent
+              borderRadius: BorderRadius.circular(20), // Rounded corners for the dialog
+            ),
+            child: Stack(
+              children: [
+                // Apply blur to the background
+                Positioned.fill(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                    child: Container(
+                      color: Colors.transparent
+                    ),
+                  ),
+                ),
+                Center(
+                  child: ClipOval(
+                    child: userProvider.chefDetails?['image_url'] == null
+                        ? const Image(
+                      image: AssetImage('assets/images/img.png'),
+                      fit: BoxFit.cover,
+                    )
+                        : Image.network(
+                      userProvider.chefDetails?['image_url'] ?? '',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 }

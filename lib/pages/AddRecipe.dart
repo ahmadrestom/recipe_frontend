@@ -100,16 +100,19 @@ class AddRecipeState extends State<AddRecipe> {
         _instructions,
       );
       print("Recipe Object: ${recipe.toJson()}");
-      final x = await RecipeService().uploadRecipe(recipe);
-      print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxx $x");
+      final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
+      await recipeProvider.uploadRecipe(recipe);
+      // if(mounted){
+      //   Navigator.pushReplacement(
+      //     context,
+      //     MaterialPageRoute(builder: (context) => const NavPage()),
+      //   );
+      // }
     }catch(e){
       print("Could not submit recipe: $e");
       throw Exception("Could not submit recipe : $e");
     }
   }
-
-
-
   final TextEditingController _recipeNameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _prepTimeController = TextEditingController();

@@ -239,10 +239,14 @@ class _NotificationList extends State<NotificationList> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        notification.title,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
+                      Container(
+                        width: screenWidth*0.6,
+                        child: Text(
+                          notification.title,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
                       ),
                       GestureDetector(
                         onTap: () async {

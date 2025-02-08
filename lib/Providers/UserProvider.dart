@@ -21,7 +21,7 @@ class UserProvider extends ChangeNotifier {
   Map<String, dynamic>? _chefDetails;
   List<dynamic>? _userFavorites;
   String? _userId;
-  String _imageUrl = "";
+  String? _imageUrl;
 
   String? get token => _token;
 
@@ -41,14 +41,14 @@ class UserProvider extends ChangeNotifier {
     _loadToken();
   }
 
-  void updateProfileImage(String newUrl) {
+  void updateProfileImage(String? newUrl) {
     _imageUrl = newUrl;
     notifyListeners();
   }
 
   Future<void> _loadToken() async {
     _token = await _secureStorage.read(key: 'authToken');
-    if (_token != null && !_authService.isTokenExpired(_token!)) {
+    if (_token != null && !_authService.isTokenExpired(_token!)){
       _isAuthenticated = true;
       await _fetchUserDetails();
     } else {
@@ -112,8 +112,16 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> updateImage(String userId, String url) async{
+  Future<void> updateImage(String userId, String? url) async{
     final res = await _authService.updateImage(userId, url);
+    chefDetails?['image_url'] = url;
+    notifyListeners();
+  }
+
+  Future<void> deleteImage(String userId)async{
+    final res = await _authService.deleteImage(userId);
+    chefDetails?['image_url'] = null;
+    notifyListeners();
   }
 
   Future<String?> uploadImage(File imageFile, String bucketName, String path) async{
@@ -123,7 +131,7 @@ class UserProvider extends ChangeNotifier {
 
   Future<void> _fetchUserDetails() async {
     try {
-      _imageUrl = "";
+      _imageUrl = null;
       if (token != null) {
         final userInfo = await _authService.getUserInfo(_token!);
         _userDetails = userInfo;
@@ -216,10 +224,11 @@ class UserProvider extends ChangeNotifier {
 
   Future<void> getChefInfo(String chefId) async{
     try{
+      _chefDetails = {};
       if(token!=null){
         final data = await _authService.getChefInfo(chefId, _token!);
         _chefDetails = data;
-        _imageUrl = _chefDetails?['image_url'] ?? "";
+        _imageUrl = _chefDetails?['image_url']??"";
         notifyListeners();
       }
     }catch(e){
