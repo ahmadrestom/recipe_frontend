@@ -17,6 +17,7 @@
 - **Saved Recipe Notifications:** Chefs are notified when someone adds their recipe to their saved list.
 - **Chef Upload Notifications:** Chefs receive notifications when their new recipe is uploaded successfully.
 - **New Recipe Notifications:** All followers of a chef will be notified when the chef posts a new recipe.
+- **New Review Notifications:** Chef gets notified when someone adds a review to his recipe.
 
 ## Technologies Used
 
