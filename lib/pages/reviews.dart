@@ -31,11 +31,13 @@ class _ReviewsState extends State<Reviews> {
   @override
   Widget build(BuildContext context) {
 
+    final reviewProvider = Provider.of<ReviewProvider>(context, listen: true);
+    Set<Review>? reviews = reviewProvider.reviews;
+
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    final reviewProvider = Provider.of<ReviewProvider>(context, listen: true);
-    Set<Review>? reviews = reviewProvider.reviews;
+
     return KeyboardDismisser(
       gestures: const [GestureType.onTap, GestureType.onPanUpdateAnyDirection],
       child: Scaffold(

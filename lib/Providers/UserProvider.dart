@@ -50,7 +50,7 @@ class UserProvider extends ChangeNotifier {
     _token = await _secureStorage.read(key: 'authToken');
     if (_token != null && !_authService.isTokenExpired(_token!)){
       _isAuthenticated = true;
-      await _fetchUserDetails();
+      await fetchUserDetails();
     } else {
       _token = null;
       _isAuthenticated = false;
@@ -63,7 +63,7 @@ class UserProvider extends ChangeNotifier {
     if (response) {
       _token = await _secureStorage.read(key: 'authToken');
       _isAuthenticated = true;
-      await _fetchUserDetails();
+      await fetchUserDetails();
       _userId = _userDetails?['id'];
       notifyListeners();
       return true; // Success
@@ -129,7 +129,7 @@ class UserProvider extends ChangeNotifier {
     return url;
   }
 
-  Future<void> _fetchUserDetails() async {
+  Future<void> fetchUserDetails() async {
     try {
       _imageUrl = null;
       if (token != null) {

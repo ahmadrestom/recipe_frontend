@@ -119,6 +119,4 @@ class RecipeProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-
 }

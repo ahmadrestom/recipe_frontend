@@ -12,6 +12,8 @@ import '../Providers/RecipeProvider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 
+import 'NavPage.dart';
+
 class AddRecipe extends StatefulWidget {
   const AddRecipe({Key? key}) : super(key: key);
 

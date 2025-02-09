@@ -32,6 +32,8 @@ class _UserprofileState extends State<UserProfile> {
   File? _image;
   String? _profileImageUrl;
 
+  Map<String, dynamic>? userDetails;
+
   @override
   void initState() {
     super.initState();
@@ -202,9 +204,7 @@ class _UserprofileState extends State<UserProfile> {
 
                         ]
                     ),
-
                   ],
-
                 ),
                 SizedBox(height: screenHeight*0.02,),
                 Row(
@@ -220,9 +220,9 @@ class _UserprofileState extends State<UserProfile> {
                                   child: CircleAvatar(
                                     key: UniqueKey(),
                                     radius: screenWidth *0.13,
-                                    backgroundImage: userProvider.userDetails?['image_url'] == null
+                                    backgroundImage: userProvider.userDetails?['imageUrl'] == null
                                         ? const AssetImage('assets/images/img.png') as ImageProvider
-                                        : NetworkImage(userProvider.userDetails?['image_url']),
+                                        : NetworkImage(userProvider.userDetails?['imageUrl']),
                                   ),
                                   onTap: (){
                                     _showChangeProfileDialog();
@@ -404,7 +404,7 @@ class _UserprofileState extends State<UserProfile> {
                 Navigator.pop(context);
               },
             ),
-            Provider.of<UserProvider>(context,listen: false).imageUrl!.isNotEmpty?ListTile(
+            Provider.of<UserProvider>(context,listen: false).userDetails?['imageUrl'] != null?ListTile(
               leading: const Icon(Icons.delete),
               title: const Text("Remove Profile Picture"),
               onTap: () async{
@@ -470,13 +470,15 @@ class _UserprofileState extends State<UserProfile> {
         if(url !=null){
           userProvider.updateProfileImage(url);
           await userProvider.updateImage(widget.id!, url);
+          await userProvider.fetchUserDetails();
+          setState(() {
+            userDetails = userProvider.userDetails;
+          });
           print("Profile picture updated successfully");
         }else{
           print("Error: Image not uploaded");
         }
       }
-
-
     } else {
       print("Image cropping cancelled");
     }
@@ -511,13 +513,13 @@ class _UserprofileState extends State<UserProfile> {
                 ),
                 Center(
                   child: ClipOval(
-                    child: userProvider.chefDetails?['image_url'] == null
+                    child: userProvider.userDetails?['imageUrl'] == null
                         ? const Image(
                       image: AssetImage('assets/images/img.png'),
                       fit: BoxFit.cover,
                     )
                         : Image.network(
-                      userProvider.chefDetails?['image_url'] ?? '',
+                      userProvider.userDetails?['imageUrl'],
                       fit: BoxFit.cover,
                     ),
                   ),
